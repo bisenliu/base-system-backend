@@ -24,8 +24,8 @@ type UserDetail struct {
 	LoginType     login.LoginType   `json:"login_type"`
 	CreateTime    *field.CustomTime `json:"create_time"`
 	LastTime      *field.CustomTime `json:"last_time"`
-	PrivilegeList []string          `json:"privilege_list"`
-	RoleIds       []int64           `json:"role_ids"`
+	PrivilegeList []string          `json:"privilege_list" gorm:"-"`
+	RoleIds       []int64           `json:"role_ids" gorm:"-"`
 }
 
 //
