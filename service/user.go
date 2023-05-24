@@ -14,7 +14,15 @@ import (
 
 type UserService struct{}
 
-// UserListService 用户列表逻辑层
+// UserListService
+//
+//	@Description: 用户列表
+//	@param c 上下文信息
+//	@param params 查询参数
+//	@return userList 用户列表
+//	@return err 查询失败异常
+//	@return debugInfo 错误调试信息
+
 func (receiver UserService) UserListService(c *gin.Context, params *request.UserFilter) (userList *response.UserList, err error, debugInfo interface{}) {
 	// 过滤
 	filter := make(map[string]map[string]string)
