@@ -1,0 +1,144 @@
+basePath: /v1/
+definitions:
+  response.Data:
+    properties:
+      data: {}
+      status:
+        type: integer
+      status_info:
+        $ref: '#/definitions/response.statusInfo'
+    type: object
+  response.UserDetail:
+    properties:
+      accounts:
+        type: string
+      avatar:
+        type: string
+      create_time:
+        type: string
+      email:
+        type: string
+      gender:
+        type: integer
+      id:
+        type: integer
+      id_card:
+        type: string
+      is_super:
+        type: integer
+      last_time:
+        type: string
+      login_type:
+        type: integer
+      name:
+        type: string
+      phone:
+        type: string
+      privilege_list:
+        items:
+          type: string
+        type: array
+      role_ids:
+        items:
+          type: integer
+        type: array
+      status:
+        $ref: '#/definitions/user.AccStatus'
+    type: object
+  response.UserList:
+    properties:
+      page:
+        type: integer
+      page_size:
+        type: integer
+      results:
+        items:
+          $ref: '#/definitions/response.UserDetail'
+        type: array
+      total_count:
+        type: integer
+      total_pages:
+        type: integer
+    type: object
+  response.statusInfo:
+    properties:
+      debug_info: {}
+      detail: {}
+      message: {}
+    type: object
+  user.AccStatus:
+    enum:
+    - 0
+    - 1
+    - 2
+    - 3
+    type: integer
+    x-enum-varnames:
+    - AccNormal
+    - AccFreeze
+    - AccChangePwd
+    - AccStop
+host: http://127.0.0.1:8001
+info:
+  contact: {}
+  description: 应用于快速搭建后端
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: 基础后端框架
+  version: "1.0"
+paths:
+  /user/list/:
+    get:
+      consumes:
+      - application/json
+      description: 用户列表
+      parameters:
+      - description: Bearer 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - in: query
+        name: name
+        type: string
+      - in: query
+        minimum: 1
+        name: page
+        type: integer
+      - in: query
+        minimum: 1
+        name: page_size
+        type: integer
+      - enum:
+        - 0
+        - 1
+        - 2
+        - 3
+        in: query
+        name: status
+        type: integer
+        x-enum-varnames:
+        - AccNormal
+        - AccFreeze
+        - AccChangePwd
+        - AccStop
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Data'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.UserList'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 用户列表
+      tags:
+      - UserApi
+swagger: "2.0"
