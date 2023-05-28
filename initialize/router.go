@@ -4,6 +4,7 @@ import "C"
 import (
 	_ "base-system-backend/docs" // 千万不要忘了导入把你上一步生成的docs
 	"base-system-backend/global"
+	"base-system-backend/middleware"
 	"base-system-backend/router"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
@@ -23,12 +24,11 @@ func Routers() *gin.Engine {
 		gin.SetMode(gin.DebugMode)
 	}
 	r := gin.New()
-	// 认证中间件
-	// r.Use (middleware. JWTAuthMiddleware())
 
 	r.GET("/swagger/*any", gs.WrapHandler(swaggerFiles.Handler))
-
 	baseRouterGroup := r.Group("v1")
+	// 认证中间件
+	baseRouterGroup.Use(middleware.JWTAuthMiddleware())
 	// 用户模块路由组
 	{
 		userRouter := router.RouterGroupApp.User
