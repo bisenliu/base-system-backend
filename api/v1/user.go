@@ -5,13 +5,15 @@ import (
 	"base-system-backend/enums/login"
 	"base-system-backend/model/common/response"
 	"base-system-backend/model/user/request"
+	"base-system-backend/utils"
+	"base-system-backend/utils/cache"
 	"base-system-backend/utils/validate"
 	"github.com/gin-gonic/gin"
 )
 
 type UserApi struct{}
 
-func (UserApi) UserLogin(c *gin.Context) {
+func (UserApi) UserLoginApi(c *gin.Context) {
 	loginBase := new(request.UserLoginBase)
 	if ok := validate.RequestParamsVerify(c, &loginBase); !ok {
 		return
@@ -40,6 +42,19 @@ func (UserApi) UserLogin(c *gin.Context) {
 		return
 	}
 	response.OK(c, loginInfo)
+	return
+}
+
+func (UserApi) UserLogoutApi(c *gin.Context) {
+	user, err, debugInfo := utils.GetCurrentUser(c)
+	if err != nil {
+		response.Error(c, code.QueryFailed, err, debugInfo)
+		return
+	}
+	//todo keycloak 登录也需要退出受录
+	//清除token
+	cache.DeleteToken(user.Id)
+	response.OK(c, nil)
 	return
 }
 
