@@ -2,17 +2,125 @@ package service
 
 import (
 	"base-system-backend/enums/errmsg"
+	"base-system-backend/enums/login"
 	"base-system-backend/enums/table"
+	userEnum "base-system-backend/enums/user"
 	"base-system-backend/global"
+	"base-system-backend/model/common/field"
+	"base-system-backend/model/user"
 	"base-system-backend/model/user/request"
 	"base-system-backend/model/user/response"
 	"base-system-backend/utils"
+	"base-system-backend/utils/cache"
+	"base-system-backend/utils/jwt"
 	"base-system-backend/utils/orm"
+	userUtils "base-system-backend/utils/user"
+	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
+	"math"
+	"strings"
+	"time"
 )
 
 type UserService struct{}
+
+func (UserService) AccountLoginService(params *request.UserAccountLogin) (err error, debugInfo interface{}) {
+	var instance user.User
+	if err = global.DB.Table(table.User).
+		Select("password", "status").
+		Where("account = ?", params.Account).
+		First(&instance).Error; err != nil {
+		return errmsg.AccPwdInvalid, nil
+	}
+	// 停用
+	if instance.Status == userEnum.AccStop {
+		return errmsg.AccStop, nil
+	}
+	// 冻结
+	if instance.Status == userEnum.AccFreeze {
+		blackList := new(user.BlackList)
+		err = global.DB.Table(table.UserBlackList).
+			Select("next_time", "failed_num").
+			Where("account = ?", params.Account).
+			First(&blackList).Error
+		if !errors.Is(err, gorm.ErrRecordNotFound) && blackList != nil && time.Now().Unix() <= time.Time(blackList.NextTime).Unix() {
+			//下次登录时间大于当前,则仍不能登录。返回剩余时间
+			var nextLoginMinute int
+			nextLoginMinute = int(math.Pow(2, float64(blackList.FailedNum-login.LoginFailedMaxNum)))
+			if nextLoginMinute == 0 {
+				nextLoginMinute = 1
+			}
+			debugInfo = map[string]interface{}{
+				"next_time":  time.Time(blackList.NextTime).Unix() * 1000,
+				"failed_num": blackList.FailedNum,
+				"login_time": nextLoginMinute,
+			}
+			return errmsg.AccPwdInvalid, debugInfo
+		}
+	}
+	// 密码错误
+	if ok := utils.BcryptCheck(params.Password, instance.Password); !ok {
+		// 登录失败后,更新黑名单信息
+		return errmsg.AccPwdInvalid, userUtils.LoginFiled(params.Account)
+	}
+	return
+}
+
+func (UserService) LoginSuccess(c *gin.Context, loginBase *request.UserLoginBase) (loginInfo *response.LoginSuccess, err error, debugInfo interface{}) {
+	u := new(user.User)
+	if *loginBase.LoginType == login.KeycloakLogin {
+		// keycloak 登录成功
+	} else {
+		// 账号密码/短信登录成功
+		if loginBase.Phone != nil {
+			global.DB.Table(table.User).Where("phone = ?", *loginBase.Phone).First(&u)
+		} else {
+			global.DB.Table(table.User).Where("account = ? or phone = ?", strings.ToLower(*loginBase.Account), *loginBase.Account).First(&u)
+		}
+		currentTime := &u.CurrentTime
+		currentIp := &u.CurrentIp
+		// 以前有登录记录后把上次当前登录时间/ip改为最后一次登录时间/ip
+		if currentTime != nil && currentIp != nil {
+			u.LastTime = *currentTime
+			u.LastIp = *currentIp
+		}
+		// 当前登录时间
+		u.CurrentTime = field.CustomTime(time.Now())
+		// 当前登录IP
+		u.CurrentIp = utils.GetLoginIp(c)
+		u.LoginType = *loginBase.LoginType
+		// 修改用户状态为正常
+		u.Status = userEnum.AccNormal
+		if err = global.DB.Table(table.User).Save(&u).Error; err != nil {
+			return nil, fmt.Errorf("登录信息%w", errmsg.UpdateFailed), err.Error()
+		}
+		// 如果黑名单有错误记录则清除记录
+		if err = global.DB.Table(table.UserBlackList).
+			Where("account = ?", u.Account).Delete(&user.BlackList{}).Error; err != nil {
+			return nil, fmt.Errorf("黑名单记录%w", errmsg.DeleteFailed), err.Error()
+		}
+	}
+	// 设置token
+	accessToken, err := jwt.GenToken(u.Id, u.Account)
+	if err != nil {
+		return nil, fmt.Errorf("token%w", errmsg.SaveFailed), err.Error()
+	}
+	cache.SetToken(u.Id, accessToken)
+	// 组装数据
+	if err = global.DB.Table(table.User).Where("account = ?", u.Account).First(&loginInfo).Error; err != nil {
+		return nil, fmt.Errorf("登录信息%w", errmsg.UpdateFailed), err.Error()
+	}
+	privilegeKeys, userRoleIds, err, debugInfo := utils.GetPrivilegeKeysByUserId(u.Id)
+	if err != nil {
+		return nil, err, debugInfo
+	}
+	loginInfo.PrivilegeList = privilegeKeys
+	loginInfo.RoleIds = userRoleIds
+	loginInfo.Token.Token = accessToken
+	return
+}
 
 // UserListService
 //

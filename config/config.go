@@ -2,7 +2,7 @@ package config
 
 type Service struct {
 	System    System    `mapstructure:"system" json:"system" yaml:"system"`
-	Kev       Key       `mapstructure:"key" json:"key" yaml:"key"`
+	Key       Key       `mapstructure:"key" json:"key" yaml:"key"`
 	Token     Token     `mapstructure:"token" json:"token" vaml:"token"`
 	Static    Static    `mapstructure:"static" json:"static" yaml:"static"`
 	Redis     Redis     `mapstructure:"redis" json:"redis" yaml:"redis"`

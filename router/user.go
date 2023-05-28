@@ -13,4 +13,6 @@ func (u UserRouter) InitUserRouter(Router *gin.RouterGroup) {
 
 	// 用户列表
 	Router.GET("list/", userApi.UserListApi)
+	// 登录
+	Router.POST("login/", userApi.UserLogin)
 }

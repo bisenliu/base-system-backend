@@ -16,3 +16,5 @@ func (t LoginType) IsValid() bool {
 	}
 	return false
 }
+
+const LoginFailedMaxNum = 5

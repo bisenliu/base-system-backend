@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/go-redis/redis/v8"
+	"go.uber.org/zap"
 )
 
 func Redis() {
@@ -17,8 +18,11 @@ func Redis() {
 		//MinIdleConns: cfg.MinIdleConns,
 	})
 
-	if _, err := client.Ping(context.Background()).Result(); err != nil {
+	if pong, err := client.Ping(context.Background()).Result(); err != nil {
 		panic(fmt.Errorf("redis connect failed: %s", err))
+	} else {
+		global.LOG.Info("redis connect info: ", zap.String("pong", pong))
+		global.REDIS = client
 	}
 }
 

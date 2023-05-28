@@ -47,3 +47,15 @@ type UserRole struct {
 func (receiver UserRole) TableName() string {
 	return table.UserRole
 }
+
+type BlackList struct {
+	Id         int64            `gorm:"column:id;primaryKey;autoIncrement;notNull;comment:Id"`
+	FailedNum  int              `gorm:"column:failed_num;notNull;comment:登录失败次数"`
+	Account    string           `gorm:"column:account;notNull;unique;size:20;comment:账号"`
+	FailedTime field.CustomTime `gorm:"column:failed_time;autoCreateTime:milli;comment:登录失败时间"`
+	NextTime   field.CustomTime `gorm:"column:next_time;comment:下次登录时间"`
+}
+
+func (receiver BlackList) TableName() string {
+	return table.UserBlackList
+}

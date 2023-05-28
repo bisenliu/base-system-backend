@@ -53,6 +53,8 @@ func RegisterTables() {
 		&user.User{},
 		// 用户角色表
 		&user.UserRole{},
+		// 用户黑名单表,
+		&user.BlackList{},
 		// 角色表
 		&role.Role{},
 		// 权限表

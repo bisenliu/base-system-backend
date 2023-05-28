@@ -9,8 +9,9 @@ type StatusCode string
 
 const (
 	Success       StatusCode = "0"
-	InvalidParams StatusCode = "001"
-	QueryFailed   StatusCode = "002"
+	InvalidLogin  StatusCode = "001"
+	InvalidParams StatusCode = "002"
+	QueryFailed   StatusCode = "003"
 
 	UnknownExc StatusCode = "999"
 )

@@ -17,14 +17,14 @@ type CustomTime time.Time
 func (c *CustomTime) MarshalJSON() ([]byte, error) {
 	//格式化毫秒
 	tTime := time.Time(*c)
-	seconds := tTime.UnixMilli()
+	seconds := tTime.Unix()
 	return []byte(strconv.FormatInt(seconds, 10)), nil
 }
 
 func (c CustomTime) Value() (driver.Value, error) {
 	var zeroTime time.Time
 	tTime := time.Time(c)
-	if tTime.UnixMilli() == zeroTime.UnixMilli() {
+	if tTime.UnixMilli() == zeroTime.Unix() {
 		return nil, nil
 	}
 	return tTime, nil

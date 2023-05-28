@@ -7,6 +7,14 @@ import (
 	"base-system-backend/model/common/response"
 )
 
+type Token struct {
+	Token string `json:"token"`
+}
+type LoginSuccess struct {
+	UserDetail
+	Token
+}
+
 //  UserDetail
 //  @Description: 用户详情
 

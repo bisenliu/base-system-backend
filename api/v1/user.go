@@ -2,13 +2,46 @@ package v1
 
 import (
 	"base-system-backend/enums/code"
-	Rsp "base-system-backend/model/common/response"
+	"base-system-backend/enums/login"
+	"base-system-backend/model/common/response"
 	"base-system-backend/model/user/request"
 	"base-system-backend/utils/validate"
 	"github.com/gin-gonic/gin"
 )
 
 type UserApi struct{}
+
+func (UserApi) UserLogin(c *gin.Context) {
+	loginBase := new(request.UserLoginBase)
+	if ok := validate.RequestParamsVerify(c, &loginBase); !ok {
+		return
+	}
+	// 账号密码登录
+	if *loginBase.LoginType == login.AccPwdLogin {
+		accLoginParams := new(request.UserAccountLogin)
+		if ok := validate.RequestParamsVerify(c, accLoginParams); !ok {
+			return
+		}
+		// 账号密码登录逻辑
+		if err, debugInfo := userService.AccountLoginService(accLoginParams); err != nil {
+			response.Error(c, code.InvalidLogin, err, debugInfo)
+			return
+		}
+	} else if *loginBase.LoginType == login.KeycloakLogin {
+		// todo Keycloak 登录
+		panic("Keycloak login api unrealized...")
+	} else {
+		panic("sms login api unrealized...")
+	}
+	// 登录参数校验成功校验成功生成token, 记录ip ...
+	loginInfo, err, debugInfo := userService.LoginSuccess(c, loginBase)
+	if err != nil {
+		response.Error(c, code.InvalidLogin, err, debugInfo)
+		return
+	}
+	response.OK(c, loginInfo)
+	return
+}
 
 // UserListApi
 // @Summary 用户列表
@@ -28,9 +61,9 @@ func (UserApi) UserListApi(c *gin.Context) {
 	}
 	userList, err, debugInfo := userService.UserListService(c, params)
 	if err != nil {
-		Rsp.Error(c, code.QueryFailed, err, debugInfo)
+		response.Error(c, code.QueryFailed, err, debugInfo)
 		return
 	}
-	Rsp.OK(c, userList)
+	response.OK(c, userList)
 	return
 }
