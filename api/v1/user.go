@@ -3,6 +3,7 @@ package v1
 import (
 	"base-system-backend/enums/code"
 	"base-system-backend/enums/login"
+	userEnum "base-system-backend/enums/user"
 	"base-system-backend/model/common/response"
 	"base-system-backend/model/user/request"
 	"base-system-backend/utils"
@@ -125,6 +126,34 @@ func (UserApi) UserUpdateApi(c *gin.Context) {
 	if err, debugInfo = userService.UserUpdateService(u.Id, params); err != nil {
 		response.Error(c, code.UpdateFailed, err, debugInfo)
 		return
+	}
+	response.OK(c, nil)
+	return
+}
+
+func (UserApi) UserChangePwdApi(c *gin.Context) {
+	params := new(request.UserChangePwdBase)
+	if ok := validate.RequestParamsVerify(c, params); !ok {
+		return
+	}
+	u, err, debugInfo := utils.GetCurrentUser(c)
+	if err != nil {
+		response.Error(c, code.QueryFailed, err, debugInfo)
+		return
+	}
+	// 密码修改
+	if params.Type == userEnum.PwdChange {
+		pwdChangeParams := new(request.PwdChangeByPwd)
+		if ok := validate.RequestParamsVerify(c, pwdChangeParams); !ok {
+			return
+		}
+		if err, debugInfo = userService.UserChangePwdByPwdService(u, pwdChangeParams); err != nil {
+			response.Error(c, code.UpdateFailed, err, debugInfo)
+			return
+		}
+
+	} else {
+		panic("sms change password api unrealized...")
 	}
 	response.OK(c, nil)
 	return

@@ -73,3 +73,14 @@ type UserUpdateById struct {
 	UserFullNameAndShortName
 	field.CUTime
 }
+
+type UserChangePwdBase struct {
+	Type        user.ChangePwdType `json:"type" binding:"enum" label:"修改密码类型"`
+	OldPassword *string            `json:"old_password" binding:"" label:"旧密码"`
+	NewPassword *string            `json:"new_password" binding:"" label:"新密码"`
+}
+
+type PwdChangeByPwd struct {
+	OldPassword string `json:"old_password" binding:"required,max=70" label:"旧密码"`
+	NewPassword string `json:"new_password" binding:"required,max=70" label:"新密码"`
+}

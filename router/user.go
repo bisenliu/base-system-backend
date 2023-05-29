@@ -24,5 +24,7 @@ func (u UserRouter) InitUserRouter(Router *gin.RouterGroup) {
 		detailRouterGroup.GET("", userApi.UserDetailApi)
 		detailRouterGroup.PUT("", userApi.UserUpdateApi)
 	}
+	// 修改当前登录用户密码
+	Router.PATCH("change_pwd/", userApi.UserChangePwdApi)
 
 }

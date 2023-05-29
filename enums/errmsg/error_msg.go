@@ -8,7 +8,9 @@ var (
 	UpdateFailed = errors.New("更新失败")
 	DeleteFailed = errors.New("删除失败")
 	NotFound     = errors.New("不存在")
+	Exists       = errors.New("已存在")
 	Invalid      = errors.New("不合法")
+	Incorrect    = errors.New("不正确")
 
 	LoginInvalid  = errors.New("未登录或登录状态已失效")
 	AccPwdInvalid = errors.New("账号或密码不正确,请重新输入")

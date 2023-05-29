@@ -276,3 +276,15 @@ func (UserService) UserUpdateService(userId int64, params *request.UserUpdate) (
 	tx.Commit()
 	return
 }
+
+func (UserService) UserChangePwdByPwdService(u *user.User, params *request.PwdChangeByPwd) (err error, debugInfo interface{}) {
+	if ok := utils.BcryptCheck(params.OldPassword, u.Password); !ok {
+		return fmt.Errorf("原密码%w", errmsg.Incorrect), nil
+	}
+	if err = global.DB.Model(&u).Update("password", utils.BcryptHash(params.NewPassword)).Error; err != nil {
+		return fmt.Errorf("密码%w", errmsg.UpdateFailed), err.Error()
+	}
+	// 修改成功删除 token
+	cache.DeleteToken(u.Id)
+	return
+}
