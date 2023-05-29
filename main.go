@@ -4,7 +4,6 @@ import (
 	"base-system-backend/core"
 	"base-system-backend/global"
 	"base-system-backend/initialize"
-	"fmt"
 	"go.uber.org/zap"
 )
 
@@ -28,7 +27,6 @@ func main() {
 	zap.ReplaceGlobals(global.LOG)
 	// 初始化gorm连接
 	global.DB = initialize.GormPgSql()
-	fmt.Println("global.DB: ", global.DB)
 	if global.DB != nil {
 		// 初始化表
 		initialize.RegisterTables()

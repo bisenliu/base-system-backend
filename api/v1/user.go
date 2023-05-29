@@ -96,3 +96,18 @@ func (UserApi) UserCreateApi(c *gin.Context) {
 	response.OK(c, map[string]int64{"id": params.Id})
 	return
 }
+
+func (UserApi) UserDetailApi(c *gin.Context) {
+	u, err, debugInfo := utils.GetCurrentUser(c)
+	if err != nil {
+		response.Error(c, code.QueryFailed, err, debugInfo)
+		return
+	}
+	userDetail, err, debugInfo := userService.UserDetailService(u.Id)
+	if err != nil {
+		response.Error(c, code.QueryFailed, err, debugInfo)
+		return
+	}
+	response.OK(c, *userDetail)
+	return
+}

@@ -212,3 +212,18 @@ func (UserService) UserCreateService(params *request.UserCreate) (err error, deb
 	tx.Commit()
 	return
 }
+
+func (UserService) UserDetailService(userId int64) (userDetail *response.UserDetail, err error, debugInfo interface{}) {
+	if err = global.DB.Table(table.User).
+		Where("id = ?", userId).
+		First(&userDetail).Error; err != nil {
+		return nil, fmt.Errorf("用户详情%w", errmsg.QueryFailed), err.Error()
+	}
+	privilegeKeys, userRoleIds, err, debugInfo := utils.GetPrivilegeKeysByUserId(userId)
+	if err != nil {
+		return nil, err, debugInfo
+	}
+	userDetail.PrivilegeList = privilegeKeys
+	userDetail.RoleIds = userRoleIds
+	return
+}
