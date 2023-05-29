@@ -111,3 +111,21 @@ func (UserApi) UserDetailApi(c *gin.Context) {
 	response.OK(c, *userDetail)
 	return
 }
+
+func (UserApi) UserUpdateApi(c *gin.Context) {
+	params := new(request.UserUpdate)
+	if ok := validate.RequestParamsVerify(c, params); !ok {
+		return
+	}
+	u, err, debugInfo := utils.GetCurrentUser(c)
+	if err != nil {
+		response.Error(c, code.QueryFailed, err, debugInfo)
+		return
+	}
+	if err, debugInfo = userService.UserUpdateService(u.Id, params); err != nil {
+		response.Error(c, code.UpdateFailed, err, debugInfo)
+		return
+	}
+	response.OK(c, nil)
+	return
+}

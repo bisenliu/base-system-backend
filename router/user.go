@@ -18,11 +18,11 @@ func (u UserRouter) InitUserRouter(Router *gin.RouterGroup) {
 	Router.GET("list/", userApi.UserListApi)
 	// 创建用户
 	Router.POST("create/", userApi.UserCreateApi)
-	// 查询/修改当前登录用户信息
+	// 查询|修改当前登录用户信息
 	detailRouterGroup := Router.Group("detail/")
 	{
 		detailRouterGroup.GET("", userApi.UserDetailApi)
-		//detailRouterGroup.PUT("", userApi.UserUpdate)
+		detailRouterGroup.PUT("", userApi.UserUpdateApi)
 	}
 
 }
