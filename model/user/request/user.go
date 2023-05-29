@@ -1,8 +1,10 @@
 package request
 
 import (
+	"base-system-backend/enums/gender"
 	"base-system-backend/enums/login"
 	"base-system-backend/enums/user"
+	"base-system-backend/model/common/field"
 	"base-system-backend/model/common/request"
 )
 
@@ -33,4 +35,25 @@ type UserLoginBase struct {
 type UserAccountLogin struct {
 	Account  string `json:"account"  binding:"required,max=20" label:"账号"`
 	Password string `json:"password"  binding:"required" label:"密码"`
+}
+
+type UserCreate struct {
+	Id        int64          `json:"id"`
+	Account   string         `json:"account" binding:"required,max=20" label:"账号"`
+	Password  string         `json:"password" binding:"required" label:"密码"`
+	SecretKey string         `json:"secret_key" label:"API秘钥"`
+	Phone     string         `json:"phone" binding:"max=11" label:"手机号"`
+	Email     string         `json:"email" binding:"omitempty,email" label:"邮箱"`
+	Name      string         `json:"name" binding:"max=20" label:"姓名"`
+	IdCard    string         `json:"id_card" binding:"max=18" label:"身份证号码"`
+	Gender    gender.Gender  `json:"gender" binding:"enum" label:"性别"`
+	Status    user.AccStatus `json:"status" binding:"enum" label:"账号状态"`
+	RoleIds   *[]int64       `json:"role_ids" gorm:"-" label:"角色ID列表"`
+	UserFullNameAndShortName
+	field.CUTime
+}
+
+type UserFullNameAndShortName struct {
+	FullName  string `json:"full_name" binding:"" label:"姓名全拼"`
+	ShortName string `json:"short_name" binding:"" label:"姓名简拼"`
 }

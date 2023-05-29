@@ -12,9 +12,11 @@ import (
 	"base-system-backend/model/user/response"
 	"base-system-backend/utils"
 	"base-system-backend/utils/cache"
+	"base-system-backend/utils/common"
 	"base-system-backend/utils/jwt"
 	"base-system-backend/utils/orm"
 	userUtils "base-system-backend/utils/user"
+	"base-system-backend/utils/validate"
 	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -167,4 +169,46 @@ func (receiver UserService) UserListService(c *gin.Context, params *request.User
 	userList.GetPageInfo(&userList.PageInfo, params.Page, params.PageSize)
 	return
 
+}
+
+func (UserService) UserCreateService(params *request.UserCreate) (err error, debugInfo interface{}) {
+	// 身份证校验
+	if params.IdCard != "" && !validate.IdCardVerify(params.IdCard) {
+		return fmt.Errorf("身份证号码%w", errmsg.Invalid), nil
+	}
+	// 手机号校验
+	if params.Phone != "" && !validate.MobileVerify(params.Phone) {
+		return fmt.Errorf("手机号码%w", errmsg.Invalid), nil
+	}
+	// 生成 SecretKey
+	secretKey, err := utils.GenerateSecretKey()
+	if err != nil {
+		return fmt.Errorf("secretKey%w", errmsg.SaveFailed), err.Error()
+	}
+	params.SecretKey = secretKey
+	// 密码加密
+	params.Password = utils.BcryptHash(params.Password)
+	// 全拼简拼
+	params.FullName, params.ShortName = common.ConvertCnToLetter(params.Name)
+	//使用分布式ID
+	params.Id = utils.GenID()
+	tx := global.DB.Begin()
+	if err = tx.Table(table.User).Create(&params).Error; err != nil {
+		return fmt.Errorf("用户%w", errmsg.SaveFailed), err.Error()
+	}
+	// 角色校验
+	if params.RoleIds != nil {
+		// 校验角色列表
+		userRoles, err, debugInfo := validate.BindRoleVerify(params.Id, params.RoleIds)
+		if err != nil {
+			return fmt.Errorf("角色Id列表%w", errmsg.Invalid), debugInfo
+		}
+		if err = tx.Table(table.UserRole).Create(&userRoles).Error; err != nil {
+			tx.Rollback()
+			return fmt.Errorf("用户角色%w", errmsg.SaveFailed), err.Error()
+		}
+
+	}
+	tx.Commit()
+	return
 }

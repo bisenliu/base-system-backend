@@ -82,3 +82,17 @@ func (UserApi) UserListApi(c *gin.Context) {
 	response.OK(c, userList)
 	return
 }
+
+func (UserApi) UserCreateApi(c *gin.Context) {
+	params := new(request.UserCreate)
+	if ok := validate.RequestParamsVerify(c, params); !ok {
+		return
+	}
+	if err, debugInfo := userService.UserCreateService(params); err != nil {
+		response.Error(c, code.SaveFailed, err, debugInfo)
+		return
+
+	}
+	response.OK(c, map[string]int64{"id": params.Id})
+	return
+}

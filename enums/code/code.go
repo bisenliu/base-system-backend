@@ -12,6 +12,9 @@ const (
 	InvalidLogin  StatusCode = "001"
 	InvalidParams StatusCode = "002"
 	QueryFailed   StatusCode = "003"
+	SaveFailed    StatusCode = "004"
+	UpdateFailed  StatusCode = "005"
+	DeleteFailed  StatusCode = "006"
 
 	UnknownExc StatusCode = "999"
 )
