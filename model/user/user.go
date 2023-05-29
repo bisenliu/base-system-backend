@@ -24,7 +24,7 @@ type User struct {
 	Avatar      string           `gorm:"column:avatar;size:100;comment:头像"`
 	CurrentIp   string           `gorm:"column:current_ip;size:50;comment:当前登录Ip"`
 	LastIp      string           `gorm:"column:last_ip;size:50;comment:最后登录Ip"`
-	IsSuper     enums.BoolSign   `gorm:"column:is_super;default:0;comment:是否超级账号"`
+	IsSystem    enums.BoolSign   `gorm:"column:is_system;default:0;comment:是否系统账号"`
 	Gender      gender.Gender    `gorm:"column:gender;notNull;comment:性别"`
 	Status      user.AccStatus   `gorm:"column:status;default:0;comment:账号状态"`
 	LoginType   login.LoginType  `gorm:"column:login_type;default:0;comment:登录方式"`
