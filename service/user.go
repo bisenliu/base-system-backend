@@ -353,3 +353,16 @@ func (UserService) UserStatusChangeByIdService(userId string, params *request.St
 	cache.DeleteToken(u.Id)
 	return
 }
+
+func (UserService) UserDetailByIdService(userId string) (userDetail *response.UserDetail, err error, debugInfo interface{}) {
+	if err = global.DB.Table(table.User).Where("id =?", userId).First(&userDetail).Error; err != nil {
+		return nil, fmt.Errorf("用户%w", errmsg.QueryFailed), err.Error()
+	}
+	privilegeKeys, userRoleIds, err, debugInfo := utils.GetPrivilegeKeysByUserId(userDetail.Id)
+	if err != nil {
+		return nil, err, debugInfo
+	}
+	userDetail.PrivilegeList = privilegeKeys
+	userDetail.RoleIds = userRoleIds
+	return
+}

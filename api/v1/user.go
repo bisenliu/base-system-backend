@@ -221,3 +221,14 @@ func (UserApi) UserStatusChangeByIdApi(c *gin.Context) {
 	response.OK(c, nil)
 	return
 }
+
+func (UserApi) UserDetailByIdApi(c *gin.Context) {
+	userId := c.Param("user_id")
+	userDetail, err, debugInfo := userService.UserDetailByIdService(userId)
+	if err != nil {
+		response.Error(c, code.QueryFailed, err, debugInfo)
+		return
+	}
+	response.OK(c, userDetail)
+	return
+}

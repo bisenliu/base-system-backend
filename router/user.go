@@ -32,4 +32,11 @@ func (u UserRouter) InitUserRouter(Router *gin.RouterGroup) {
 	Router.PUT("reset_pwd/:user_id/", userApi.UserResetPwdByIdApi)
 	// 修改指定账户状态
 	Router.PUT("change_status/:user_id/", userApi.UserStatusChangeByIdApi)
+	// 查询|编辑指定账户信息
+	RURouterGroup := Router.Group(":user_id/")
+	{
+		RURouterGroup.GET("", userApi.UserDetailByIdApi)
+		//RURouterGroup.PUT("", userApi.UserUpdateById)
+	}
+
 }
