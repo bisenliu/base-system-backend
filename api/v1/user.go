@@ -2,6 +2,7 @@ package v1
 
 import (
 	"base-system-backend/enums/code"
+	"base-system-backend/enums/errmsg"
 	"base-system-backend/enums/login"
 	userEnum "base-system-backend/enums/user"
 	"base-system-backend/model/common/response"
@@ -9,6 +10,7 @@ import (
 	"base-system-backend/utils"
 	"base-system-backend/utils/cache"
 	"base-system-backend/utils/validate"
+	"fmt"
 	"github.com/gin-gonic/gin"
 )
 
@@ -157,4 +159,36 @@ func (UserApi) UserChangePwdApi(c *gin.Context) {
 	}
 	response.OK(c, nil)
 	return
+}
+
+func (UserApi) UserUploadAvatarApi(c *gin.Context) {
+	fileHeader, err := c.FormFile("avatar")
+	// 文件不存在
+	if fileHeader == nil {
+		response.Error(c, code.SaveFailed, fmt.Errorf("头像文件%w", errmsg.Required), nil)
+		return
+	}
+	// 读取失败
+	if err != nil {
+		response.Error(c, code.SaveFailed, fmt.Errorf("头像文件%w", errmsg.Invalid), err.Error())
+		return
+	}
+	// 头像文件校验
+	if err, debugInfo := validate.ImageVerify(fileHeader); err != nil {
+		response.Error(c, code.SaveFailed, err, debugInfo)
+		return
+	}
+	// 获取当前登录用户
+	u, err, debugInfo := utils.GetCurrentUser(c)
+	if err != nil {
+		response.Error(c, code.QueryFailed, err, debugInfo)
+		return
+	}
+	// 上传头像
+	if err, debugInfo = userService.UserUploadAvatarService(c, u, fileHeader); err != nil {
+		response.Error(c, code.SaveFailed, err, debugInfo)
+		return
+	}
+	return
+
 }

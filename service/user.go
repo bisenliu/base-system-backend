@@ -22,6 +22,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"math"
+	"mime/multipart"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -286,5 +288,24 @@ func (UserService) UserChangePwdByPwdService(u *user.User, params *request.PwdCh
 	}
 	// 修改成功删除 token
 	cache.DeleteToken(u.Id)
+	return
+}
+
+func (UserService) UserUploadAvatarService(c *gin.Context, user *user.User, fileHeader *multipart.FileHeader) (err error, debugInfo interface{}) {
+	// 拼接路径
+	savePath := strings.Join(global.CONFIG.Static.Avatar, "")
+	if err, debugInfo = common.FileCheck(savePath); err != nil {
+		return
+	}
+	avatarAbsPath := strings.Join([]string{savePath, "/", strconv.FormatInt(user.Id, 10), ".jpg"}, "")
+	if err = c.SaveUploadedFile(fileHeader, avatarAbsPath); err != nil {
+		return fmt.Errorf("头像%w", errmsg.UpdateFailed), err.Error()
+	}
+	pathSlice := strings.Split(avatarAbsPath, "static")
+	avatarPath := strings.Join([]string{"/static", pathSlice[1]}, "")
+	// 保存到数据库
+	if err = global.DB.Model(&user).Update("avatar", avatarPath).Error; err != nil {
+		return fmt.Errorf("头像%w", errmsg.UpdateFailed), err.Error()
+	}
 	return
 }

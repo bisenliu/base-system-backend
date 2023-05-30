@@ -26,5 +26,6 @@ func (u UserRouter) InitUserRouter(Router *gin.RouterGroup) {
 	}
 	// 修改当前登录用户密码
 	Router.PATCH("change_pwd/", userApi.UserChangePwdApi)
-
+	//上传头像
+	Router.PATCH("avatar/", userApi.UserUploadAvatarApi)
 }
