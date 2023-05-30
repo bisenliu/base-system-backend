@@ -18,8 +18,8 @@ func (RoleRouter) InitRoleRouter(Router *gin.RouterGroup) {
 	{
 		// 角色详情
 		roleCRUDRouterGroup.GET("", roleApi.RoleDetailApi)
-		//// 角色修改
-		//roleCRUDRouterGroup.PUT("", roleApi.RoleUpdate)
+		// 角色修改
+		roleCRUDRouterGroup.PUT("", roleApi.RoleUpdate)
 		//// 角色删除
 		//roleCRUDRouterGroup.DELETE("", roleApi.RoleDelete)
 	}

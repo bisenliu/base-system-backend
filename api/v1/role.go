@@ -45,3 +45,17 @@ func (RoleApi) RoleDetailApi(c *gin.Context) {
 	response.OK(c, *roleDetail)
 	return
 }
+
+func (RoleApi) RoleUpdate(c *gin.Context) {
+	params := new(request.RoleUpdate)
+	if ok := validate.RequestParamsVerify(c, params); !ok {
+		return
+	}
+	roleId := c.Param("role_id")
+	if err, debugInfo := roleService.RoleUpdateService(roleId, params); err != nil {
+		response.Error(c, code.UpdateFailed, err, debugInfo)
+		return
+	}
+	response.OK(c, nil)
+	return
+}
