@@ -3,6 +3,8 @@ package v1
 import (
 	"base-system-backend/enums/code"
 	"base-system-backend/model/common/response"
+	"base-system-backend/model/role/request"
+	"base-system-backend/utils/validate"
 	"github.com/gin-gonic/gin"
 )
 
@@ -17,5 +19,18 @@ func (RoleApi) RoleListApi(c *gin.Context) {
 	response.OK(c, map[string]interface{}{
 		"results": roleList,
 	})
+	return
+}
+
+func (RoleApi) RoleCreateApi(c *gin.Context) {
+	params := new(request.RoleCreate)
+	if ok := validate.RequestParamsVerify(c, params); !ok {
+		return
+	}
+	if err, debugInfo := roleService.RoleCreateService(params); err != nil {
+		response.Error(c, code.SaveFailed, err, debugInfo)
+		return
+	}
+	response.OK(c, map[string]interface{}{"id": params.Id})
 	return
 }

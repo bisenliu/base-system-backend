@@ -5,6 +5,7 @@ import (
 	"base-system-backend/enums/table"
 	"base-system-backend/global"
 	"base-system-backend/model/role"
+	"base-system-backend/model/role/request"
 	"fmt"
 	"github.com/gin-gonic/gin"
 )
@@ -19,6 +20,13 @@ func (RoleService) RoleListService(c *gin.Context) (roleList []role.Role, err er
 	}
 	if err = tx.Order("id").Find(&roleList).Error; err != nil {
 		return nil, fmt.Errorf("角色%w", errmsg.QueryFailed), err.Error()
+	}
+	return
+}
+
+func (RoleService) RoleCreateService(params *request.RoleCreate) (err error, debugInfo interface{}) {
+	if err = global.DB.Table(table.Role).Create(params).Error; err != nil {
+		return fmt.Errorf("角色%w", errmsg.SaveFailed), err.Error()
 	}
 	return
 }
