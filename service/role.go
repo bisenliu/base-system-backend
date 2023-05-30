@@ -67,3 +67,17 @@ func (RoleService) RoleUpdateService(roleId string, params *request.RoleUpdate) 
 	}
 	return
 }
+
+func (RoleService) RoleDeleteService(roleId string) (err error, debugInfo interface{}) {
+	var r role.Role
+	if err = global.DB.Table(table.Role).Where("id = ?", roleId).First(&r).Error; err != nil {
+		return fmt.Errorf("角色%w", errmsg.QueryFailed), err.Error()
+	}
+	if r.IsSystem == enums.True {
+		return fmt.Errorf(errmsg.NotPrivilege.Error(), "删除系统默认角色"), nil
+	}
+	if err = global.DB.Delete(&r).Error; err != nil {
+		return fmt.Errorf("角色%w", errmsg.DeleteFailed), err.Error()
+	}
+	return
+}
