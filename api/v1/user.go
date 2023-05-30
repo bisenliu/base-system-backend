@@ -189,6 +189,6 @@ func (UserApi) UserUploadAvatarApi(c *gin.Context) {
 		response.Error(c, code.SaveFailed, err, debugInfo)
 		return
 	}
+	response.OK(c, nil)
 	return
-
 }
