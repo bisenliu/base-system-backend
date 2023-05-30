@@ -30,4 +30,6 @@ func (u UserRouter) InitUserRouter(Router *gin.RouterGroup) {
 	Router.PATCH("avatar/", userApi.UserUploadAvatarApi)
 	//重置指定账号密码
 	Router.PUT("reset_pwd/:user_id/", userApi.UserResetPwdByIdApi)
+	// 修改指定账户状态
+	Router.PUT("change_status/:user_id/", userApi.UserStatusChangeByIdApi)
 }

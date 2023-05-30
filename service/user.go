@@ -331,3 +331,25 @@ func (UserService) UserResetPwdByIdService(userId string, params *request.PwdCha
 	}
 	return
 }
+
+func (UserService) UserStatusChangeByIdService(userId string, params *request.StatusChangeById) (err error, debugInfo interface{}) {
+	var u user.User
+	if err = global.DB.Table(table.User).Where("id =?", userId).First(&u).Error; err != nil {
+		return fmt.Errorf("用户%w", errmsg.QueryFailed), err.Error()
+	}
+	// 不能修改管理员账号状态
+	if u.IsSystem == enums.True {
+		return fmt.Errorf(errmsg.NotPrivilege.Error(), "修改管理员状态"), nil
+	}
+	// 只能启动或停用
+	if params.Status == userEnum.AccFreeze || params.Status == userEnum.AccChangePwd {
+		return errmsg.OnlyStopOrEnable, nil
+	}
+	//更新状态
+	if err = global.DB.Model(&u).Update("status", params.Status).Error; err != nil {
+		return fmt.Errorf("用户状态%w", errmsg.UpdateFailed), err.Error()
+	}
+	//修改成功清除token
+	cache.DeleteToken(u.Id)
+	return
+}

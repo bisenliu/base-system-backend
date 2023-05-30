@@ -88,3 +88,7 @@ type PwdChangeByPwd struct {
 type PwdChangeById struct {
 	Password string `json:"password" binding:"required,max=70" label:"密码"`
 }
+
+type StatusChangeById struct {
+	Status user.AccStatus `json:"status" binding:"enum" label:"账号状态"`
+}
