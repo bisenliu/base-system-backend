@@ -30,3 +30,10 @@ func (RoleService) RoleCreateService(params *request.RoleCreate) (err error, deb
 	}
 	return
 }
+
+func (RoleService) RoleDetailService(roleId string) (roleDetail *role.Role, err error, debugInfo interface{}) {
+	if err = global.DB.Table(table.Role).Where("id = ?", roleId).First(&roleDetail).Error; err != nil {
+		return nil, fmt.Errorf("角色%w", errmsg.QueryFailed), err.Error()
+	}
+	return
+}

@@ -34,3 +34,14 @@ func (RoleApi) RoleCreateApi(c *gin.Context) {
 	response.OK(c, map[string]interface{}{"id": params.Id})
 	return
 }
+
+func (RoleApi) RoleDetailApi(c *gin.Context) {
+	roleId := c.Param("role_id")
+	roleDetail, err, debugInfo := roleService.RoleDetailService(roleId)
+	if err != nil {
+		response.Error(c, code.QueryFailed, err, debugInfo)
+		return
+	}
+	response.OK(c, *roleDetail)
+	return
+}
