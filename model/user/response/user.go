@@ -21,7 +21,7 @@ type LoginSuccess struct {
 type UserDetail struct {
 	Id            int64             `json:"id"`
 	Gender        int               `json:"gender"`
-	IsSuper       int               `json:"is_super"`
+	IsSystem      int               `json:"is_system"`
 	Accounts      string            `json:"accounts"`
 	Phone         *string           `json:"phone"`
 	Email         *string           `json:"email"`
