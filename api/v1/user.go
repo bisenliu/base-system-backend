@@ -192,3 +192,17 @@ func (UserApi) UserUploadAvatarApi(c *gin.Context) {
 	response.OK(c, nil)
 	return
 }
+
+func (UserApi) UserResetPwdByIdApi(c *gin.Context) {
+	params := new(request.PwdChangeById)
+	if ok := validate.RequestParamsVerify(c, &params); !ok {
+		return
+	}
+	userId := c.Param("user_id")
+	if err, debugInfo := userService.UserResetPwdByIdService(userId, params); err != nil {
+		response.Error(c, code.UpdateFailed, err, debugInfo)
+		return
+	}
+	response.OK(c, nil)
+	return
+}

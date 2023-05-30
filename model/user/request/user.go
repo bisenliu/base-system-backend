@@ -84,3 +84,7 @@ type PwdChangeByPwd struct {
 	OldPassword string `json:"old_password" binding:"required,max=70" label:"旧密码"`
 	NewPassword string `json:"new_password" binding:"required,max=70" label:"新密码"`
 }
+
+type PwdChangeById struct {
+	Password string `json:"password" binding:"required,max=70" label:"密码"`
+}

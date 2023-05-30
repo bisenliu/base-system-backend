@@ -1,6 +1,7 @@
 package service
 
 import (
+	"base-system-backend/enums"
 	"base-system-backend/enums/errmsg"
 	"base-system-backend/enums/login"
 	"base-system-backend/enums/table"
@@ -306,6 +307,27 @@ func (UserService) UserUploadAvatarService(c *gin.Context, user *user.User, file
 	// 保存到数据库
 	if err = global.DB.Model(&user).Update("avatar", avatarPath).Error; err != nil {
 		return fmt.Errorf("头像%w", errmsg.UpdateFailed), err.Error()
+	}
+	return
+}
+
+func (UserService) UserResetPwdByIdService(userId string, params *request.PwdChangeById) (err error, debugInfo interface{}) {
+	var u user.User
+	if err = global.DB.Table(table.User).Where("id = ?", userId).First(&u).Error; err != nil {
+		return fmt.Errorf("用户%w", errmsg.QueryFailed), err.Error()
+	}
+	//不能重置管理员账号密码
+	if u.IsSystem == enums.True {
+		return fmt.Errorf(errmsg.NotPrivilege.Error(), "修改管理员密码"), nil
+	}
+	//禁用/冻结
+	if u.Status == userEnum.AccStop || u.Status == userEnum.AccFreeze {
+		return fmt.Errorf(errmsg.ResetPwdFailed.Error(), u.Status.AccStatusDisplay(u.Status)), nil
+	}
+	//更新密码
+	if err = global.DB.Model(&u).
+		Updates(user.User{Password: utils.BcryptHash(params.Password), Status: userEnum.AccChangePwd}).Error; err != nil {
+		return fmt.Errorf("用户密码%w", errmsg.UpdateFailed), err.Error()
 	}
 	return
 }
