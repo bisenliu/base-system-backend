@@ -35,7 +35,12 @@ func Routers() *gin.Engine {
 		userRouterGroup := baseRouterGroup.Group("/user/")
 		userRouter.InitUserRouter(userRouterGroup)
 	}
-
+	// 角色模块路由组
+	{
+		roleRouter := router.RouterGroupApp.Role
+		roleRouterGroup := baseRouterGroup.Group("/role/")
+		roleRouter.InitRoleRouter(roleRouterGroup)
+	}
 	r.NoRoute(func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"msg": "404",

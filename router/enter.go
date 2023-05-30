@@ -3,7 +3,7 @@ package router
 type GroupRouter struct {
 	User UserRouter
 	//Privilege PrivilegeRouter
-	//Role      RoleRouter
+	Role RoleRouter
 	//Log       LogRouter
 }
 

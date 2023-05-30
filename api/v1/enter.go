@@ -5,7 +5,7 @@ import "base-system-backend/service"
 type ApiGroup struct {
 	UserApi UserApi
 	//PrivilegeApi PrivilegeApi
-	//RoleApi RoleApi
+	RoleApi RoleApi
 	//LogApi LogApi
 }
 
@@ -16,9 +16,8 @@ var (
 	userService = service.ServicesGroupApp.UserService
 	//// 权限模块服务层入口
 	//privilegeService=service.ServicesGroupApp.PrivilegeService
-	//// 角色模块服务层入口
-	//roleService
-	//// service.ServicesGroupApp.RoleService
+	// 角色模块服务层入口
+	roleService = service.ServicesGroupApp.RoleService
 	//// 日志模块服务层入口
 	//logService = service.ServicesGroupApp. LogService
 )

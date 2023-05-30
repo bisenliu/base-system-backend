@@ -3,7 +3,7 @@ package service
 type ServicesGroup struct {
 	UserService
 	//PrivilegeService
-	//RoleService
+	RoleService
 	//LogService
 }
 
