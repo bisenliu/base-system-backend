@@ -36,7 +36,7 @@ func (u UserRouter) InitUserRouter(Router *gin.RouterGroup) {
 	RURouterGroup := Router.Group(":user_id/")
 	{
 		RURouterGroup.GET("", userApi.UserDetailByIdApi)
-		//RURouterGroup.PUT("", userApi.UserUpdateById)
+		RURouterGroup.PUT("", userApi.UserUpdateByIdApi)
 	}
 
 }

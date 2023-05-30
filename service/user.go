@@ -366,3 +366,50 @@ func (UserService) UserDetailByIdService(userId string) (userDetail *response.Us
 	userDetail.RoleIds = userRoleIds
 	return
 }
+
+func (UserService) UserUpdateByIdService(userId string, params *request.UserUpdateById) (err error, debugInfo interface{}) {
+	// 身份证校验
+	if params.IdCard != "" && !validate.IdCardVerify(params.IdCard) {
+		return fmt.Errorf("身份证号码%w", errmsg.Invalid), nil
+	}
+	var u user.User
+	if err = global.DB.Table(table.User).Where("id = ?", userId).First(&u).Error; err != nil {
+		return fmt.Errorf("用户%w", errmsg.QueryFailed), err.Error()
+	}
+	tx := global.DB.Begin()
+	if params.Name != "" && params.Name != u.Name {
+		//全拼简拼
+		params.FullName, params.ShortName = common.ConvertCnToLetter(params.Name)
+	}
+	if err = tx.Model(&u).Updates(user.User{
+		IdCard:    params.IdCard,
+		Email:     params.Email,
+		Name:      params.Name,
+		FullName:  params.FullName,
+		ShortName: params.ShortName,
+		Gender:    params.Gender,
+	}).Error; err != nil {
+		return fmt.Errorf("用户%w", errmsg.UpdateFailed), err.Error()
+	}
+	//绑定角色
+	if params.RoleIds != nil {
+		//校验角色列表
+		userRoles, err, debugInfo := validate.BindRoleVerify(u.Id, params.RoleIds)
+		if err != nil {
+			return fmt.Errorf("角色Id列表%w", errmsg.Invalid), debugInfo
+		}
+		//删除旧绑定
+		if err = tx.Table(table.UserRole).Where("user_id =?", u.Id).Delete(&user.UserRole{}).Error; err != nil {
+			tx.Rollback()
+			return fmt.Errorf("用户绑定角色%w", errmsg.DeleteFailed), err.Error()
+
+		}
+		//重新绑定
+		if err = tx.Table(table.UserRole).Create(&userRoles).Error; err != nil {
+			tx.Rollback()
+			return fmt.Errorf("用户角色#{msg.ErrorSaveFailed}"), err.Error()
+		}
+	}
+	tx.Commit()
+	return
+}

@@ -232,3 +232,18 @@ func (UserApi) UserDetailByIdApi(c *gin.Context) {
 	response.OK(c, userDetail)
 	return
 }
+
+func (UserApi) UserUpdateByIdApi(c *gin.Context) {
+	params := new(request.UserUpdateById)
+	if ok := validate.RequestParamsVerify(c, params); !ok {
+		return
+	}
+	userId := c.Param("user_id")
+	err, debugInfo := userService.UserUpdateByIdService(userId, params)
+	if err != nil {
+		response.Error(c, code.UpdateFailed, err, debugInfo)
+		return
+	}
+	response.OK(c, nil)
+	return
+}
