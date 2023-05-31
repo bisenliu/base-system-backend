@@ -15,6 +15,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"io"
 	"strconv"
+	"time"
 )
 
 type LogService struct{}
@@ -39,6 +40,7 @@ func (service LogService) OperateLogDownloadService(c *gin.Context, params *requ
 		if value.UserId == nil {
 			userID = ""
 		}
+
 		res = append(res, &response.OperateLogDownload{
 			Id:          value.Id,
 			ActionName:  value.ActionName,
@@ -49,8 +51,8 @@ func (service LogService) OperateLogDownloadService(c *gin.Context, params *requ
 			UserId:      userID,
 			UserName:    value.UserName,
 			UserAccount: value.UserAccount,
-			AccessTime:  value.AccessTime,
-			Success:     value.Success,
+			AccessTime:  time.Time(value.AccessTime),
+			Success:     value.Success.Choices(value.Success),
 			Message:     value.Message,
 		})
 	}

@@ -14,3 +14,15 @@ func (receiver BoolSign) IsValid() bool {
 	}
 	return false
 }
+
+func (BoolSign) Choices(key BoolSign) string {
+	boolChoices := map[BoolSign]string{
+		False: "失败",
+		True:  "成功",
+	}
+	desc, ok := boolChoices[key]
+	if !ok {
+		return "失败"
+	}
+	return desc
+}
