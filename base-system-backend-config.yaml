@@ -19,6 +19,9 @@ static:
   avatar:
     - *base
     - "/avatar"
+  log:
+    - *base
+    - "/log"
 # 头像配置
 avatar: &Avatar
   size: 5 # 头像大小限制(MB)
@@ -51,10 +54,13 @@ local:
   token:
     <<: *Token
   static:
-    base: &base  "~/programming/go/base-system-backend/static"
+    base: &base  "./static"
     avatar:
       - *base
       - "/avatar"
+    log:
+      - *base
+      - "/log"
   avatar:
     <<: *Avatar
   redis:

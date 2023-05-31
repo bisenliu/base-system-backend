@@ -2,10 +2,13 @@ package utils
 
 import (
 	"base-system-backend/enums/errmsg"
+	"base-system-backend/global"
+	"base-system-backend/utils/common"
 	"bytes"
 	"fmt"
 	"github.com/tealeg/xlsx"
 	"io"
+	"strings"
 )
 
 func ToExcel(tableName string, titleList []string, dataList []interface{}) (content io.ReadSeeker, err error, debugInfo interface{}) {
@@ -24,7 +27,12 @@ func ToExcel(tableName string, titleList []string, dataList []interface{}) (cont
 		row := sheet.AddRow()
 		row.WriteStruct(v, -1)
 	}
-	if err = file.Save("~/programming/go/base-system-backend/static/aaaaa.xlsx"); err != nil {
+	savePath := strings.Join(global.CONFIG.Static.Log, "")
+	err, debugInfo = common.FileCheck(savePath)
+	if err != nil {
+		return nil, err, debugInfo
+	}
+	if err = file.Save(strings.Join([]string{savePath, "/", tableName, ".xlsx"}, "")); err != nil {
 		return
 	}
 	var buffer bytes.Buffer
