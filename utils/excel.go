@@ -27,9 +27,6 @@ func ToExcel(tableName string, titleList []string, dataList []interface{}) (cont
 	if err = file.Save("~/programming/go/base-system-backend/static/aaaaa.xlsx"); err != nil {
 		return
 	}
-	//if err != nil{
-	//	return nil, fmt.Errorf("%s表%w", tableName, errmsg.ReadFailed), err.Error()
-	//}
 	var buffer bytes.Buffer
 	if err = file.Write(&buffer); err != nil {
 		return nil, fmt.Errorf("%s表%w", tableName, errmsg.ReadFailed), err.Error()
