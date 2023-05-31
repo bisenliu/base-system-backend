@@ -47,6 +47,12 @@ func Routers() *gin.Engine {
 		logRouterGroup := baseRouterGroup.Group("/log/")
 		logRouter.InitLogRouter(logRouterGroup)
 	}
+	// 权限模块路由组
+	{
+		privilegeRouter := router.RouterGroupApp.Privilege
+		privilegeRouterGroup := baseRouterGroup.Group("/privilege/")
+		privilegeRouter.InitPrivilegeRouter(privilegeRouterGroup)
+	}
 
 	r.NoRoute(func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{

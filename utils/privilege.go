@@ -4,8 +4,10 @@ import (
 	"base-system-backend/enums/errmsg"
 	"base-system-backend/enums/table"
 	"base-system-backend/global"
+	"base-system-backend/model/privilege/response"
 	"base-system-backend/utils/common"
 	"fmt"
+	"strconv"
 )
 
 func GetPrivilegeKeysByUserId(userID int64) (privilegeKeys []string, userRoleIds []int64, err error, debugInfo interface{}) {
@@ -37,5 +39,44 @@ func GetRolePrivilegeKeysByRoleId(userRoleIds []int64) (privilegeKeys []string, 
 	}
 	//去重
 	privilegeKeys = common.RemoveDuplication(privilegeKeys)
+	return
+}
+
+func RecursionGetChildPrivilege(privilege []*response.PrivilegeList, parentID int64) (res []*response.PrivilegeList) {
+	for _, p := range privilege {
+		if p.ParentId == 0 {
+			continue
+		}
+		if p.ParentId == parentID {
+			children := RecursionGetChildPrivilege(privilege, p.Id)
+			p.ChildList = children
+			res = append(res, p)
+		}
+	}
+	return res
+}
+
+func PrivilegeRoleIdFilter(roleIdString string) (privilegeKeys []string, err error, debugInfo interface{}) {
+	roleId, err := strconv.Atoi(roleIdString)
+	if err != nil {
+		return nil, fmt.Errorf("角色Id%w", errmsg.Invalid), err.Error()
+	}
+	privilegeKeys, err, debugInfo = GetRolePrivilegeKeysByRoleId([]int64{int64(roleId)})
+	if err != nil {
+		return nil, err, debugInfo
+	}
+	return
+}
+
+func PrivilegeUserIdFilter(userIdString string) (privilegeKeys []string, err error, debugInfo interface{}) {
+	userId, err := strconv.Atoi(userIdString)
+	if err != nil {
+		return nil, fmt.Errorf("用户Id%w", errmsg.Invalid), err.Error()
+	}
+
+	privilegeKeys, _, err, debugInfo = GetPrivilegeKeysByUserId(int64(userId))
+	if err != nil {
+		return nil, err, debugInfo
+	}
 	return
 }
