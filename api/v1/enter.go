@@ -6,7 +6,7 @@ type ApiGroup struct {
 	UserApi UserApi
 	//PrivilegeApi PrivilegeApi
 	RoleApi RoleApi
-	//LogApi LogApi
+	LogApi  LogApi
 }
 
 var ApiGroupApp = new(ApiGroup)
@@ -18,6 +18,6 @@ var (
 	//privilegeService=service.ServicesGroupApp.PrivilegeService
 	// 角色模块服务层入口
 	roleService = service.ServicesGroupApp.RoleService
-	//// 日志模块服务层入口
-	//logService = service.ServicesGroupApp. LogService
+	// 日志模块服务层入口
+	logService = service.ServicesGroupApp.LogService
 )

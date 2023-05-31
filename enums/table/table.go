@@ -8,4 +8,6 @@ const (
 	Role = "role"
 
 	Privilege = "privilege"
+
+	OperateLog = "operate_log"
 )

@@ -41,6 +41,13 @@ func Routers() *gin.Engine {
 		roleRouterGroup := baseRouterGroup.Group("/role/")
 		roleRouter.InitRoleRouter(roleRouterGroup)
 	}
+	// 日志模块路由组
+	{
+		logRouter := router.RouterGroupApp.Log
+		logRouterGroup := baseRouterGroup.Group("/log/")
+		logRouter.InitLogRouter(logRouterGroup)
+	}
+
 	r.NoRoute(func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"msg": "404",

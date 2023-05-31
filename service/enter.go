@@ -4,7 +4,7 @@ type ServicesGroup struct {
 	UserService
 	//PrivilegeService
 	RoleService
-	//LogService
+	LogService
 }
 
 var ServicesGroupApp = new(ServicesGroup)

@@ -2,6 +2,7 @@ package initialize
 
 import (
 	"base-system-backend/global"
+	"base-system-backend/model/log"
 	"base-system-backend/model/privilege"
 	"base-system-backend/model/role"
 	"base-system-backend/model/user"
@@ -59,6 +60,8 @@ func RegisterTables() {
 		&role.Role{},
 		// 权限表
 		&privilege.Privilege{},
+		// 操作日志表
+		&log.OperateLog{},
 	)
 	if err != nil {
 		global.LOG.Error("register table failed", zap.Error(err))
