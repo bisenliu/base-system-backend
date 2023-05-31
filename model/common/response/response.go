@@ -5,9 +5,11 @@ import (
 	"base-system-backend/enums/errmsg"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"io"
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type Data struct {
@@ -51,6 +53,13 @@ func Error(c *gin.Context, statusCode code.StatusCode, errorInfo interface{}, de
 		},
 		Data: data,
 	})
+}
+
+func File(c *gin.Context, content io.ReadSeeker, fileTag string) {
+	fileName := fmt.Sprintf("%s%s%s.xlsx", time.Now(), `-`, fileTag)
+	c.Writer.Header().Add("Content-Disposition", fmt.Sprintf(`attachment; filename="%s"`, fileName))
+	c.Writer.Header().Add("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+	http.ServeContent(c.Writer, c.Request, fileName, time.Now(), content)
 }
 
 func getErrorInfo(statusCode code.StatusCode, errorInfo interface{}) (errMsg interface{}, detail interface{}) {

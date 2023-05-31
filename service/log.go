@@ -7,11 +7,14 @@ import (
 	"base-system-backend/model/log/request"
 	"base-system-backend/model/log/response"
 	"base-system-backend/model/user"
+	"base-system-backend/utils"
 	"base-system-backend/utils/common"
 	"base-system-backend/utils/orm"
 	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"io"
+	"strconv"
 )
 
 type LogService struct{}
@@ -19,6 +22,41 @@ type LogService struct{}
 func (service LogService) OperateLogListService(c *gin.Context, params *request.OperateLogFilter) (
 	operateLogList *response.OperateLogList, err error, debugInfo interface{}) {
 	return service.operateLogQuery(true, c, params)
+}
+
+func (service LogService) OperateLogDownloadService(c *gin.Context, params *request.OperateLogFilter) (content io.ReadSeeker, err error, debugInfo interface{}) {
+	var (
+		operateLogList *response.OperateLogList
+		res            []interface{}
+	)
+	operateLogList, err, debugInfo = service.operateLogQuery(false, c, params)
+	if err != nil {
+		return
+	}
+	for _, value := range operateLogList.Results {
+		var userID string
+		userID = strconv.FormatInt(*value.UserId, 10)
+		if value.UserId == nil {
+			userID = ""
+		}
+		res = append(res, &response.OperateLogDownload{
+			Id:          value.Id,
+			ActionName:  value.ActionName,
+			Module:      value.Module,
+			AccessUrl:   value.AccessUrl,
+			RequestIp:   value.RequestIp,
+			UserAgent:   value.UserAgent,
+			UserId:      userID,
+			UserName:    value.UserName,
+			UserAccount: value.UserAccount,
+			AccessTime:  value.AccessTime,
+			Success:     value.Success,
+			Message:     value.Message,
+		})
+	}
+	content, err, debugInfo = utils.ToExcel("操作日志", []string{`Id`, `接口名称`, `模块名称`, `接口地址`, `来源IP`, `UserAgent`, `用户ID`, `用户姓名`, `用户账号`, `请求时间`, `请求状态`, `错误信息`}, res)
+
+	return
 }
 
 func (LogService) operateLogQuery(isPage bool, c *gin.Context, params *request.OperateLogFilter) (operateLogList *response.OperateLogList, err error, debugInfo interface{}) {

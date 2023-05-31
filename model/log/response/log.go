@@ -31,3 +31,18 @@ type OperateLogList struct {
 	response.PageInfo
 	Results []OperateLogDetail `json:"results" form:"results"` //数据
 }
+
+type OperateLogDownload struct {
+	Id          int64            `json:"id"`
+	ActionName  string           `json:"action_name"`
+	Module      string           `json:"module"`
+	AccessUrl   string           `json:"access_url"`
+	RequestIp   string           `json:"request_ip"`
+	UserAgent   string           `json:"user_agent"`
+	UserId      string           `json:"user_id"`
+	UserName    string           `json:"user_name"`
+	UserAccount string           `json:"user_account"`
+	AccessTime  field.CustomTime `json:"access_time"`
+	Success     enums.BoolSign   `json:"success"`
+	Message     string           `json:"message"`
+}
