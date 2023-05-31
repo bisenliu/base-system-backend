@@ -3,7 +3,9 @@ package v1
 import (
 	"base-system-backend/enums/code"
 	"base-system-backend/model/common/response"
+	"base-system-backend/model/privilege/request"
 	"base-system-backend/utils"
+	"base-system-backend/utils/validate"
 	"github.com/gin-gonic/gin"
 )
 
@@ -44,4 +46,17 @@ func (PrivilegeApi) PrivilegeListApi(c *gin.Context) {
 	results["results"] = privilegeKeys
 	response.OK(c, results)
 	return
+}
+
+func (PrivilegeApi) RolePrivilegeUpdateApi(c *gin.Context) {
+	params := new(request.RolePrivilegeUpdate)
+	if ok := validate.RequestParamsVerify(c, params); !ok {
+		return
+	}
+	roleId := c.Param("role_id")
+	if err, debugInfo := privilegeService.RolePrivilegeUpdateService(roleId, params); err != nil {
+		response.Error(c, code.UpdateFailed, err, debugInfo)
+		return
+	}
+	response.OK(c, nil)
 }
