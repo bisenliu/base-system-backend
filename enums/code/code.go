@@ -36,8 +36,10 @@ func (receiver StatusCode) Msg() string {
 
 func GetStatusCodeByModelCode(urlPrefix string, statusCode StatusCode) int {
 	modelMapping := map[string]ModelCode{
-		"user": User,
-		"role": Role,
+		"user":      User,
+		"role":      Role,
+		"privilege": Privilege,
+		"log":       Log,
 	}
 	modelCode, ok := modelMapping[urlPrefix]
 	if !ok {
