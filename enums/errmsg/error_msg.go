@@ -25,4 +25,5 @@ var (
 
 	JsonConvertFiled = errors.New("json转换失败")
 	TimeCalcFiled    = errors.New("时间计算失败")
+	DecryptFailed    = errors.New("字段解密失败")
 )
