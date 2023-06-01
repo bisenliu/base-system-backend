@@ -2,6 +2,7 @@ package initialize
 
 import "C"
 import (
+	v1 "base-system-backend/api/v1"
 	_ "base-system-backend/docs" // 千万不要忘了导入把你上一步生成的docs
 	"base-system-backend/global"
 	"base-system-backend/middleware"
@@ -27,6 +28,8 @@ func Routers() *gin.Engine {
 
 	r.GET("/swagger/*any", gs.WrapHandler(swaggerFiles.Handler))
 	baseRouterGroup := r.Group("v1")
+	// 版本号
+	baseRouterGroup.GET("/version/", v1.ApiGroupApp.VersionApi.GetVersionApi)
 	// 认证中间件
 	baseRouterGroup.Use(middleware.GinLogger(), middleware.GinRecovery(true), middleware.JWTAuthMiddleware())
 	// 用户模块路由组

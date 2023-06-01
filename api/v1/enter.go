@@ -3,10 +3,11 @@ package v1
 import "base-system-backend/service"
 
 type ApiGroup struct {
-	UserApi      UserApi
-	PrivilegeApi PrivilegeApi
-	RoleApi      RoleApi
-	LogApi       LogApi
+	UserApi
+	PrivilegeApi
+	RoleApi
+	LogApi
+	VersionApi
 }
 
 var ApiGroupApp = new(ApiGroup)
