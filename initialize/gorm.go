@@ -1,11 +1,13 @@
 package initialize
 
 import (
+	"base-system-backend/enums/errmsg"
 	"base-system-backend/global"
 	"base-system-backend/model/log"
 	"base-system-backend/model/privilege"
 	"base-system-backend/model/role"
 	"base-system-backend/model/user"
+	"fmt"
 	"go.uber.org/zap"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -16,7 +18,7 @@ import (
 func GormPgSql() *gorm.DB {
 	p := global.CONFIG.Pgsql
 	if p.Dbname == "" {
-		return nil
+		panic(fmt.Errorf("数据库名称%w", errmsg.Required))
 	}
 	pgsqlConfig := postgres.Config{
 		DSN:                  p.Dsn(), // DSN data source name
@@ -30,7 +32,7 @@ func GormPgSql() *gorm.DB {
 			SingularTable: true,
 		},
 	}); err != nil {
-		return nil
+		panic(errmsg.DatabaseConnectFailed)
 	} else {
 		sqlDB, _ := db.DB()
 		sqlDB.SetMaxIdleConns(p.MaxIdleConns)

@@ -23,7 +23,8 @@ var (
 	ResetPwdFailed   = errors.New("无法重置状态为%s的账号密码")
 	OnlyStopOrEnable = errors.New("只能停用或启用账号")
 
-	JsonConvertFiled = errors.New("json转换失败")
-	TimeCalcFiled    = errors.New("时间计算失败")
-	DecryptFailed    = errors.New("字段解密失败")
+	JsonConvertFiled      = errors.New("json转换失败")
+	TimeCalcFiled         = errors.New("时间计算失败")
+	DecryptFailed         = errors.New("字段解密失败")
+	DatabaseConnectFailed = errors.New("数据库连接失败")
 )
