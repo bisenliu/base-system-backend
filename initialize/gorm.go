@@ -72,4 +72,5 @@ func RegisterTables() {
 	}
 	global.LOG.Info("register table success")
 	internal.DefaultPrivilegeInit()
+	internal.DefaultRoleInit()
 }

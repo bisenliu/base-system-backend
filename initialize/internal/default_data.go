@@ -4,6 +4,7 @@ import (
 	"base-system-backend/enums/table"
 	"base-system-backend/global"
 	"base-system-backend/model/privilege"
+	"base-system-backend/model/role"
 	"encoding/json"
 	"fmt"
 	"gorm.io/datatypes"
@@ -22,14 +23,14 @@ func DefaultPrivilegeInit() {
 		panic(fmt.Errorf("get current dir failed: (%s)", err.Error()))
 	}
 	privilegeJsonPath := strings.Join([]string{baseDir, "/initialize/internal/privilege.json"}, "")
-	bytePrivliege, err := os.ReadFile(privilegeJsonPath)
+	bytePrivilege, err := os.ReadFile(privilegeJsonPath)
 	if err != nil {
 		panic(fmt.Errorf("read privilege json file failed: (%s)", err.Error()))
 	}
 	var Privileges struct {
 		RECORDS []map[string]string `json:"records"`
 	}
-	err = json.Unmarshal(bytePrivliege, &Privileges)
+	err = json.Unmarshal(bytePrivilege, &Privileges)
 	if err != nil {
 		panic(fmt.Errorf("privilege json convert failed: (%s)", err.Error()))
 	}
@@ -55,12 +56,45 @@ func DefaultPrivilegeInit() {
 	}
 }
 
-func defaultRoleInit() {
-	global.DB.Exec(fmt.Sprintf("TRUNCATE TABLE %s RESTART IDENTITY", table.Role))
+func DefaultRoleInit() {
+	err := global.DB.Exec(fmt.Sprintf("TRUNCATE TABLE %s RESTART IDENTITY", table.Role)).Error
+	if err != nil {
+		panic(fmt.Errorf("clear role table failed: (%s)", err.Error()))
+	}
+	// 管理员角色
+	var adminPrivilegeKeys []string
+	err = global.DB.Table(table.Privilege).Select("key").Find(&adminPrivilegeKeys).Error
+	if err != nil {
+		panic(fmt.Errorf("privilege query failed: (%s)", err.Error()))
+	}
+	adminPrivilegeKeysByte, err := json.Marshal(adminPrivilegeKeys)
+	err = global.DB.Table(table.Role).Create(&role.Role{
+		Name:          "管理员",
+		IsSystem:      1,
+		PrivilegeKeys: adminPrivilegeKeysByte,
+	}).Error
+	if err != nil {
+		panic(fmt.Errorf("create admin role failed: (%s)", err.Error()))
+	}
+	// 普通角色
+	plainPrivilegeKeys, err := json.Marshal([]string{"operate_log_list", "operate_log_download", "role_list", "role_detail",
+		"privilege_list", "account_list", "account_detail_other"})
+	err = global.DB.Table(table.Role).Create(&role.Role{
+		Name:          "普通用户",
+		IsSystem:      1,
+		PrivilegeKeys: plainPrivilegeKeys,
+	}).Error
+	if err != nil {
+		panic(fmt.Errorf("create plain role failed: (%s)", err.Error()))
+	}
+
 }
 
 func defaultUserInit() {
-	global.DB.Exec(fmt.Sprintf("TRUNCATE TABLE %s RESTART IDENTITY", table.User))
+	err := global.DB.Exec(fmt.Sprintf("TRUNCATE TABLE %s RESTART IDENTITY", table.User)).Error
+	if err != nil {
+		panic(fmt.Errorf("clear user table failed: (%s)", err.Error()))
+	}
 }
 
 func defaultUserRoleInit() {
