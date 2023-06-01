@@ -1,0 +1,158 @@
+{
+  "RECORDS": [
+    {
+      "id": "1",
+      "title": "系统权限",
+      "key": "system_privilege",
+      "dependency": "[]",
+      "parent_id": "0"
+    },
+    {
+      "id": "2",
+      "title": "系统管理",
+      "key": "system_manage",
+      "dependency": "[]",
+      "parent_id": "1"
+    },
+    {
+      "id": "3",
+      "title": "日志管理",
+      "key": "log_manage",
+      "dependency": "[]",
+      "parent_id": "2"
+    },
+    {
+      "id": "4",
+      "title": "查询操作日志",
+      "key": "operate_log_list",
+      "dependency": "[\"account_list\"]",
+      "parent_id": "3"
+    },
+    {
+      "id": "5",
+      "title": "下载操作日志",
+      "key": "operate_log_download",
+      "dependency": "[\"operate_log_list\"]",
+      "parent_id": "3"
+    },
+    {
+      "id": "6",
+      "title": "角色管理",
+      "key": "role_manage",
+      "dependency": "[]",
+      "parent_id": "2"
+    },
+    {
+      "id": "7",
+      "title": "查询角色列表",
+      "key": "role_list",
+      "dependency": "[]",
+      "parent_id": "6"
+    },
+    {
+      "id": "8",
+      "title": "查询角色详情",
+      "key": "role_detail",
+      "dependency": "[\"role_list\"]",
+      "parent_id": "6"
+    },
+    {
+      "id": "9",
+      "title": "创建角色",
+      "key": "role_create",
+      "dependency": "[\"role_list\"]",
+      "parent_id": "6"
+    },
+    {
+      "id": "10",
+      "title": "修改角色",
+      "key": "role_update",
+      "dependency": "[\"role_list\", \"role_detail\"]",
+      "parent_id": "6"
+    },
+    {
+      "id": "11",
+      "title": "删除角色",
+      "key": "role_delete",
+      "dependency": "[\"role_list\"]",
+      "parent_id": "6"
+    },
+    {
+      "id": "12",
+      "title": "解绑角色",
+      "key": "role_unbind",
+      "dependency": "[\"role_list\", \"role_detail\", \"account_list\"]",
+      "parent_id": "6"
+    },
+    {
+      "id": "13",
+      "title": "权限管理",
+      "key": "privilege_manage",
+      "dependency": "[]",
+      "parent_id": "2"
+    },
+    {
+      "id": "14",
+      "title": "查询权限列表",
+      "key": "privilege_list",
+      "dependency": "[\"role_detail\"]",
+      "parent_id": "13"
+    },
+    {
+      "id": "15",
+      "title": "修改角色权限",
+      "key": "privilege_set",
+      "dependency": "[\"privilege_list\"]",
+      "parent_id": "13"
+    },
+    {
+      "id": "16",
+      "title": "账号管理",
+      "key": "account_manage",
+      "dependency": "[]",
+      "parent_id": "2"
+    },
+    {
+      "id": "17",
+      "title": "查询账号列表",
+      "key": "account_list",
+      "dependency": "[]",
+      "parent_id": "16"
+    },
+    {
+      "id": "18",
+      "title": "添加账号",
+      "key": "account_create",
+      "dependency": "[\"account_list\"]",
+      "parent_id": "16"
+    },
+    {
+      "id": "19",
+      "title": "重置指定账号密码",
+      "key": "reset_pwd_other",
+      "dependency": "[\"account_list\"]",
+      "parent_id": "16"
+    },
+    {
+      "id": "20",
+      "title": "修改指定账号状态",
+      "key": "change_status_other",
+      "dependency": "[\"account_list\"]",
+      "parent_id": "16"
+    },
+    {
+      "id": "21",
+      "title": "查询指定账号信息",
+      "key": "account_detail_other",
+      "dependency": "[\"account_list\"]",
+      "parent_id": "16"
+    },
+    {
+      "id": "22",
+      "title": "修改指定账号信息",
+      "key": "account_update_other",
+      "dependency": "[\"account_list\", \"account_detail_other\"]",
+      "parent_id": "16"
+    }
+  ]
+}
