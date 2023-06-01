@@ -28,7 +28,7 @@ func Routers() *gin.Engine {
 	r.GET("/swagger/*any", gs.WrapHandler(swaggerFiles.Handler))
 	baseRouterGroup := r.Group("v1")
 	// 认证中间件
-	baseRouterGroup.Use(middleware.JWTAuthMiddleware())
+	baseRouterGroup.Use(middleware.GinLogger(), middleware.GinRecovery(true), middleware.JWTAuthMiddleware())
 	// 用户模块路由组
 	{
 		userRouter := router.RouterGroupApp.User
