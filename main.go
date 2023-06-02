@@ -33,6 +33,7 @@ func main() {
 		//程序结束前关闭数据库链援
 		defer initialize.CloseDB()
 	}
+	initialize.DefaultDataInit()
 	// 初始化redis
 	initialize.Redis()
 	defer initialize.CloseRedis()

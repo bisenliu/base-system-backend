@@ -1,7 +1,7 @@
 package table
 
 const (
-	User          = "user"
+	User          = "users"
 	UserRole      = "user_role"
 	UserBlackList = "user_black_list"
 

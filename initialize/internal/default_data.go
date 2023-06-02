@@ -5,6 +5,9 @@ import (
 	"base-system-backend/global"
 	"base-system-backend/model/privilege"
 	"base-system-backend/model/role"
+	"base-system-backend/model/user"
+	"base-system-backend/utils"
+	"base-system-backend/utils/common"
 	"encoding/json"
 	"fmt"
 	"gorm.io/datatypes"
@@ -90,13 +93,41 @@ func DefaultRoleInit() {
 
 }
 
-func defaultUserInit() {
+func DefaultUserInit() {
 	err := global.DB.Exec(fmt.Sprintf("TRUNCATE TABLE %s RESTART IDENTITY", table.User)).Error
 	if err != nil {
 		panic(fmt.Errorf("clear user table failed: (%s)", err.Error()))
 	}
+	secretKey, err := utils.GenerateSecretKey()
+	if err != nil {
+		panic(fmt.Errorf("generate seecret key failed: (%s)", err.Error()))
+	}
+	name := "管理员"
+	fullName, shortName := common.ConvertCnToLetter(name)
+	err = global.DB.Table(table.User).Create(&user.User{
+		Account:   "root",
+		Password:  utils.BcryptHash("123456"),
+		SecretKey: secretKey,
+		Name:      name,
+		FullName:  fullName,
+		ShortName: shortName,
+		IsSystem:  1,
+	}).Error
+	if err != nil {
+		panic(fmt.Errorf("create user failed: (%s)", err.Error()))
+	}
 }
 
-func defaultUserRoleInit() {
-	global.DB.Exec(fmt.Sprintf("TRUNCATE TABLE %s RESTART IDENTITY", table.UserRole))
+func DefaultUserRoleInit() {
+	err := global.DB.Exec(fmt.Sprintf("TRUNCATE TABLE %s RESTART IDENTITY", table.UserRole)).Error
+	if err != nil {
+		panic(fmt.Errorf("clear user_role table failed: (%s)", err.Error()))
+	}
+	err = global.DB.Table(table.UserRole).Create(&user.UserRole{
+		UserId: 1,
+		RoleId: 1,
+	}).Error
+	if err != nil {
+		panic(fmt.Errorf("create user role failed: (%s)", err.Error()))
+	}
 }
