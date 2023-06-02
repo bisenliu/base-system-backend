@@ -21,6 +21,63 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/user/": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "用户添加",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "UserApi"
+                ],
+                "summary": "用户添加",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Token 令牌",
+                        "name": "Identification",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "用户信息",
+                        "name": "object",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/request.UserCreate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Data"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.Create"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/user/list/": {
             "get": {
                 "security": [
@@ -42,8 +99,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Bearer 用户令牌",
-                        "name": "Authorization",
+                        "description": "Token 令牌",
+                        "name": "Identification",
                         "in": "header",
                         "required": true
                     },
@@ -103,9 +160,214 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/user/login/": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "登录",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "UserApi"
+                ],
+                "summary": "登录",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Token 令牌",
+                        "name": "Identification",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "登录参数",
+                        "name": "object",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.UserLoginBase"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Data"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.LoginSuccess"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/user/logout/": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "登出",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "UserApi"
+                ],
+                "summary": "登出",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Token 令牌",
+                        "name": "Identification",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Data"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "gender.Gender": {
+            "type": "integer",
+            "enum": [
+                0,
+                1
+            ],
+            "x-enum-comments": {
+                "Female": "女",
+                "Male": "男"
+            },
+            "x-enum-varnames": [
+                "Female",
+                "Male"
+            ]
+        },
+        "request.UserCreate": {
+            "type": "object",
+            "required": [
+                "account",
+                "password"
+            ],
+            "properties": {
+                "account": {
+                    "type": "string",
+                    "maxLength": 20
+                },
+                "createTime": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "full_name": {
+                    "type": "string"
+                },
+                "gender": {
+                    "$ref": "#/definitions/gender.Gender"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "id_card": {
+                    "type": "string",
+                    "maxLength": 18
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 20
+                },
+                "password": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string",
+                    "maxLength": 11
+                },
+                "role_ids": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "secret_key": {
+                    "type": "string"
+                },
+                "short_name": {
+                    "type": "string"
+                },
+                "status": {
+                    "$ref": "#/definitions/user.AccStatus"
+                },
+                "updateTime": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.UserLoginBase": {
+            "type": "object",
+            "required": [
+                "login_type"
+            ],
+            "properties": {
+                "account": {
+                    "type": "string"
+                },
+                "code": {
+                    "type": "string"
+                },
+                "login_type": {
+                    "type": "integer"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "slider": {
+                    "type": "object"
+                }
+            }
+        },
+        "response.Create": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
         "response.Data": {
             "type": "object",
             "properties": {
@@ -115,6 +377,65 @@ const docTemplate = `{
                 },
                 "status_info": {
                     "$ref": "#/definitions/response.statusInfo"
+                }
+            }
+        },
+        "response.LoginSuccess": {
+            "type": "object",
+            "properties": {
+                "accounts": {
+                    "type": "string"
+                },
+                "avatar": {
+                    "type": "string"
+                },
+                "create_time": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "gender": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "id_card": {
+                    "type": "string"
+                },
+                "is_system": {
+                    "type": "integer"
+                },
+                "last_time": {
+                    "type": "string"
+                },
+                "login_type": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "privilege_list": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "role_ids": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "status": {
+                    "$ref": "#/definitions/user.AccStatus"
+                },
+                "token": {
+                    "type": "string"
                 }
             }
         },
@@ -142,7 +463,7 @@ const docTemplate = `{
                 "id_card": {
                     "type": "string"
                 },
-                "is_super": {
+                "is_system": {
                     "type": "integer"
                 },
                 "last_time": {

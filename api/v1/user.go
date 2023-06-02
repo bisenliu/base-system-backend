@@ -16,6 +16,17 @@ import (
 
 type UserApi struct{}
 
+// UserLoginApi
+// @Summary 登录
+// @Description 登录
+// @Tags UserApi
+// @Accept application/json
+// @Produce application/json
+// @Param Identification header string true "Token 令牌"
+// @Param object body request.UserLoginBase true "登录参数"
+// @Security ApiKeyAuth
+// @Success 200 {object} response.Data{data=response.LoginSuccess}
+// @Router /user/login/ [post]
 func (UserApi) UserLoginApi(c *gin.Context) {
 	loginBase := new(request.UserLoginBase)
 	if ok := validate.RequestParamsVerify(c, &loginBase); !ok {
@@ -48,6 +59,16 @@ func (UserApi) UserLoginApi(c *gin.Context) {
 	return
 }
 
+// UserLogoutApi
+// @Summary 登出
+// @Description 登出
+// @Tags UserApi
+// @Accept application/json
+// @Produce application/json
+// @Param Identification header string true "Token 令牌"
+// @Security ApiKeyAuth
+// @Success 200 {object} response.Data
+// @Router /user/logout/ [post]
 func (UserApi) UserLogoutApi(c *gin.Context) {
 	user, err, debugInfo := utils.GetCurrentUser(c)
 	if err != nil {
@@ -67,7 +88,7 @@ func (UserApi) UserLogoutApi(c *gin.Context) {
 // @Tags UserApi
 // @Accept application/json
 // @Produce application/json
-// @Param Authorization header string true "Bearer 用户令牌"
+// @Param Identification header string true "Token 令牌"
 // @Param object query request.UserFilter false "查询参数"
 // @Security ApiKeyAuth
 // @Success 200 {object} response.Data{data=response.UserList}
@@ -86,6 +107,17 @@ func (UserApi) UserListApi(c *gin.Context) {
 	return
 }
 
+// UserCreateApi
+// @Summary 用户添加
+// @Description 用户添加
+// @Tags UserApi
+// @Accept application/json
+// @Produce application/json
+// @Param Identification header string true "Token 令牌"
+// @Param object body request.UserCreate false "用户信息"
+// @Security ApiKeyAuth
+// @Success 200 {object} response.Data{data=response.Create}
+// @Router /user/ [post]
 func (UserApi) UserCreateApi(c *gin.Context) {
 	params := new(request.UserCreate)
 	if ok := validate.RequestParamsVerify(c, params); !ok {
