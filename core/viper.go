@@ -28,7 +28,7 @@ func Viper() *viper.Viper {
 	v.OnConfigChange(func(e fsnotify.Event) {
 		fmt.Println("config file changed:", e.Name)
 		if err := mapstructure.Decode(v.Get(global.ENV), &global.CONFIG); err != nil {
-			fmt.Println(err)
+			panic(fmt.Errorf("mapstructure.Decode failed: %s \n", err))
 		}
 	})
 	return v

@@ -4,6 +4,7 @@ import (
 	"base-system-backend/core"
 	"base-system-backend/global"
 	"base-system-backend/initialize"
+	"fmt"
 	"go.uber.org/zap"
 )
 
@@ -27,12 +28,10 @@ func main() {
 	zap.ReplaceGlobals(global.LOG)
 	// 初始化gorm连接
 	global.DB = initialize.GormPgSql()
-	if global.DB != nil {
-		// 初始化表
-		initialize.RegisterTables()
-		//程序结束前关闭数据库链援
-		defer initialize.CloseDB()
-	}
+	// 初始化表
+	initialize.RegisterTables()
+	//程序结束前关闭数据库链援
+	defer initialize.CloseDB()
 	initialize.DefaultDataInit()
 	// 初始化redis
 	initialize.Redis()
@@ -41,8 +40,7 @@ func main() {
 	global.Node = initialize.SnowFlake()
 	// 初始化翻译器
 	if err := initialize.InitTrans("zh"); err != nil {
-		global.LOG.Error("init trans failed:", zap.Error(err))
-		return
+		panic(fmt.Errorf("init trans failed: %s", err.Error()))
 	}
 	core.RunServer()
 }
