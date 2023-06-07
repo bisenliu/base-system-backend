@@ -24,7 +24,7 @@ func (c *CustomTime) MarshalJSON() ([]byte, error) {
 func (c CustomTime) Value() (driver.Value, error) {
 	var zeroTime time.Time
 	tTime := time.Time(c)
-	if tTime.UnixMilli() == zeroTime.Unix() {
+	if tTime.Unix() == zeroTime.Unix() {
 		return nil, nil
 	}
 	return tTime, nil
