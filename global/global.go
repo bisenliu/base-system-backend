@@ -11,12 +11,13 @@ import (
 )
 
 var (
-	ENV    string
-	CONFIG config.Service
-	LOG    *zap.Logger
-	DB     *gorm.DB
-	VP     *viper.Viper
-	REDIS  *redis.Client
-	TRANS  ut.Translator
-	Node   *sf.Node
+	ENV        string
+	CONFIG     config.Service
+	LOG        *zap.Logger
+	DB         *gorm.DB
+	VP         *viper.Viper
+	REDIS      *redis.Client
+	TRANS      ut.Translator
+	Node       *sf.Node
+	SystemInit bool
 )

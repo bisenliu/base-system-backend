@@ -20,7 +20,7 @@ import (
 // @BasePath /v1/
 func main() {
 	// 环境变量
-	global.ENV = core.Env()
+	global.ENV, global.SystemInit = core.Env()
 	// 初始化viper
 	global.VP = core.Viper()
 	//初始化日志库
