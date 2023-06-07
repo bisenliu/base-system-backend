@@ -2,7 +2,6 @@ package initialize
 
 import (
 	"base-system-backend/enums/errmsg"
-	"base-system-backend/enums/table"
 	"base-system-backend/global"
 	"base-system-backend/initialize/internal"
 	"base-system-backend/model/log"
@@ -75,18 +74,8 @@ func RegisterTables() {
 }
 
 func DefaultDataInit() {
-	var (
-		userCount      int64
-		userRoleCount  int64
-		roleCount      int64
-		privilegeCount int64
-	)
-	global.DB.Table(table.User).Count(&userCount)
-	global.DB.Table(table.UserRole).Count(&userRoleCount)
-	global.DB.Table(table.Role).Count(&roleCount)
-	global.DB.Table(table.Privilege).Count(&privilegeCount)
 
-	if userCount == 0 && userRoleCount == 0 && roleCount == 0 && privilegeCount == 0 {
+	if global.SystemInit {
 		global.LOG.Info("init privilege ...")
 		internal.DefaultPrivilegeInit()
 
