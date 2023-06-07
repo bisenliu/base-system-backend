@@ -1,7 +1,9 @@
 package middleware
 
 import (
+	"base-system-backend/enums/code"
 	"base-system-backend/global"
+	"base-system-backend/model/common/response"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"net"
@@ -53,6 +55,7 @@ func GinRecovery(stack bool) gin.HandlerFunc {
 					)
 				}
 				c.AbortWithStatus(http.StatusInternalServerError)
+				response.Error(c, code.UnknownExc, err, nil)
 			}
 		}()
 		c.Next()
