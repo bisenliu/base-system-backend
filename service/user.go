@@ -33,6 +33,7 @@ type UserService struct{}
 
 func (UserService) AccountLoginService(params *request.UserAccountLogin) (err error, debugInfo interface{}) {
 	var instance user.User
+	params.Account = strings.ToLower(params.Account)
 	if err = global.DB.Table(table.User).
 		Select("password", "status").
 		Where("account = ?", params.Account).
@@ -189,6 +190,8 @@ func (UserService) UserCreateService(params *request.UserCreate) (err error, deb
 		return fmt.Errorf("secretKey%w", errmsg.SaveFailed), err.Error()
 	}
 	params.SecretKey = secretKey
+	// 账号统一小写
+	params.Account = strings.ToLower(params.Account)
 	// 密码加密
 	params.Password = utils.BcryptHash(params.Password)
 	// 全拼简拼
