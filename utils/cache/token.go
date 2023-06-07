@@ -17,12 +17,16 @@ func getTokenExpireTime() (expire time.Duration) {
 func SetToken(userID int64, token string) {
 	expireTime := getTokenExpireTime()
 	key := fmt.Sprintf(getRedisKey(KeyToken), strconv.FormatInt(userID, 10))
-	global.REDIS.Set(context.Background(), key, token, expireTime)
+	rdb := global.REDIS
+	rdb.Do(context.Background(), "SELECT", global.CONFIG.Redis.TokenDb)
+	rdb.Set(context.Background(), key, token, expireTime)
 }
 
 func GetToken(userID int64) string {
 	key := fmt.Sprintf(getRedisKey(KeyToken), strconv.FormatInt(userID, 10))
-	token, err := global.REDIS.Get(context.Background(), key).Result()
+	rdb := global.REDIS
+	rdb.Do(context.Background(), "SELECT", global.CONFIG.Redis.TokenDb)
+	token, err := rdb.Get(context.Background(), key).Result()
 	if err != nil {
 		return ""
 	}
@@ -33,11 +37,15 @@ func GetToken(userID int64) string {
 func FlushToken(userID int64) {
 	key := fmt.Sprintf(getRedisKey(KeyToken), strconv.FormatInt(userID, 10))
 	expireTime := getTokenExpireTime()
-	global.REDIS.Expire(context.Background(), key, expireTime)
+	rdb := global.REDIS
+	rdb.Do(context.Background(), "SELECT", global.CONFIG.Redis.TokenDb)
+	rdb.Expire(context.Background(), key, expireTime)
 }
 
 // DeleteToken 删除token
 func DeleteToken(userID int64) {
 	key := fmt.Sprintf(getRedisKey(KeyToken), strconv.FormatInt(userID, 10))
-	global.REDIS.Del(context.Background(), key)
+	rdb := global.REDIS
+	rdb.Do(context.Background(), "SELECT", global.CONFIG.Redis.TokenDb)
+	rdb.Del(context.Background(), key)
 }
