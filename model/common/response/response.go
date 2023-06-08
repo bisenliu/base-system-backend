@@ -1,6 +1,7 @@
 package response
 
 import (
+	"base-system-backend/enums"
 	"base-system-backend/enums/code"
 	"base-system-backend/enums/errmsg"
 	"base-system-backend/utils"
@@ -58,7 +59,7 @@ func Error(c *gin.Context, statusCode code.StatusCode, errorInfo interface{}, de
 func File(c *gin.Context, content io.ReadSeeker, fileTag string) {
 	fileName := fmt.Sprintf("%s%s%s.xlsx", time.Now(), `-`, fileTag)
 	c.Writer.Header().Add("Content-Disposition", fmt.Sprintf(`attachment; filename="%s"`, fileName))
-	c.Writer.Header().Add("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+	c.Writer.Header().Add("Content-Type", enums.ExcelContentType)
 	http.ServeContent(c.Writer, c.Request, fileName, time.Now(), content)
 }
 
