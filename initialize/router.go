@@ -31,10 +31,11 @@ func Routers() *gin.Engine {
 	// 版本号
 	baseRouterGroup.GET("/version/", v1.ApiGroupApp.VersionApi.GetVersionApi)
 	// 认证中间件
-	baseRouterGroup.Use(middleware.GinLogger(),
-		middleware.GinRecovery(true),
+	baseRouterGroup.Use(
+		middleware.GinLogger(),
 		middleware.JWTAuthMiddleware(),
 		middleware.OperateLogMiddleware(),
+		middleware.GinRecovery(false),
 	)
 	// 用户模块路由组
 	{
