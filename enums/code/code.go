@@ -40,6 +40,9 @@ func GetStatusCodeByModelCode(urlPrefix string, statusCode StatusCode) int {
 	if !ok {
 		modelCode = Unknown
 	}
-	code, _ := strconv.Atoi(fmt.Sprintf("%s", modelCode) + fmt.Sprintf("%s", statusCode))
+	if statusCode == InvalidLogin {
+		modelCode = User
+	}
+	code, _ := strconv.Atoi(fmt.Sprintf("%s", modelCode.Code()) + fmt.Sprintf("%s", statusCode))
 	return code
 }
