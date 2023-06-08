@@ -24,7 +24,7 @@ type OperateLogDetail struct {
 	UserAccount string            `json:"user_account"`
 	AccessTime  *field.CustomTime `json:"access_time"`
 	Success     enums.BoolSign    `json:"success"`
-	Detail      *datatypes.JSON   `json:"_"`
+	Detail      *datatypes.JSON   `json:"-"`
 	OperateLogErrMessage
 }
 
