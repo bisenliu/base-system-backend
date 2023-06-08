@@ -3,12 +3,12 @@ package response
 import (
 	"base-system-backend/enums/code"
 	"base-system-backend/enums/errmsg"
+	"base-system-backend/utils"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"io"
 	"net/http"
 	"strconv"
-	"strings"
 	"time"
 )
 
@@ -86,7 +86,6 @@ func getErrorInfo(statusCode code.StatusCode, errorInfo interface{}) (errMsg int
 }
 
 func generateStatusCode(c *gin.Context, statusCode code.StatusCode) int {
-	urlSlice := strings.Split(fmt.Sprintf("%s", c.Request.URL), "/")
-	prefix := urlSlice[2]
+	prefix := utils.GetUrlPrefix(c.Request.RequestURI)
 	return code.GetStatusCodeByModelCode(prefix, statusCode)
 }

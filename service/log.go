@@ -51,7 +51,7 @@ func (service LogService) OperateLogDownloadService(c *gin.Context, params *requ
 			UserId:      userID,
 			UserName:    value.UserName,
 			UserAccount: value.UserAccount,
-			AccessTime:  time.Time(value.AccessTime),
+			AccessTime:  time.Time(*value.AccessTime),
 			Success:     value.Success.Choices(value.Success),
 			Message:     value.Message,
 		})

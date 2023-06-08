@@ -2,7 +2,9 @@ package request
 
 import (
 	"base-system-backend/enums"
+	"base-system-backend/model/common/field"
 	"base-system-backend/model/common/request"
+	"gorm.io/datatypes"
 )
 
 type OperateLogFilter struct {
@@ -14,4 +16,16 @@ type OperateLogFilter struct {
 	EndAccessTime   *int64         `json:"end_access_time" form:"end_access_time" label:"访问结束时间"`
 	Success         enums.BoolSign `json:"success" form:"success" binding:"enum" label:"操作是否成功"`
 	request.PageInfo
+}
+
+type OperateLogCreate struct {
+	UserId     *int64           `json:"user_id"`
+	ActionName string           `json:"action_name"`
+	Module     string           `json:"module"`
+	AccessUrl  string           `json:"access_url"`
+	RequestIp  string           `json:"request_ip"`
+	UserAgent  string           `json:"user_agent"`
+	AccessTime field.CustomTime `json:"access_time"`
+	Success    enums.BoolSign   `json:"success"`
+	Detail     datatypes.JSON   `json:"detail"`
 }

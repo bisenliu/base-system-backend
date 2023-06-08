@@ -13,18 +13,18 @@ type OperateLogErrMessage struct {
 }
 
 type OperateLogDetail struct {
-	Id          int64            `json:"id"`
-	ActionName  string           `json:"action_name"`
-	Module      string           `json:"module"`
-	AccessUrl   string           `json:"access_url"`
-	RequestIp   string           `json:"request_ip"`
-	UserAgent   string           `json:"user_agent"`
-	UserId      *int64           `json:"user_id"`
-	UserName    string           `json:"user_name"`
-	UserAccount string           `json:"user_account"`
-	AccessTime  field.CustomTime `json:"access_time"`
-	Success     enums.BoolSign   `json:"success"`
-	Detail      *datatypes.JSON  `json:"_"`
+	Id          int64             `json:"id"`
+	ActionName  string            `json:"action_name"`
+	Module      string            `json:"module"`
+	AccessUrl   string            `json:"access_url"`
+	RequestIp   string            `json:"request_ip"`
+	UserAgent   string            `json:"user_agent"`
+	UserId      *int64            `json:"user_id"`
+	UserName    string            `json:"user_name"`
+	UserAccount string            `json:"user_account"`
+	AccessTime  *field.CustomTime `json:"access_time"`
+	Success     enums.BoolSign    `json:"success"`
+	Detail      *datatypes.JSON   `json:"_"`
 	OperateLogErrMessage
 }
 

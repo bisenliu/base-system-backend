@@ -8,8 +8,8 @@ import (
 )
 
 type CUTime struct {
-	CreateTime CustomTime `gorm:"column:create_time;autoCreateTime:milli;comment:创建时间"`
-	UpdateTime CustomTime `gorm:"column:update_time;autoCreateTime:milli;comment:更新时间"`
+	CreateTime CustomTime `gorm:"column:create_time;autoCreateTime;comment:创建时间"`
+	UpdateTime CustomTime `gorm:"column:update_time;autoCreateTime;comment:更新时间"`
 }
 
 type CustomTime time.Time

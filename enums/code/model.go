@@ -1,11 +1,38 @@
 package code
 
-type ModelCode string
+type Model []string
 
-const (
-	User         ModelCode = "100"
-	Role         ModelCode = "101"
-	Privilege    ModelCode = "102"
-	Log          ModelCode = "103"
-	UnknownModel ModelCode = "999"
+var ModelMapping = map[string]Model{
+	"user":      User,
+	"role":      Role,
+	"privilege": Privilege,
+	"log":       Log,
+}
+
+var (
+	User      Model = []string{"100", "user", "用户管理"}
+	Role      Model = []string{"101", "role", "角色管理"}
+	Privilege Model = []string{"102", "privilege", "权限管理"}
+	Log       Model = []string{"103", "log", "日志管理"}
+	Unknown   Model = []string{"999", "unknown", "未知"}
 )
+
+func (m Model) Choices(prefix string) Model {
+	info, ok := ModelMapping[prefix]
+	if !ok {
+		info = Unknown
+	}
+	return info
+}
+
+func (m Model) Code() string {
+	return m[0]
+}
+
+func (m Model) Key() string {
+	return m[1]
+}
+
+func (m Model) Desc() string {
+	return m[2]
+}
