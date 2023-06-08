@@ -55,7 +55,7 @@ func getFunctionComments(funcName string) string {
 
 		for _, decl := range file.Decls {
 			if fd, ok := decl.(*ast.FuncDecl); ok {
-				fmt.Println(fd.Name.Name, funcName)
+				//fmt.Println(fd.Name.Name, funcName)
 				if isFunctionMatch(fd.Name.Name, funcName) && fd.Doc != nil {
 					return fd.Doc.Text()
 				}
