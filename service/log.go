@@ -15,7 +15,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"io"
 	"strconv"
-	"time"
 )
 
 type LogService struct{}
@@ -29,16 +28,20 @@ func (service LogService) OperateLogDownloadService(c *gin.Context, params *requ
 	var (
 		operateLogList *response.OperateLogList
 		res            []interface{}
+		userID         string
+		accessTime     string
 	)
 	operateLogList, err, debugInfo = service.operateLogQuery(false, c, params)
 	if err != nil {
 		return
 	}
 	for _, value := range operateLogList.Results {
-		var userID string
 		userID = strconv.FormatInt(*value.UserId, 10)
-		if value.UserId == nil {
-			userID = ""
+		if value.UserId != nil {
+			userID = strconv.FormatInt(*value.UserId, 10)
+		}
+		if value.AccessTime != nil {
+			accessTime = value.AccessTime.String()
 		}
 
 		res = append(res, &response.OperateLogDownload{
@@ -51,7 +54,7 @@ func (service LogService) OperateLogDownloadService(c *gin.Context, params *requ
 			UserId:      userID,
 			UserName:    value.UserName,
 			UserAccount: value.UserAccount,
-			AccessTime:  time.Time(*value.AccessTime),
+			AccessTime:  accessTime,
 			Success:     value.Success.Choices(value.Success),
 			Message:     value.Message,
 		})

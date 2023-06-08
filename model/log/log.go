@@ -10,7 +10,7 @@ import (
 type OperateLog struct {
 	Id         int64            `gorm:"column:id;primaryKey;autoIncrement;notNull;comment:操作日志ID"`
 	UserId     int64            `gorm:"column:user_id;comment:请求者的用户ID"`
-	ActionName string           `gorm:"column:action_name;notNull;size:50;comment:行为名称"`
+	ActionName string           `gorm:"column:action_name;notNull;size:100;comment:行为名称"`
 	Module     string           `gorm:"column:module;notNull;size:20;comment:模块名称"`
 	AccessUrl  string           `gorm:"column:access_url;notNull;size:200;comment:访问Url"`
 	RequestIp  string           `gorm:"column:request_ip;notNull;size:100;comment:访问时的ip"`

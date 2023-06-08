@@ -37,3 +37,7 @@ func (c *CustomTime) Scan(v interface{}) error {
 	}
 	return fmt.Errorf("can not convert %v to timestamp", v)
 }
+
+func (c *CustomTime) String() string {
+	return fmt.Sprintf(time.Time(*c).Format("2006-01-02 15:04:05"))
+}
