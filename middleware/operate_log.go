@@ -68,7 +68,7 @@ func getFunctionComments(funcName string) string {
 
 // 辅助函数，检查函数名是否匹配
 func isFunctionMatch(declName, funcName string) bool {
-	parts := strings.Split(funcName, "/")
+	parts := strings.Split(strings.Join(strings.Split(funcName, "-fm"), ""), "/")
 	if len(parts) > 0 {
 		funcName = parts[len(parts)-1]
 	}
@@ -80,28 +80,6 @@ func isFunctionMatch(declName, funcName string) bool {
 	}
 
 	return declName == funcName
-}
-
-// 辅助函数，通过处理函数获取函数名称
-func getFunctionName(handler gin.HandlerFunc) string {
-	handlerType := reflect.TypeOf(handler)
-	if handlerType.Kind() == reflect.Func {
-		handlerValue := reflect.ValueOf(handler)
-		handlerName := runtime.FuncForPC(handlerValue.Pointer()).Name()
-
-		parts := strings.Split(strings.Join(strings.Split(handlerName, "/-fm"), ""), "/")
-		if len(parts) > 0 {
-			funcName := parts[len(parts)-1]
-
-			parts = strings.Split(funcName, ".")
-			if len(parts) > 0 {
-				funcName = parts[len(parts)-1]
-			}
-
-			return strings.TrimSuffix(funcName, "-fm")
-		}
-	}
-	return ""
 }
 
 // 辅助函数，获取所有 Go 文件
