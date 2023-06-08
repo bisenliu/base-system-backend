@@ -36,9 +36,9 @@ func (receiver StatusCode) Msg() string {
 
 func GetStatusCodeByModelCode(urlPrefix string, statusCode StatusCode) int {
 
-	modelCode, ok := modelMapping[urlPrefix]
+	modelCode, ok := ModelMapping[urlPrefix]
 	if !ok {
-		modelCode = UnknownModel
+		modelCode = Unknown
 	}
 	code, _ := strconv.Atoi(fmt.Sprintf("%s", modelCode) + fmt.Sprintf("%s", statusCode))
 	return code
