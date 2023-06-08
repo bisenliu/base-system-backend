@@ -7,26 +7,12 @@ import (
 	"base-system-backend/model/common/response"
 	"base-system-backend/utils/cache"
 	"base-system-backend/utils/jwt"
-	"fmt"
 	"github.com/gin-gonic/gin"
-	"reflect"
-	"runtime"
 )
 
 // JWTAuthMiddleware 基于JWT的认证中间件
 func JWTAuthMiddleware() func(c *gin.Context) {
 	return func(c *gin.Context) {
-		// 获取当前请求的处理函数
-		handler := c.Handler()
-
-		// 使用反射获取函数名称
-		funcName := runtime.FuncForPC(reflect.ValueOf(handler).Pointer()).Name()
-
-		// 获取函数的注释
-		comments := getFunctionComments(funcName)
-
-		// 打印注释
-		fmt.Println("API 注释：", comments)
 
 		// 获取请求uri
 		requestURI := c.Request.RequestURI

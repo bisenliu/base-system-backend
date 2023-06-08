@@ -131,7 +131,7 @@ func getAllGoFiles() ([]string, error) {
 	return goFiles, nil
 }
 
-func SystemLogMiddleware() func(c *gin.Context) {
+func OperateLogMiddleware() func(c *gin.Context) {
 	return func(c *gin.Context) {
 		var (
 			rsp        map[string]interface{}
