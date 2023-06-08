@@ -21,9 +21,15 @@ const (
 )
 
 var statusCodeMapping = map[StatusCode]string{
-	Success:       "Success",
-	InvalidParams: "无效的参数",
-	UnknownExc:    "未知错误",
+	Success:        "Success",
+	InvalidLogin:   "未登录或登录状态已失效",
+	InvalidParams:  "无效的参数",
+	QueryFailed:    "查询失败",
+	SaveFailed:     "保存失败",
+	UpdateFailed:   "更新失败",
+	DeleteFailed:   "删除失败",
+	NotPermissions: "权限不足",
+	UnknownExc:     "未知错误",
 }
 
 func (receiver StatusCode) Msg() string {
