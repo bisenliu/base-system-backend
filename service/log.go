@@ -36,7 +36,6 @@ func (service LogService) OperateLogDownloadService(c *gin.Context, params *requ
 		return
 	}
 	for _, value := range operateLogList.Results {
-		userID = strconv.FormatInt(*value.UserId, 10)
 		if value.UserId != nil {
 			userID = strconv.FormatInt(*value.UserId, 10)
 		}
@@ -117,20 +116,20 @@ func (LogService) operateLogQuery(isPage bool, c *gin.Context, params *request.O
 				Where("id = ?", operateLog.UserId).Take(&userInfo).Error; err != nil {
 				return nil, fmt.Errorf("用户信息%w", errmsg.QueryFailed), err.Error()
 			}
-			//用户名
-			operateLogList.Results[index].UserName = userInfo.Name
-			// 账号
-			operateLogList.Results[index].UserAccount = userInfo.Account
-			detail := operateLogList.Results[index].Detail
-			//错误信息判断
-			if detail != nil {
-				var errMsg response.OperateLogErrMessage
-				err = json.Unmarshal([]byte(detail.String()), &errMsg)
-				if err != nil {
-					return nil, errmsg.JsonConvertFiled, err.Error()
-				}
-				operateLogList.Results[index].Message = errMsg.Message
+		}
+		//用户名
+		operateLogList.Results[index].UserName = userInfo.Name
+		// 账号
+		operateLogList.Results[index].UserAccount = userInfo.Account
+		detail := operateLogList.Results[index].Detail
+		//错误信息判断
+		if detail != nil {
+			var errMsg response.OperateLogErrMessage
+			err = json.Unmarshal([]byte(detail.String()), &errMsg)
+			if err != nil {
+				return nil, errmsg.JsonConvertFiled, err.Error()
 			}
+			operateLogList.Results[index].Message = errMsg.Message
 		}
 	}
 	return
