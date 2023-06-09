@@ -1,12 +1,15 @@
 package middleware
 
 import (
+	"base-system-backend/enums"
 	"base-system-backend/enums/code"
 	"base-system-backend/enums/errmsg"
 	"base-system-backend/enums/user"
 	"base-system-backend/model/common/response"
+	"base-system-backend/utils"
 	"base-system-backend/utils/cache"
 	"base-system-backend/utils/jwt"
+	"encoding/json"
 	"github.com/gin-gonic/gin"
 )
 
@@ -28,30 +31,30 @@ func JWTAuthMiddleware() func(c *gin.Context) {
 				return
 			}
 		}
-
+		var debugInfo string
 		authHeader := c.Request.Header.Get("Identification")
 		if authHeader == "" {
 			// todo 如果没有 Identification，先校验ak/sk
-			response.Error(c, code.InvalidLogin, errmsg.LoginInvalid, "token not found")
-			c.Abort()
-			return
+			debugInfo = "token not found"
 		}
 		// parts[1]是获取到的tokenString，我们使用之前定义好的解析JWT的函数来解析它
 		mc, err := jwt.ParseToken(authHeader)
 		if err != nil {
-			response.Error(c, code.InvalidLogin, errmsg.LoginInvalid, "token parse failed")
-			c.Abort()
-			return
+			debugInfo = "token parse failed"
+
 		}
 		// 获取redis token
 		cacheToken := cache.GetToken(mc.UserId)
 		if cacheToken == "" {
-			response.Error(c, code.InvalidLogin, errmsg.LoginInvalid, "cache token not found")
-			c.Abort()
-			return
+			debugInfo = "cache token not found"
 		}
 		if cacheToken != authHeader {
-			response.Error(c, code.InvalidLogin, errmsg.LoginInvalid, "invalid token")
+			debugInfo = "invalid token"
+		}
+		if debugInfo != "" {
+			response.Error(c, code.InvalidLogin, errmsg.LoginInvalid, debugInfo)
+			detailByte, _ := json.Marshal(map[string]string{"message": errmsg.LoginInvalid.Error()})
+			utils.CreateOperateLog(c, enums.False, detailByte)
 			c.Abort()
 			return
 		}
