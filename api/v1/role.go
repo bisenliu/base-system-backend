@@ -14,12 +14,10 @@ func (RoleApi) RoleListApi(c *gin.Context) {
 	roleList, err, debugInfo := roleService.RoleListService(c)
 	if err != nil {
 		response.Error(c, code.QueryFailed, err, debugInfo)
-		return
 	}
 	response.OK(c, map[string]interface{}{
 		"results": roleList,
 	})
-	return
 }
 
 func (RoleApi) RoleCreateApi(c *gin.Context) {
@@ -29,10 +27,8 @@ func (RoleApi) RoleCreateApi(c *gin.Context) {
 	}
 	if err, debugInfo := roleService.RoleCreateService(params); err != nil {
 		response.Error(c, code.SaveFailed, err, debugInfo)
-		return
 	}
 	response.OK(c, map[string]interface{}{"id": params.Id})
-	return
 }
 
 func (RoleApi) RoleDetailApi(c *gin.Context) {
@@ -40,10 +36,8 @@ func (RoleApi) RoleDetailApi(c *gin.Context) {
 	roleDetail, err, debugInfo := roleService.RoleDetailService(roleId)
 	if err != nil {
 		response.Error(c, code.QueryFailed, err, debugInfo)
-		return
 	}
 	response.OK(c, *roleDetail)
-	return
 }
 
 func (RoleApi) RoleUpdateApi(c *gin.Context) {
@@ -54,18 +48,14 @@ func (RoleApi) RoleUpdateApi(c *gin.Context) {
 	roleId := c.Param("role_id")
 	if err, debugInfo := roleService.RoleUpdateService(roleId, params); err != nil {
 		response.Error(c, code.UpdateFailed, err, debugInfo)
-		return
 	}
 	response.OK(c, nil)
-	return
 }
 
 func (RoleApi) RoleDeleteApi(c *gin.Context) {
 	roleId := c.Param("role_id")
 	if err, debugInfo := roleService.RoleDeleteService(roleId); err != nil {
 		response.Error(c, code.DeleteFailed, err, debugInfo)
-		return
 	}
 	response.OK(c, nil)
-	return
 }

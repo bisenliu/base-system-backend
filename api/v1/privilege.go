@@ -19,11 +19,9 @@ func (PrivilegeApi) PrivilegeListApi(c *gin.Context) {
 		privilegeKeys, err, debugInfo := utils.PrivilegeUserIdFilter(userIdQueryString)
 		if err != nil {
 			response.Error(c, code.QueryFailed, err, debugInfo)
-			return
 		}
 		results["results"] = privilegeKeys
 		response.OK(c, results)
-		return
 	}
 	//角色Id过滤
 	roleIdQueryString := c.Query("role_id")
@@ -31,21 +29,17 @@ func (PrivilegeApi) PrivilegeListApi(c *gin.Context) {
 		privilegeKeys, err, debugInfo := utils.PrivilegeRoleIdFilter(roleIdQueryString)
 		if err != nil {
 			response.Error(c, code.QueryFailed, err, debugInfo)
-			return
 		}
 		results["results"] = privilegeKeys
 		response.OK(c, results)
-		return
 
 	}
 	privilegeKeys, err, debugInfo := privilegeService.PrivilegeListService()
 	if err != nil {
 		response.Error(c, code.QueryFailed, err, debugInfo)
-		return
 	}
 	results["results"] = privilegeKeys
 	response.OK(c, results)
-	return
 }
 
 func (PrivilegeApi) RolePrivilegeUpdateApi(c *gin.Context) {
@@ -56,7 +50,6 @@ func (PrivilegeApi) RolePrivilegeUpdateApi(c *gin.Context) {
 	roleId := c.Param("role_id")
 	if err, debugInfo := privilegeService.RolePrivilegeUpdateService(roleId, params); err != nil {
 		response.Error(c, code.UpdateFailed, err, debugInfo)
-		return
 	}
 	response.OK(c, nil)
 }

@@ -2,6 +2,8 @@ package router
 
 import (
 	v1 "base-system-backend/api/v1"
+	"base-system-backend/enums"
+	"base-system-backend/middleware"
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,7 +17,7 @@ func (u UserRouter) InitUserRouter(Router *gin.RouterGroup) {
 	Router.POST("logout/", userApi.UserLogoutApi)
 
 	// 用户列表
-	Router.GET("list/", userApi.UserListApi)
+	Router.GET("list/", middleware.PrivilegeVerify(enums.UserListPrivilege), userApi.UserListApi)
 	// 创建用户
 	Router.POST("create/", userApi.UserCreateApi)
 	// 查询|修改当前登录用户信息

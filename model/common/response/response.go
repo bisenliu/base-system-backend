@@ -28,6 +28,7 @@ type statusInfo struct {
 func OK(c *gin.Context, data interface{}) {
 	status, _ := strconv.Atoi(fmt.Sprint(code.Success))
 	c.JSON(http.StatusOK, &Data{Status: status, Data: data})
+	return
 }
 
 func Error(c *gin.Context, statusCode code.StatusCode, errorInfo interface{}, debugInfo interface{}) {
@@ -54,6 +55,7 @@ func Error(c *gin.Context, statusCode code.StatusCode, errorInfo interface{}, de
 		},
 		Data: data,
 	})
+	return
 }
 
 func File(c *gin.Context, content io.ReadSeeker, fileTag string) {
