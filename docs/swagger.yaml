@@ -1,5 +1,13 @@
 basePath: /v1/
 definitions:
+  enums.BoolSign:
+    enum:
+    - 0
+    - 1
+    type: integer
+    x-enum-varnames:
+    - "False"
+    - "True"
   gender.Gender:
     enum:
     - 0
@@ -11,6 +19,50 @@ definitions:
     x-enum-varnames:
     - Female
     - Male
+  request.PwdChangeById:
+    properties:
+      password:
+        maxLength: 70
+        type: string
+    required:
+    - password
+    type: object
+  request.RoleCreate:
+    properties:
+      id:
+        type: integer
+      name:
+        maxLength: 20
+        type: string
+    required:
+    - name
+    type: object
+  request.RoleUpdate:
+    properties:
+      name:
+        maxLength: 20
+        type: string
+      privilege_keys:
+        items:
+          type: string
+        type: array
+    required:
+    - name
+    type: object
+  request.StatusChangeById:
+    properties:
+      status:
+        $ref: '#/definitions/user.AccStatus'
+    type: object
+  request.UserChangePwdBase:
+    properties:
+      new_password:
+        type: string
+      old_password:
+        type: string
+      type:
+        $ref: '#/definitions/user.ChangePwdType'
+    type: object
   request.UserCreate:
     properties:
       account:
@@ -70,6 +122,67 @@ definitions:
     required:
     - login_type
     type: object
+  request.UserUpdate:
+    properties:
+      createTime:
+        type: string
+      email:
+        type: string
+      full_name:
+        type: string
+      gender:
+        $ref: '#/definitions/gender.Gender'
+      id_card:
+        maxLength: 18
+        type: string
+      name:
+        maxLength: 20
+        type: string
+      phone:
+        maxLength: 11
+        type: string
+      role_ids:
+        items:
+          type: integer
+        type: array
+      short_name:
+        type: string
+      status:
+        $ref: '#/definitions/user.AccStatus'
+      updateTime:
+        type: string
+    required:
+    - name
+    type: object
+  request.UserUpdateById:
+    properties:
+      createTime:
+        type: string
+      email:
+        type: string
+      full_name:
+        type: string
+      gender:
+        $ref: '#/definitions/gender.Gender'
+      id_card:
+        maxLength: 18
+        type: string
+      name:
+        maxLength: 20
+        type: string
+      role_ids:
+        items:
+          type: integer
+        type: array
+      short_name:
+        type: string
+      status:
+        $ref: '#/definitions/user.AccStatus'
+      updateTime:
+        type: string
+    required:
+    - name
+    type: object
   response.Create:
     properties:
       id:
@@ -121,6 +234,13 @@ definitions:
         $ref: '#/definitions/user.AccStatus'
       token:
         type: string
+    type: object
+  response.RoleList:
+    properties:
+      results:
+        items:
+          $ref: '#/definitions/role.Role'
+        type: array
     type: object
   response.UserDetail:
     properties:
@@ -180,6 +300,19 @@ definitions:
       detail: {}
       message: {}
     type: object
+  role.Role:
+    properties:
+      id:
+        type: integer
+      is_system:
+        $ref: '#/definitions/enums.BoolSign'
+      name:
+        type: string
+      privilege_keys:
+        items:
+          type: integer
+        type: array
+    type: object
   user.AccStatus:
     enum:
     - 0
@@ -192,6 +325,17 @@ definitions:
     - AccFreeze
     - AccChangePwd
     - AccStop
+  user.ChangePwdType:
+    enum:
+    - 0
+    - 1
+    type: integer
+    x-enum-comments:
+      PwdChange: 密码修改
+      SmsChange: 手机验证码修改
+    x-enum-varnames:
+    - PwdChange
+    - SmsChange
 host: http://127.0.0.1:8001
 info:
   contact: {}
@@ -203,11 +347,155 @@ info:
   title: 基础后端框架
   version: "1.0"
 paths:
+  /role/:
+    post:
+      consumes:
+      - application/json
+      description: 角色添加
+      parameters:
+      - description: Token 令牌
+        in: header
+        name: Identification
+        required: true
+        type: string
+      - description: 角色信息
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/request.RoleCreate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Data'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.Create'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 角色添加
+      tags:
+      - RoleApi
+  /role/:role_id/:
+    delete:
+      consumes:
+      - application/json
+      description: 角色删除
+      parameters:
+      - description: Token 令牌
+        in: header
+        name: Identification
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Data'
+      security:
+      - ApiKeyAuth: []
+      summary: 角色删除
+      tags:
+      - RoleApi
+    put:
+      consumes:
+      - application/json
+      description: 角色修改
+      parameters:
+      - description: Token 令牌
+        in: header
+        name: Identification
+        required: true
+        type: string
+      - description: 角色信息
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/request.RoleUpdate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Data'
+      security:
+      - ApiKeyAuth: []
+      summary: 角色修改
+      tags:
+      - RoleApi
+  /role/:role_id//:
+    get:
+      consumes:
+      - application/json
+      description: 角色详情
+      parameters:
+      - description: Token 令牌
+        in: header
+        name: Identification
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Data'
+            - properties:
+                data:
+                  $ref: '#/definitions/role.Role'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 角色详情
+      tags:
+      - RoleApi
+  /role/list/:
+    get:
+      consumes:
+      - application/json
+      description: 角色列表
+      parameters:
+      - description: Token 令牌
+        in: header
+        name: Identification
+        required: true
+        type: string
+      - in: query
+        name: name
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Data'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.RoleList'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 角色列表
+      tags:
+      - RoleApi
   /user/:
     post:
       consumes:
       - application/json
-      description: 用户添加
+      description: 用户创建
       parameters:
       - description: Token 令牌
         in: header
@@ -217,6 +505,7 @@ paths:
       - description: 用户信息
         in: body
         name: object
+        required: true
         schema:
           $ref: '#/definitions/request.UserCreate'
       produces:
@@ -233,7 +522,205 @@ paths:
               type: object
       security:
       - ApiKeyAuth: []
-      summary: 用户添加
+      summary: 用户创建
+      tags:
+      - UserApi
+  /user/:user_id/:
+    get:
+      consumes:
+      - application/json
+      description: 查询指定用户信息
+      parameters:
+      - description: Token 令牌
+        in: header
+        name: Identification
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Data'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.UserDetail'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 查询指定用户信息
+      tags:
+      - UserApi
+    put:
+      consumes:
+      - application/json
+      description: 修改指定用户信息
+      parameters:
+      - description: Token 令牌
+        in: header
+        name: Identification
+        required: true
+        type: string
+      - description: 用户信息
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/request.UserUpdateById'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Data'
+      security:
+      - ApiKeyAuth: []
+      summary: 修改指定用户信息
+      tags:
+      - UserApi
+  /user/avatar/:
+    patch:
+      consumes:
+      - application/json
+      description: 用户头像修改
+      parameters:
+      - description: Token 令牌
+        in: header
+        name: Identification
+        required: true
+        type: string
+      - description: 头像
+        in: formData
+        name: avatar
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Data'
+      security:
+      - ApiKeyAuth: []
+      summary: 用户头像修改
+      tags:
+      - UserApi
+  /user/change_pwd/:
+    patch:
+      consumes:
+      - application/json
+      description: 用户密码修改
+      parameters:
+      - description: Token 令牌
+        in: header
+        name: Identification
+        required: true
+        type: string
+      - description: 用户密码信息
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/request.UserChangePwdBase'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Data'
+      security:
+      - ApiKeyAuth: []
+      summary: 用户密码修改
+      tags:
+      - UserApi
+  /user/change_status/:user_id/:
+    put:
+      consumes:
+      - application/json
+      description: 修改指定账户状态
+      parameters:
+      - description: Token 令牌
+        in: header
+        name: Identification
+        required: true
+        type: string
+      - description: 用户状态
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/request.StatusChangeById'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Data'
+      security:
+      - ApiKeyAuth: []
+      summary: 修改指定账户状态
+      tags:
+      - UserApi
+  /user/detail/:
+    get:
+      consumes:
+      - application/json
+      description: 用户详情
+      parameters:
+      - description: Token 令牌
+        in: header
+        name: Identification
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Data'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.UserDetail'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 用户详情
+      tags:
+      - UserApi
+    put:
+      consumes:
+      - application/json
+      description: 用户修改
+      parameters:
+      - description: Token 令牌
+        in: header
+        name: Identification
+        required: true
+        type: string
+      - description: 用户修改信息
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/request.UserUpdate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Data'
+      security:
+      - ApiKeyAuth: []
+      summary: 用户修改
       tags:
       - UserApi
   /user/list/:
@@ -343,6 +830,35 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 登出
+      tags:
+      - UserApi
+  /user/reset_pwd/:user_id/:
+    put:
+      consumes:
+      - application/json
+      description: 重置指定账号密码
+      parameters:
+      - description: Token 令牌
+        in: header
+        name: Identification
+        required: true
+        type: string
+      - description: 用户密码信息
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/request.PwdChangeById'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Data'
+      security:
+      - ApiKeyAuth: []
+      summary: 重置指定账号密码
       tags:
       - UserApi
 swagger: "2.0"

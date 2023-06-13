@@ -101,13 +101,13 @@ func (UserApi) UserListApi(c *gin.Context) {
 }
 
 // UserCreateApi
-// @Summary 用户添加
-// @Description 用户添加
+// @Summary 用户创建
+// @Description 用户创建
 // @Tags UserApi
 // @Accept application/json
 // @Produce application/json
 // @Param Identification header string true "Token 令牌"
-// @Param object body request.UserCreate false "用户信息"
+// @Param object body request.UserCreate true "用户信息"
 // @Security ApiKeyAuth
 // @Success 200 {object} response.Data{data=response.Create}
 // @Router /user/ [post]
@@ -123,6 +123,16 @@ func (UserApi) UserCreateApi(c *gin.Context) {
 	response.OK(c, map[string]int64{"id": params.Id})
 }
 
+// UserDetailApi
+// @Summary 用户详情
+// @Description 用户详情
+// @Tags UserApi
+// @Accept application/json
+// @Produce application/json
+// @Param Identification header string true "Token 令牌"
+// @Security ApiKeyAuth
+// @Success 200 {object} response.Data{data=response.UserDetail}
+// @Router /user/detail/ [get]
 func (UserApi) UserDetailApi(c *gin.Context) {
 	u, err, debugInfo := utils.GetCurrentUser(c)
 	if err != nil {
@@ -135,6 +145,17 @@ func (UserApi) UserDetailApi(c *gin.Context) {
 	response.OK(c, *userDetail)
 }
 
+// UserUpdateApi
+// @Summary 用户修改
+// @Description 用户修改
+// @Tags UserApi
+// @Accept application/json
+// @Produce application/json
+// @Param Identification header string true "Token 令牌"
+// @Param object body request.UserUpdate true "用户修改信息"
+// @Security ApiKeyAuth
+// @Success 200 {object} response.Data
+// @Router /user/detail/ [put]
 func (UserApi) UserUpdateApi(c *gin.Context) {
 	params := new(request.UserUpdate)
 	if ok := validate.RequestParamsVerify(c, params); !ok {
@@ -150,6 +171,17 @@ func (UserApi) UserUpdateApi(c *gin.Context) {
 	response.OK(c, nil)
 }
 
+// UserChangePwdApi
+// @Summary 用户密码修改
+// @Description 用户密码修改
+// @Tags UserApi
+// @Accept application/json
+// @Produce application/json
+// @Param Identification header string true "Token 令牌"
+// @Param object body request.UserChangePwdBase true "用户密码信息"
+// @Security ApiKeyAuth
+// @Success 200 {object} response.Data
+// @Router /user/change_pwd/ [patch]
 func (UserApi) UserChangePwdApi(c *gin.Context) {
 	params := new(request.UserChangePwdBase)
 	if ok := validate.RequestParamsVerify(c, params); !ok {
@@ -175,6 +207,17 @@ func (UserApi) UserChangePwdApi(c *gin.Context) {
 	response.OK(c, nil)
 }
 
+// UserUploadAvatarApi
+// @Summary 用户头像修改
+// @Description 用户头像修改
+// @Tags UserApi
+// @Accept application/json
+// @Produce application/json
+// @Param Identification header string true "Token 令牌"
+// @Param avatar formData file true "头像"
+// @Security ApiKeyAuth
+// @Success 200 {object} response.Data
+// @Router /user/avatar/ [patch]
 func (UserApi) UserUploadAvatarApi(c *gin.Context) {
 	fileHeader, err := c.FormFile("avatar")
 	// 文件不存在
@@ -201,6 +244,17 @@ func (UserApi) UserUploadAvatarApi(c *gin.Context) {
 	response.OK(c, nil)
 }
 
+// UserResetPwdByIdApi
+// @Summary 重置指定账号密码
+// @Description 重置指定账号密码
+// @Tags UserApi
+// @Accept application/json
+// @Produce application/json
+// @Param Identification header string true "Token 令牌"
+// @Param object body request.PwdChangeById true "用户密码信息"
+// @Security ApiKeyAuth
+// @Success 200 {object} response.Data
+// @Router /user/reset_pwd/:user_id/ [put]
 func (UserApi) UserResetPwdByIdApi(c *gin.Context) {
 	params := new(request.PwdChangeById)
 	if ok := validate.RequestParamsVerify(c, &params); !ok {
@@ -213,6 +267,17 @@ func (UserApi) UserResetPwdByIdApi(c *gin.Context) {
 	response.OK(c, nil)
 }
 
+// UserStatusChangeByIdApi
+// @Summary 修改指定账户状态
+// @Description 修改指定账户状态
+// @Tags UserApi
+// @Accept application/json
+// @Produce application/json
+// @Param Identification header string true "Token 令牌"
+// @Param object body request.StatusChangeById true "用户状态"
+// @Security ApiKeyAuth
+// @Success 200 {object} response.Data
+// @Router /user/change_status/:user_id/ [put]
 func (UserApi) UserStatusChangeByIdApi(c *gin.Context) {
 	params := new(request.StatusChangeById)
 	if ok := validate.RequestParamsVerify(c, &params); !ok {
@@ -226,6 +291,16 @@ func (UserApi) UserStatusChangeByIdApi(c *gin.Context) {
 	response.OK(c, nil)
 }
 
+// UserDetailByIdApi
+// @Summary 查询指定用户信息
+// @Description 查询指定用户信息
+// @Tags UserApi
+// @Accept application/json
+// @Produce application/json
+// @Param Identification header string true "Token 令牌"
+// @Security ApiKeyAuth
+// @Success 200 {object} response.Data{data=response.UserDetail}
+// @Router /user/:user_id/ [get]
 func (UserApi) UserDetailByIdApi(c *gin.Context) {
 	userId := c.Param("user_id")
 	userDetail, err, debugInfo := userService.UserDetailByIdService(userId)
@@ -235,6 +310,17 @@ func (UserApi) UserDetailByIdApi(c *gin.Context) {
 	response.OK(c, userDetail)
 }
 
+// UserUpdateByIdApi
+// @Summary 修改指定用户信息
+// @Description 修改指定用户信息
+// @Tags UserApi
+// @Accept application/json
+// @Produce application/json
+// @Param Identification header string true "Token 令牌"
+// @Param object body request.UserUpdateById true "用户信息"
+// @Security ApiKeyAuth
+// @Success 200 {object} response.Data
+// @Router /user/:user_id/ [put]
 func (UserApi) UserUpdateByIdApi(c *gin.Context) {
 	params := new(request.UserUpdateById)
 	if ok := validate.RequestParamsVerify(c, params); !ok {

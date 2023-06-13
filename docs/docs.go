@@ -21,6 +21,248 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/role/": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "角色添加",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "RoleApi"
+                ],
+                "summary": "角色添加",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Token 令牌",
+                        "name": "Identification",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "角色信息",
+                        "name": "object",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.RoleCreate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Data"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.Create"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/role/:role_id/": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "角色修改",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "RoleApi"
+                ],
+                "summary": "角色修改",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Token 令牌",
+                        "name": "Identification",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "角色信息",
+                        "name": "object",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.RoleUpdate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Data"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "角色删除",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "RoleApi"
+                ],
+                "summary": "角色删除",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Token 令牌",
+                        "name": "Identification",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Data"
+                        }
+                    }
+                }
+            }
+        },
+        "/role/:role_id//": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "角色详情",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "RoleApi"
+                ],
+                "summary": "角色详情",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Token 令牌",
+                        "name": "Identification",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Data"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/role.Role"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/role/list/": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "角色列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "RoleApi"
+                ],
+                "summary": "角色列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Token 令牌",
+                        "name": "Identification",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "name": "name",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Data"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.RoleList"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/user/": {
             "post": {
                 "security": [
@@ -28,7 +270,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "用户添加",
+                "description": "用户创建",
                 "consumes": [
                     "application/json"
                 ],
@@ -38,7 +280,7 @@ const docTemplate = `{
                 "tags": [
                     "UserApi"
                 ],
-                "summary": "用户添加",
+                "summary": "用户创建",
                 "parameters": [
                     {
                         "type": "string",
@@ -51,6 +293,7 @@ const docTemplate = `{
                         "description": "用户信息",
                         "name": "object",
                         "in": "body",
+                        "required": true,
                         "schema": {
                             "$ref": "#/definitions/request.UserCreate"
                         }
@@ -73,6 +316,328 @@ const docTemplate = `{
                                     }
                                 }
                             ]
+                        }
+                    }
+                }
+            }
+        },
+        "/user/:user_id/": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "查询指定用户信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "UserApi"
+                ],
+                "summary": "查询指定用户信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Token 令牌",
+                        "name": "Identification",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Data"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.UserDetail"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "修改指定用户信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "UserApi"
+                ],
+                "summary": "修改指定用户信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Token 令牌",
+                        "name": "Identification",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "用户信息",
+                        "name": "object",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.UserUpdateById"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Data"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/avatar/": {
+            "patch": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "用户头像修改",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "UserApi"
+                ],
+                "summary": "用户头像修改",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Token 令牌",
+                        "name": "Identification",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "头像",
+                        "name": "avatar",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Data"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/change_pwd/": {
+            "patch": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "用户密码修改",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "UserApi"
+                ],
+                "summary": "用户密码修改",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Token 令牌",
+                        "name": "Identification",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "用户密码信息",
+                        "name": "object",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.UserChangePwdBase"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Data"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/change_status/:user_id/": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "修改指定账户状态",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "UserApi"
+                ],
+                "summary": "修改指定账户状态",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Token 令牌",
+                        "name": "Identification",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "用户状态",
+                        "name": "object",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.StatusChangeById"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Data"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/detail/": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "用户详情",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "UserApi"
+                ],
+                "summary": "用户详情",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Token 令牌",
+                        "name": "Identification",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Data"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.UserDetail"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "用户修改",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "UserApi"
+                ],
+                "summary": "用户修改",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Token 令牌",
+                        "name": "Identification",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "用户修改信息",
+                        "name": "object",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.UserUpdate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Data"
                         }
                     }
                 }
@@ -255,9 +820,66 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/user/reset_pwd/:user_id/": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "重置指定账号密码",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "UserApi"
+                ],
+                "summary": "重置指定账号密码",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Token 令牌",
+                        "name": "Identification",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "用户密码信息",
+                        "name": "object",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.PwdChangeById"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Data"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "enums.BoolSign": {
+            "type": "integer",
+            "enum": [
+                0,
+                1
+            ],
+            "x-enum-varnames": [
+                "False",
+                "True"
+            ]
+        },
         "gender.Gender": {
             "type": "integer",
             "enum": [
@@ -272,6 +894,73 @@ const docTemplate = `{
                 "Female",
                 "Male"
             ]
+        },
+        "request.PwdChangeById": {
+            "type": "object",
+            "required": [
+                "password"
+            ],
+            "properties": {
+                "password": {
+                    "type": "string",
+                    "maxLength": 70
+                }
+            }
+        },
+        "request.RoleCreate": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 20
+                }
+            }
+        },
+        "request.RoleUpdate": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "maxLength": 20
+                },
+                "privilege_keys": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "request.StatusChangeById": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "$ref": "#/definitions/user.AccStatus"
+                }
+            }
+        },
+        "request.UserChangePwdBase": {
+            "type": "object",
+            "properties": {
+                "new_password": {
+                    "type": "string"
+                },
+                "old_password": {
+                    "type": "string"
+                },
+                "type": {
+                    "$ref": "#/definitions/user.ChangePwdType"
+                }
+            }
         },
         "request.UserCreate": {
             "type": "object",
@@ -360,6 +1049,96 @@ const docTemplate = `{
                 }
             }
         },
+        "request.UserUpdate": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "createTime": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "full_name": {
+                    "type": "string"
+                },
+                "gender": {
+                    "$ref": "#/definitions/gender.Gender"
+                },
+                "id_card": {
+                    "type": "string",
+                    "maxLength": 18
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 20
+                },
+                "phone": {
+                    "type": "string",
+                    "maxLength": 11
+                },
+                "role_ids": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "short_name": {
+                    "type": "string"
+                },
+                "status": {
+                    "$ref": "#/definitions/user.AccStatus"
+                },
+                "updateTime": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.UserUpdateById": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "createTime": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "full_name": {
+                    "type": "string"
+                },
+                "gender": {
+                    "$ref": "#/definitions/gender.Gender"
+                },
+                "id_card": {
+                    "type": "string",
+                    "maxLength": 18
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 20
+                },
+                "role_ids": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "short_name": {
+                    "type": "string"
+                },
+                "status": {
+                    "$ref": "#/definitions/user.AccStatus"
+                },
+                "updateTime": {
+                    "type": "string"
+                }
+            }
+        },
         "response.Create": {
             "type": "object",
             "properties": {
@@ -436,6 +1215,17 @@ const docTemplate = `{
                 },
                 "token": {
                     "type": "string"
+                }
+            }
+        },
+        "response.RoleList": {
+            "type": "object",
+            "properties": {
+                "results": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/role.Role"
+                    }
                 }
             }
         },
@@ -526,6 +1316,26 @@ const docTemplate = `{
                 "message": {}
             }
         },
+        "role.Role": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "is_system": {
+                    "$ref": "#/definitions/enums.BoolSign"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "privilege_keys": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
         "user.AccStatus": {
             "type": "integer",
             "enum": [
@@ -539,6 +1349,21 @@ const docTemplate = `{
                 "AccFreeze",
                 "AccChangePwd",
                 "AccStop"
+            ]
+        },
+        "user.ChangePwdType": {
+            "type": "integer",
+            "enum": [
+                0,
+                1
+            ],
+            "x-enum-comments": {
+                "PwdChange": "密码修改",
+                "SmsChange": "手机验证码修改"
+            },
+            "x-enum-varnames": [
+                "PwdChange",
+                "SmsChange"
             ]
         }
     }
