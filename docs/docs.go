@@ -21,6 +21,302 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/log/operate/download/": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "操作日志下载",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                ],
+                "tags": [
+                    "LogApi"
+                ],
+                "summary": "操作日志下载",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Token 令牌",
+                        "name": "Identification",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "name": "action_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "end_access_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "module",
+                        "in": "query"
+                    },
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "name": "page_size",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "request_ip",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "start_access_time",
+                        "in": "query"
+                    },
+                    {
+                        "enum": [
+                            0,
+                            1
+                        ],
+                        "type": "integer",
+                        "x-enum-varnames": [
+                            "False",
+                            "True"
+                        ],
+                        "name": "success",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "user_id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/log/operate/list/": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "操作日志列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "LogApi"
+                ],
+                "summary": "操作日志列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Token 令牌",
+                        "name": "Identification",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "name": "action_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "end_access_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "module",
+                        "in": "query"
+                    },
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "name": "page_size",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "request_ip",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "start_access_time",
+                        "in": "query"
+                    },
+                    {
+                        "enum": [
+                            0,
+                            1
+                        ],
+                        "type": "integer",
+                        "x-enum-varnames": [
+                            "False",
+                            "True"
+                        ],
+                        "name": "success",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "user_id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Data"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.OperateLogList"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/privilege/:role_id/": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "更新角色权限",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "PrivilegeApi"
+                ],
+                "summary": "更新角色权限",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Token 令牌",
+                        "name": "Identification",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "更新参数",
+                        "name": "object",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.RolePrivilegeUpdate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Data"
+                        }
+                    }
+                }
+            }
+        },
+        "/privilege/list/": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "权限列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "PrivilegeApi"
+                ],
+                "summary": "权限列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Token 令牌",
+                        "name": "Identification",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "用户 ID",
+                        "name": "user_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "角色 ID",
+                        "name": "role_id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Data"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.PrivilegeList"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/role/": {
             "post": {
                 "security": [
@@ -922,6 +1218,20 @@ const docTemplate = `{
                 }
             }
         },
+        "request.RolePrivilegeUpdate": {
+            "type": "object",
+            "required": [
+                "privilege_keys"
+            ],
+            "properties": {
+                "privilege_keys": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
         "request.RoleUpdate": {
             "type": "object",
             "required": [
@@ -1214,6 +1524,100 @@ const docTemplate = `{
                     "$ref": "#/definitions/user.AccStatus"
                 },
                 "token": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.OperateLogDetail": {
+            "type": "object",
+            "properties": {
+                "access_time": {
+                    "type": "string"
+                },
+                "access_url": {
+                    "type": "string"
+                },
+                "action_name": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "module": {
+                    "type": "string"
+                },
+                "request_ip": {
+                    "type": "string"
+                },
+                "success": {
+                    "$ref": "#/definitions/enums.BoolSign"
+                },
+                "user_account": {
+                    "type": "string"
+                },
+                "user_agent": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "integer"
+                },
+                "user_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.OperateLogList": {
+            "type": "object",
+            "properties": {
+                "page": {
+                    "type": "integer"
+                },
+                "page_size": {
+                    "type": "integer"
+                },
+                "results": {
+                    "description": "数据",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/response.OperateLogDetail"
+                    }
+                },
+                "total_count": {
+                    "type": "integer"
+                },
+                "total_pages": {
+                    "type": "integer"
+                }
+            }
+        },
+        "response.PrivilegeList": {
+            "type": "object",
+            "properties": {
+                "child_list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/response.PrivilegeList"
+                    }
+                },
+                "dependency": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "key": {
+                    "type": "string"
+                },
+                "parent_id": {
+                    "type": "integer"
+                },
+                "title": {
                     "type": "string"
                 }
             }

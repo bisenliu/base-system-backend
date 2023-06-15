@@ -37,6 +37,15 @@ definitions:
     required:
     - name
     type: object
+  request.RolePrivilegeUpdate:
+    properties:
+      privilege_keys:
+        items:
+          type: string
+        type: array
+    required:
+    - privilege_keys
+    type: object
   request.RoleUpdate:
     properties:
       name:
@@ -235,6 +244,68 @@ definitions:
       token:
         type: string
     type: object
+  response.OperateLogDetail:
+    properties:
+      access_time:
+        type: string
+      access_url:
+        type: string
+      action_name:
+        type: string
+      id:
+        type: integer
+      message:
+        type: string
+      module:
+        type: string
+      request_ip:
+        type: string
+      success:
+        $ref: '#/definitions/enums.BoolSign'
+      user_account:
+        type: string
+      user_agent:
+        type: string
+      user_id:
+        type: integer
+      user_name:
+        type: string
+    type: object
+  response.OperateLogList:
+    properties:
+      page:
+        type: integer
+      page_size:
+        type: integer
+      results:
+        description: 数据
+        items:
+          $ref: '#/definitions/response.OperateLogDetail'
+        type: array
+      total_count:
+        type: integer
+      total_pages:
+        type: integer
+    type: object
+  response.PrivilegeList:
+    properties:
+      child_list:
+        items:
+          $ref: '#/definitions/response.PrivilegeList'
+        type: array
+      dependency:
+        items:
+          type: integer
+        type: array
+      id:
+        type: integer
+      key:
+        type: string
+      parent_id:
+        type: integer
+      title:
+        type: string
+    type: object
   response.RoleList:
     properties:
       results:
@@ -347,6 +418,188 @@ info:
   title: 基础后端框架
   version: "1.0"
 paths:
+  /log/operate/download/:
+    get:
+      consumes:
+      - application/json
+      description: 操作日志下载
+      parameters:
+      - description: Token 令牌
+        in: header
+        name: Identification
+        required: true
+        type: string
+      - in: query
+        name: action_name
+        type: string
+      - in: query
+        name: end_access_time
+        type: integer
+      - in: query
+        name: module
+        type: string
+      - in: query
+        minimum: 1
+        name: page
+        type: integer
+      - in: query
+        minimum: 1
+        name: page_size
+        type: integer
+      - in: query
+        name: request_ip
+        type: string
+      - in: query
+        name: start_access_time
+        type: integer
+      - enum:
+        - 0
+        - 1
+        in: query
+        name: success
+        type: integer
+        x-enum-varnames:
+        - "False"
+        - "True"
+      - in: query
+        name: user_id
+        type: integer
+      produces:
+      - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+      responses: {}
+      security:
+      - ApiKeyAuth: []
+      summary: 操作日志下载
+      tags:
+      - LogApi
+  /log/operate/list/:
+    get:
+      consumes:
+      - application/json
+      description: 操作日志列表
+      parameters:
+      - description: Token 令牌
+        in: header
+        name: Identification
+        required: true
+        type: string
+      - in: query
+        name: action_name
+        type: string
+      - in: query
+        name: end_access_time
+        type: integer
+      - in: query
+        name: module
+        type: string
+      - in: query
+        minimum: 1
+        name: page
+        type: integer
+      - in: query
+        minimum: 1
+        name: page_size
+        type: integer
+      - in: query
+        name: request_ip
+        type: string
+      - in: query
+        name: start_access_time
+        type: integer
+      - enum:
+        - 0
+        - 1
+        in: query
+        name: success
+        type: integer
+        x-enum-varnames:
+        - "False"
+        - "True"
+      - in: query
+        name: user_id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Data'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.OperateLogList'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 操作日志列表
+      tags:
+      - LogApi
+  /privilege/:role_id/:
+    put:
+      consumes:
+      - application/json
+      description: 更新角色权限
+      parameters:
+      - description: Token 令牌
+        in: header
+        name: Identification
+        required: true
+        type: string
+      - description: 更新参数
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/request.RolePrivilegeUpdate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Data'
+      security:
+      - ApiKeyAuth: []
+      summary: 更新角色权限
+      tags:
+      - PrivilegeApi
+  /privilege/list/:
+    get:
+      consumes:
+      - application/json
+      description: 权限列表
+      parameters:
+      - description: Token 令牌
+        in: header
+        name: Identification
+        required: true
+        type: string
+      - description: 用户 ID
+        in: query
+        name: user_id
+        type: string
+      - description: 角色 ID
+        in: query
+        name: role_id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Data'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.PrivilegeList'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 权限列表
+      tags:
+      - PrivilegeApi
   /role/:
     post:
       consumes:
