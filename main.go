@@ -26,6 +26,8 @@ func main() {
 	//初始化日志库
 	global.LOG = core.Zap()
 	zap.ReplaceGlobals(global.LOG)
+	// 初始化雪花算法
+	global.Node = initialize.SnowFlake()
 	// 初始化gorm连接
 	global.DB = initialize.GormPgSql()
 	// 初始化表
@@ -36,8 +38,6 @@ func main() {
 	// 初始化redis
 	initialize.Redis()
 	defer initialize.CloseRedis()
-	// 初始化雪花算法
-	global.Node = initialize.SnowFlake()
 	// 初始化翻译器
 	if err := initialize.InitTrans("zh"); err != nil {
 		panic(fmt.Errorf("init trans failed: %s", err.Error()))

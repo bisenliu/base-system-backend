@@ -1,7 +1,6 @@
 package service
 
 import (
-	"base-system-backend/enums"
 	"base-system-backend/enums/errmsg"
 	"base-system-backend/enums/login"
 	"base-system-backend/enums/table"
@@ -320,7 +319,7 @@ func (UserService) UserResetPwdByIdService(userId string, params *request.PwdCha
 		return fmt.Errorf("用户%w", errmsg.QueryFailed), err.Error()
 	}
 	//不能重置管理员账号密码
-	if u.IsSystem == enums.True {
+	if u.IsSystem == true {
 		return fmt.Errorf(errmsg.NotPrivilege.Error(), "修改管理员密码"), nil
 	}
 	//禁用/冻结
@@ -341,7 +340,7 @@ func (UserService) UserStatusChangeByIdService(userId string, params *request.St
 		return fmt.Errorf("用户%w", errmsg.QueryFailed), err.Error()
 	}
 	// 不能修改管理员账号状态
-	if u.IsSystem == enums.True {
+	if u.IsSystem == true {
 		return fmt.Errorf(errmsg.NotPrivilege.Error(), "修改管理员状态"), nil
 	}
 	// 只能启动或停用
