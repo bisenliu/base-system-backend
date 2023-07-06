@@ -1,7 +1,6 @@
 package log
 
 import (
-	"base-system-backend/enums"
 	"base-system-backend/enums/table"
 	"base-system-backend/model/common/field"
 	"gorm.io/datatypes"
@@ -16,7 +15,7 @@ type OperateLog struct {
 	RequestIp  string           `gorm:"column:request_ip;notNull;size:100;comment:访问时的ip"`
 	UserAgent  string           `gorm:"column:user_agent;notNull;size:200;comment:请求者的UserAgent"`
 	AccessTime field.CustomTime `gorm:"column:access_time;autoCreateTime;comment:访问时间"`
-	Success    enums.BoolSign   `gorm:"column:success;notNull;default:0;comment:操作是否成功"`
+	Success    bool             `gorm:"column:success;notNull;comment:操作是否成功"`
 	Detail     datatypes.JSON   `gorm:"column:detail;comment:失败原因"`
 }
 

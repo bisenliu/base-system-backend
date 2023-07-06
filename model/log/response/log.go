@@ -1,7 +1,6 @@
 package response
 
 import (
-	"base-system-backend/enums"
 	"base-system-backend/model/common/field"
 	"base-system-backend/model/common/response"
 	"gorm.io/datatypes"
@@ -22,7 +21,7 @@ type OperateLogDetail struct {
 	UserName    string            `json:"user_name"`
 	UserAccount string            `json:"user_account"`
 	AccessTime  *field.CustomTime `json:"access_time"`
-	Success     enums.BoolSign    `json:"success"`
+	Success     bool              `json:"success"`
 	Detail      *datatypes.JSON   `json:"-"`
 	OperateLogErrMessage
 }

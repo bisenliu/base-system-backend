@@ -100,7 +100,7 @@ func getAllGoFiles() ([]string, error) {
 	return goFiles, nil
 }
 
-func GetResponseData(c *gin.Context) (success enums.BoolSign, detailByte []byte) {
+func GetResponseData(c *gin.Context) (success bool, detailByte []byte) {
 	var rsp map[string]interface{}
 	method := c.Request.Method
 	blw := &bodyLogWriter{body: bytes.NewBuffer([]byte{}), ResponseWriter: c.Writer}
@@ -108,7 +108,7 @@ func GetResponseData(c *gin.Context) (success enums.BoolSign, detailByte []byte)
 	c.Next()
 
 	contentType := c.Writer.Header().Get("Content-Type")
-	success = enums.True
+	success = true
 	if contentType != enums.ExcelContentType && blw != nil {
 		if err := json.Unmarshal(blw.body.Bytes(), &rsp); err != nil {
 			global.LOG.Error("body convert json failed:%w ", zap.Error(err))
@@ -123,9 +123,9 @@ func GetResponseData(c *gin.Context) (success enums.BoolSign, detailByte []byte)
 					c.Abort()
 					return
 				}
-				success = enums.True
+				success = false
 			} else {
-				success = enums.False
+				success = false
 			}
 		}
 

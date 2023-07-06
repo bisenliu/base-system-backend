@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"base-system-backend/enums"
 	"base-system-backend/enums/code"
 	"base-system-backend/enums/table"
 	"base-system-backend/global"
@@ -16,7 +15,7 @@ import (
 	"time"
 )
 
-func CreateOperateLog(c *gin.Context, success enums.BoolSign, detailByte []byte) {
+func CreateOperateLog(c *gin.Context, success bool, detailByte []byte) {
 	var (
 		actionName string
 		userId     *int64

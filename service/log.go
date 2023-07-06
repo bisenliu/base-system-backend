@@ -42,7 +42,10 @@ func (service LogService) OperateLogDownloadService(c *gin.Context, params *requ
 		if value.AccessTime != nil {
 			accessTime = value.AccessTime.String()
 		}
-
+		success := "失败"
+		if value.Success == true {
+			success = "成功"
+		}
 		res = append(res, &response.OperateLogDownload{
 			Id:          value.Id,
 			ActionName:  value.ActionName,
@@ -54,7 +57,7 @@ func (service LogService) OperateLogDownloadService(c *gin.Context, params *requ
 			UserName:    value.UserName,
 			UserAccount: value.UserAccount,
 			AccessTime:  accessTime,
-			Success:     value.Success.Choices(value.Success),
+			Success:     success,
 			Message:     value.Message,
 		})
 	}

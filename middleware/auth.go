@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"base-system-backend/enums"
 	"base-system-backend/enums/code"
 	"base-system-backend/enums/errmsg"
 	"base-system-backend/enums/user"
@@ -54,7 +53,7 @@ func JWTAuthMiddleware() func(c *gin.Context) {
 		if debugInfo != "" {
 			response.Error(c, code.InvalidLogin, errmsg.LoginInvalid, debugInfo)
 			detailByte, _ := json.Marshal(map[string]string{"message": errmsg.LoginInvalid.Error()})
-			utils.CreateOperateLog(c, enums.False, detailByte)
+			utils.CreateOperateLog(c, false, detailByte)
 			c.Abort()
 			return
 		}
