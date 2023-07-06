@@ -1,7 +1,6 @@
 package service
 
 import (
-	"base-system-backend/enums"
 	"base-system-backend/enums/errmsg"
 	"base-system-backend/enums/table"
 	"base-system-backend/global"
@@ -45,7 +44,7 @@ func (RoleService) RoleUpdateService(roleId string, params *request.RoleUpdate) 
 	if err = global.DB.Table(table.Role).Where("id = ?", roleId).First(&r).Error; err != nil {
 		return fmt.Errorf("角色%w", errmsg.QueryFailed), err.Error()
 	}
-	if r.IsSystem == enums.True {
+	if r.IsSystem == true {
 		return fmt.Errorf(errmsg.NotPrivilege.Error(), "修改系统默认角色"), nil
 	}
 	var marshal []byte
@@ -73,7 +72,7 @@ func (RoleService) RoleDeleteService(roleId string) (err error, debugInfo interf
 	if err = global.DB.Table(table.Role).Where("id = ?", roleId).First(&r).Error; err != nil {
 		return fmt.Errorf("角色%w", errmsg.QueryFailed), err.Error()
 	}
-	if r.IsSystem == enums.True {
+	if r.IsSystem == true {
 		return fmt.Errorf(errmsg.NotPrivilege.Error(), "删除系统默认角色"), nil
 	}
 	if err = global.DB.Delete(&r).Error; err != nil {

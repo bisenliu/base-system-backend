@@ -1,7 +1,6 @@
 package service
 
 import (
-	"base-system-backend/enums"
 	"base-system-backend/enums/errmsg"
 	"base-system-backend/enums/table"
 	"base-system-backend/global"
@@ -30,7 +29,7 @@ func (PrivilegeService) RolePrivilegeUpdateService(roleId string, params *reques
 		return fmt.Errorf("角色%w", errmsg.QueryFailed), err.Error()
 	}
 	//不能更新系统角色
-	if r.IsSystem == enums.True {
+	if r.IsSystem == true {
 		return fmt.Errorf(errmsg.NotPrivilege.Error(), "修改系统角色权限Key"), nil
 	}
 	//过滤无效的权限key

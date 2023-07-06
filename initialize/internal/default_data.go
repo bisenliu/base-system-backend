@@ -73,7 +73,7 @@ func DefaultRoleInit() {
 	adminPrivilegeKeysByte, err := json.Marshal(adminPrivilegeKeys)
 	err = global.DB.Table(table.Role).Create(&role.Role{
 		Name:          "管理员",
-		IsSystem:      1,
+		IsSystem:      true,
 		PrivilegeKeys: adminPrivilegeKeysByte,
 	}).Error
 	if err != nil {
@@ -83,8 +83,8 @@ func DefaultRoleInit() {
 	plainPrivilegeKeys, err := json.Marshal([]string{"operate_log_list", "operate_log_download", "role_list", "role_detail",
 		"privilege_list", "account_list", "account_detail_other"})
 	err = global.DB.Table(table.Role).Create(&role.Role{
-		Name:          "普通用户",
-		IsSystem:      1,
+		Name:          "普通角色",
+		IsSystem:      true,
 		PrivilegeKeys: plainPrivilegeKeys,
 	}).Error
 	if err != nil {
