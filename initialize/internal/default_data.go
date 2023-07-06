@@ -105,13 +105,14 @@ func DefaultUserInit() {
 	name := "管理员"
 	fullName, shortName := common.ConvertCnToLetter(name)
 	err = global.DB.Table(table.User).Create(&user.User{
+		Id:        utils.GenID(),
 		Account:   "root",
 		Password:  utils.BcryptHash("123456"),
 		SecretKey: secretKey,
 		Name:      name,
 		FullName:  fullName,
 		ShortName: shortName,
-		IsSystem:  1,
+		IsSystem:  true,
 	}).Error
 	if err != nil {
 		panic(fmt.Errorf("create user failed: (%s)", err.Error()))
