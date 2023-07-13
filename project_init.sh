@@ -109,7 +109,7 @@ show_msg "替换 aesKey"
 sed -i "" -e "s#base_aes_key#${aesKey}#g" ./config.yaml & wait
 
 show_msg "替换 base-system-backend 为 $projectName"
-find . -type f -not -name 'project_init.sh' -not -path './.git/*' -not -path './.idea/*' -exec sed -i 's/base-system-backend/'$projectName'/g' {} +
+find . -type f -not -name 'project_init.sh' -not -name 'README.md' -not -path './.git/*' -not -path './.idea/*' -exec sed -i 's/base-system-backend/'$projectName'/g' {} +
 
 show_msg "修改项目目录"
 cd ../ && mv ./base-system-backend ./$projectName
