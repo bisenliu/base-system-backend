@@ -29,6 +29,7 @@ func (LogApi) OperateLogListApi(c *gin.Context) {
 	operateLogList, err, debugInfo := logService.OperateLogListService(c, params)
 	if err != nil {
 		response.Error(c, code.QueryFailed, err, debugInfo)
+		return
 	}
 	response.OK(c, operateLogList)
 }
@@ -51,6 +52,7 @@ func (LogApi) OperateLogDownloadApi(c *gin.Context) {
 	content, err, debugInfo := logService.OperateLogDownloadService(c, params)
 	if err != nil {
 		response.Error(c, code.QueryFailed, err, debugInfo)
+		return
 	}
 	response.File(c, content, "操作日志")
 }

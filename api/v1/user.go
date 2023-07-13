@@ -41,6 +41,7 @@ func (UserApi) UserLoginApi(c *gin.Context) {
 		// 账号密码登录逻辑
 		if err, debugInfo := userService.AccountLoginService(accLoginParams); err != nil {
 			response.Error(c, code.InvalidLogin, err, debugInfo)
+			return
 		}
 	} else if *loginBase.LoginType == login.KeycloakLogin {
 		// todo Keycloak 登录
@@ -52,6 +53,7 @@ func (UserApi) UserLoginApi(c *gin.Context) {
 	loginInfo, err, debugInfo := userService.LoginSuccess(c, loginBase)
 	if err != nil {
 		response.Error(c, code.InvalidLogin, err, debugInfo)
+		return
 	}
 	response.OK(c, loginInfo)
 }
@@ -70,6 +72,7 @@ func (UserApi) UserLogoutApi(c *gin.Context) {
 	user, err, debugInfo := utils.GetCurrentUser(c)
 	if err != nil {
 		response.Error(c, code.QueryFailed, err, debugInfo)
+		return
 	}
 	//todo keycloak 登录也需要退出受录
 	//清除token
@@ -96,6 +99,7 @@ func (UserApi) UserListApi(c *gin.Context) {
 	userList, err, debugInfo := userService.UserListService(c, params)
 	if err != nil {
 		response.Error(c, code.QueryFailed, err, debugInfo)
+		return
 	}
 	response.OK(c, userList)
 }
@@ -118,6 +122,7 @@ func (UserApi) UserCreateApi(c *gin.Context) {
 	}
 	if err, debugInfo := userService.UserCreateService(params); err != nil {
 		response.Error(c, code.SaveFailed, err, debugInfo)
+		return
 
 	}
 	response.OK(c, map[string]int64{"id": params.Id})
@@ -137,10 +142,12 @@ func (UserApi) UserDetailApi(c *gin.Context) {
 	u, err, debugInfo := utils.GetCurrentUser(c)
 	if err != nil {
 		response.Error(c, code.QueryFailed, err, debugInfo)
+		return
 	}
 	userDetail, err, debugInfo := userService.UserDetailService(u.Id)
 	if err != nil {
 		response.Error(c, code.QueryFailed, err, debugInfo)
+		return
 	}
 	response.OK(c, *userDetail)
 }
@@ -164,9 +171,11 @@ func (UserApi) UserUpdateApi(c *gin.Context) {
 	u, err, debugInfo := utils.GetCurrentUser(c)
 	if err != nil {
 		response.Error(c, code.QueryFailed, err, debugInfo)
+		return
 	}
 	if err, debugInfo = userService.UserUpdateService(u.Id, params); err != nil {
 		response.Error(c, code.UpdateFailed, err, debugInfo)
+		return
 	}
 	response.OK(c, nil)
 }
@@ -190,6 +199,7 @@ func (UserApi) UserChangePwdApi(c *gin.Context) {
 	u, err, debugInfo := utils.GetCurrentUser(c)
 	if err != nil {
 		response.Error(c, code.QueryFailed, err, debugInfo)
+		return
 	}
 	// 密码修改
 	if params.Type == userEnum.PwdChange {
@@ -199,6 +209,7 @@ func (UserApi) UserChangePwdApi(c *gin.Context) {
 		}
 		if err, debugInfo = userService.UserChangePwdByPwdService(u, pwdChangeParams); err != nil {
 			response.Error(c, code.UpdateFailed, err, debugInfo)
+			return
 		}
 
 	} else {
@@ -223,23 +234,28 @@ func (UserApi) UserUploadAvatarApi(c *gin.Context) {
 	// 文件不存在
 	if fileHeader == nil {
 		response.Error(c, code.SaveFailed, fmt.Errorf("头像文件%w", errmsg.Required), nil)
+		return
 	}
 	// 读取失败
 	if err != nil {
 		response.Error(c, code.SaveFailed, fmt.Errorf("头像文件%w", errmsg.Invalid), err.Error())
+		return
 	}
 	// 头像文件校验
 	if err, debugInfo := validate.ImageVerify(fileHeader); err != nil {
 		response.Error(c, code.SaveFailed, err, debugInfo)
+		return
 	}
 	// 获取当前登录用户
 	u, err, debugInfo := utils.GetCurrentUser(c)
 	if err != nil {
 		response.Error(c, code.QueryFailed, err, debugInfo)
+		return
 	}
 	// 上传头像
 	if err, debugInfo = userService.UserUploadAvatarService(c, u, fileHeader); err != nil {
 		response.Error(c, code.SaveFailed, err, debugInfo)
+		return
 	}
 	response.OK(c, nil)
 }
@@ -263,6 +279,7 @@ func (UserApi) UserResetPwdByIdApi(c *gin.Context) {
 	userId := c.Param("user_id")
 	if err, debugInfo := userService.UserResetPwdByIdService(userId, params); err != nil {
 		response.Error(c, code.UpdateFailed, err, debugInfo)
+		return
 	}
 	response.OK(c, nil)
 }
@@ -287,6 +304,7 @@ func (UserApi) UserStatusChangeByIdApi(c *gin.Context) {
 	userId := c.Param("user_id")
 	if err, debugInfo := userService.UserStatusChangeByIdService(userId, params); err != nil {
 		response.Error(c, code.UpdateFailed, err, debugInfo)
+		return
 	}
 	response.OK(c, nil)
 }
@@ -306,6 +324,7 @@ func (UserApi) UserDetailByIdApi(c *gin.Context) {
 	userDetail, err, debugInfo := userService.UserDetailByIdService(userId)
 	if err != nil {
 		response.Error(c, code.QueryFailed, err, debugInfo)
+		return
 	}
 	response.OK(c, userDetail)
 }
@@ -330,6 +349,7 @@ func (UserApi) UserUpdateByIdApi(c *gin.Context) {
 	err, debugInfo := userService.UserUpdateByIdService(userId, params)
 	if err != nil {
 		response.Error(c, code.UpdateFailed, err, debugInfo)
+		return
 	}
 	response.OK(c, nil)
 }
