@@ -20,8 +20,8 @@
 ```bash
 # 克隆项目
 git clone -b develop https://github.com/bisenliu/base-system-backend.git
-# 进入server文件夹
-cd test-backend
+# 进入 base-system-backend 文件夹
+cd base-system-backend
 
 # 运行初始化脚本
 chmod +x project_init.sh
