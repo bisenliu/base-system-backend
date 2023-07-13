@@ -13,7 +13,7 @@ import (
 func Viper() *viper.Viper {
 	v := viper.New()
 	currentPath, _ := os.Getwd()
-	configPath := path.Join(currentPath, "base-system-backend-config.yaml")
+	configPath := path.Join(currentPath, "config.yaml")
 	v.SetConfigFile(configPath)
 	if err := v.ReadInConfig(); err != nil {
 		panic(fmt.Errorf(" v.ReadInConfig() failed: %s \n", err))

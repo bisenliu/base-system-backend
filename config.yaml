@@ -8,8 +8,10 @@ snow_flake: &SnowFlake
   machine_id: 1 # 机器编号
 # 系统馝钥
 kev: &Key
-  secret_key: "gin-insecure-013-1x84ut+1igmu8%#pjh)9!%rv+mvobon*0#d1g5!dmu$s3＃"   # 项目秘钥
-  aes_key: "$bd+#e-45!+5*g&t"   # aes秘钥
+  # 项目秘钥
+  secret_key: "gin-insecure-013-1x84ut+1igmu8%#pjh)9!%rv+mvobon*0#d1g5!dmu$s3＃"
+  # aes秘钥
+  aes_key: "$bd+#e-45!+5*g&t"
 # token配置
 token: &Token
   expired_time: 0.5  # 过期时间（小时）
