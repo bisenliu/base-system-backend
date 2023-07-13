@@ -5,6 +5,7 @@ import (
 	"base-system-backend/enums/errmsg"
 	"base-system-backend/global"
 	"base-system-backend/model/common/response"
+	"base-system-backend/utils/common"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"os"
@@ -28,7 +29,10 @@ func (VersionApi) GetVersionApi(c *gin.Context) {
 	if err != nil {
 		response.Error(c, code.QueryFailed, fmt.Errorf("文件日期%w", errmsg.Invalid), err.Error())
 	}
-	projectStartTime := global.CONFIG.System.StartTime
+	projectStartTime, err := common.TimeStr2TimeStamp(global.CONFIG.System.StartTime)
+	if err != nil {
+		response.Error(c, code.QueryFailed, errmsg.TimeCalcFiled, err.Error())
+	}
 	str := strconv.FormatFloat(float64((submitTime-projectStartTime)/(3600*24)), 'f', 3, 64)
 	version := global.CONFIG.System.Version
 	info := strings.Join([]string{version, ".", str}, "")
