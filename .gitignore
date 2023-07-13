@@ -25,3 +25,4 @@ tmp
 .idea/*
 /.air.conf
 /static/
+.vs/*
