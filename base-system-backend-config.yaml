@@ -1,5 +1,5 @@
 system: &System
-  port: 8002   # 项目端口
+  port: 8888   # 项目端口
   start_time: 1640966400   # 项目开始时间
   version: "1.0.0"   # 版本号
 # 雪花算法配置
