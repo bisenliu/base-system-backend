@@ -22,7 +22,6 @@ func JWTAuthMiddleware() func(c *gin.Context) {
 		notNeedAuthPath := []string{
 			"/v1/common/version/",
 			"/v1/user/login/",
-			"/v1/user/slider_verify/",
 		}
 		for _, path := range notNeedAuthPath {
 			if requestURI == path {
@@ -40,6 +39,11 @@ func JWTAuthMiddleware() func(c *gin.Context) {
 		mc, err := jwt.ParseToken(authHeader)
 		if err != nil {
 			debugInfo = "token parse failed"
+			response.Error(c, code.InvalidLogin, errmsg.LoginInvalid, debugInfo)
+			detailByte, _ := json.Marshal(map[string]string{"message": errmsg.LoginInvalid.Error()})
+			utils.CreateOperateLog(c, false, detailByte)
+			c.Abort()
+			return
 
 		}
 		// 获取redis token
