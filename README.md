@@ -33,6 +33,10 @@ cd base-system-backend # 上面初始化脚本自己输入的项目名称
 # 使用 go mod 并安装go依赖包
 go generate
 
+# 第一次运行请初始化(自动创建表以及账号角色,账号 root 密码 123456)
+# 可在 initialize/internal/default_data.go 去修改
+go run main.go --system_init true
+
 # 编译 
 go build -o server main.go (windows编译命令为go build -o server.exe main.go )
 
