@@ -78,15 +78,7 @@
                         "in": "query"
                     },
                     {
-                        "enum": [
-                            0,
-                            1
-                        ],
-                        "type": "integer",
-                        "x-enum-varnames": [
-                            "False",
-                            "True"
-                        ],
+                        "type": "boolean",
                         "name": "success",
                         "in": "query"
                     },
@@ -163,15 +155,7 @@
                         "in": "query"
                     },
                     {
-                        "enum": [
-                            0,
-                            1
-                        ],
-                        "type": "integer",
-                        "x-enum-varnames": [
-                            "False",
-                            "True"
-                        ],
+                        "type": "boolean",
                         "name": "success",
                         "in": "query"
                     },
@@ -1155,20 +1139,46 @@
                     }
                 }
             }
+        },
+        "/version/": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "获取版本号",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "VersionApi"
+                ],
+                "summary": "获取版本号",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Token 令牌",
+                        "name": "Identification",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"status\": 0, data: {\"version\": \"1.0.0.30.000\"}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
-        "enums.BoolSign": {
-            "type": "integer",
-            "enum": [
-                0,
-                1
-            ],
-            "x-enum-varnames": [
-                "False",
-                "True"
-            ]
-        },
         "gender.Gender": {
             "type": "integer",
             "enum": [
@@ -1277,7 +1287,7 @@
                     "maxLength": 20
                 },
                 "createTime": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "email": {
                     "type": "string"
@@ -1322,7 +1332,7 @@
                     "$ref": "#/definitions/user.AccStatus"
                 },
                 "updateTime": {
-                    "type": "string"
+                    "type": "integer"
                 }
             }
         },
@@ -1359,7 +1369,7 @@
             ],
             "properties": {
                 "createTime": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "email": {
                     "type": "string"
@@ -1395,7 +1405,7 @@
                     "$ref": "#/definitions/user.AccStatus"
                 },
                 "updateTime": {
-                    "type": "string"
+                    "type": "integer"
                 }
             }
         },
@@ -1406,7 +1416,7 @@
             ],
             "properties": {
                 "createTime": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "email": {
                     "type": "string"
@@ -1438,7 +1448,7 @@
                     "$ref": "#/definitions/user.AccStatus"
                 },
                 "updateTime": {
-                    "type": "string"
+                    "type": "integer"
                 }
             }
         },
@@ -1472,7 +1482,7 @@
                     "type": "string"
                 },
                 "create_time": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "email": {
                     "type": "string"
@@ -1487,10 +1497,10 @@
                     "type": "string"
                 },
                 "is_system": {
-                    "type": "integer"
+                    "type": "boolean"
                 },
                 "last_time": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "login_type": {
                     "type": "integer"
@@ -1525,7 +1535,7 @@
             "type": "object",
             "properties": {
                 "access_time": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "access_url": {
                     "type": "string"
@@ -1546,7 +1556,7 @@
                     "type": "string"
                 },
                 "success": {
-                    "$ref": "#/definitions/enums.BoolSign"
+                    "type": "boolean"
                 },
                 "user_account": {
                     "type": "string"
@@ -1636,7 +1646,7 @@
                     "type": "string"
                 },
                 "create_time": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "email": {
                     "type": "string"
@@ -1651,10 +1661,10 @@
                     "type": "string"
                 },
                 "is_system": {
-                    "type": "integer"
+                    "type": "boolean"
                 },
                 "last_time": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "login_type": {
                     "type": "integer"
@@ -1720,7 +1730,7 @@
                     "type": "integer"
                 },
                 "is_system": {
-                    "$ref": "#/definitions/enums.BoolSign"
+                    "type": "boolean"
                 },
                 "name": {
                     "type": "string"

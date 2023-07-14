@@ -1,13 +1,5 @@
 basePath: /v1/
 definitions:
-  enums.BoolSign:
-    enum:
-    - 0
-    - 1
-    type: integer
-    x-enum-varnames:
-    - "False"
-    - "True"
   gender.Gender:
     enum:
     - 0
@@ -78,7 +70,7 @@ definitions:
         maxLength: 20
         type: string
       createTime:
-        type: string
+        type: integer
       email:
         type: string
       full_name:
@@ -109,7 +101,7 @@ definitions:
       status:
         $ref: '#/definitions/user.AccStatus'
       updateTime:
-        type: string
+        type: integer
     required:
     - account
     - password
@@ -134,7 +126,7 @@ definitions:
   request.UserUpdate:
     properties:
       createTime:
-        type: string
+        type: integer
       email:
         type: string
       full_name:
@@ -159,14 +151,14 @@ definitions:
       status:
         $ref: '#/definitions/user.AccStatus'
       updateTime:
-        type: string
+        type: integer
     required:
     - name
     type: object
   request.UserUpdateById:
     properties:
       createTime:
-        type: string
+        type: integer
       email:
         type: string
       full_name:
@@ -188,7 +180,7 @@ definitions:
       status:
         $ref: '#/definitions/user.AccStatus'
       updateTime:
-        type: string
+        type: integer
     required:
     - name
     type: object
@@ -212,7 +204,7 @@ definitions:
       avatar:
         type: string
       create_time:
-        type: string
+        type: integer
       email:
         type: string
       gender:
@@ -222,9 +214,9 @@ definitions:
       id_card:
         type: string
       is_system:
-        type: integer
+        type: boolean
       last_time:
-        type: string
+        type: integer
       login_type:
         type: integer
       name:
@@ -247,7 +239,7 @@ definitions:
   response.OperateLogDetail:
     properties:
       access_time:
-        type: string
+        type: integer
       access_url:
         type: string
       action_name:
@@ -261,7 +253,7 @@ definitions:
       request_ip:
         type: string
       success:
-        $ref: '#/definitions/enums.BoolSign'
+        type: boolean
       user_account:
         type: string
       user_agent:
@@ -320,7 +312,7 @@ definitions:
       avatar:
         type: string
       create_time:
-        type: string
+        type: integer
       email:
         type: string
       gender:
@@ -330,9 +322,9 @@ definitions:
       id_card:
         type: string
       is_system:
-        type: integer
+        type: boolean
       last_time:
-        type: string
+        type: integer
       login_type:
         type: integer
       name:
@@ -376,7 +368,7 @@ definitions:
       id:
         type: integer
       is_system:
-        $ref: '#/definitions/enums.BoolSign'
+        type: boolean
       name:
         type: string
       privilege_keys:
@@ -452,15 +444,9 @@ paths:
       - in: query
         name: start_access_time
         type: integer
-      - enum:
-        - 0
-        - 1
-        in: query
+      - in: query
         name: success
-        type: integer
-        x-enum-varnames:
-        - "False"
-        - "True"
+        type: boolean
       - in: query
         name: user_id
         type: integer
@@ -506,15 +492,9 @@ paths:
       - in: query
         name: start_access_time
         type: integer
-      - enum:
-        - 0
-        - 1
-        in: query
+      - in: query
         name: success
-        type: integer
-        x-enum-varnames:
-        - "False"
-        - "True"
+        type: boolean
       - in: query
         name: user_id
         type: integer
@@ -1114,4 +1094,27 @@ paths:
       summary: 重置指定账号密码
       tags:
       - UserApi
+  /version/:
+    get:
+      consumes:
+      - application/json
+      description: 获取版本号
+      parameters:
+      - description: Token 令牌
+        in: header
+        name: Identification
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"status": 0, data: {"version": "1.0.0.30.000"}}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 获取版本号
+      tags:
+      - VersionApi
 swagger: "2.0"
