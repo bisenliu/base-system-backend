@@ -59,7 +59,7 @@ func DefaultPrivilegeInit() {
 	}
 }
 
-func DefaultRoleInit() {
+func DefaultRoleInit() int64 {
 	err := global.DB.Exec(fmt.Sprintf("TRUNCATE TABLE %s RESTART IDENTITY", table.Role)).Error
 	if err != nil {
 		panic(fmt.Errorf("clear role table failed: (%s)", err.Error()))
@@ -71,11 +71,12 @@ func DefaultRoleInit() {
 		panic(fmt.Errorf("privilege query failed: (%s)", err.Error()))
 	}
 	adminPrivilegeKeysByte, err := json.Marshal(adminPrivilegeKeys)
-	err = global.DB.Table(table.Role).Create(&role.Role{
+	adminRole := role.Role{
 		Name:          "管理员",
 		IsSystem:      true,
 		PrivilegeKeys: adminPrivilegeKeysByte,
-	}).Error
+	}
+	err = global.DB.Table(table.Role).Create(&adminRole).Error
 	if err != nil {
 		panic(fmt.Errorf("create admin role failed: (%s)", err.Error()))
 	}
@@ -90,10 +91,11 @@ func DefaultRoleInit() {
 	if err != nil {
 		panic(fmt.Errorf("create plain role failed: (%s)", err.Error()))
 	}
+	return adminRole.Id
 
 }
 
-func DefaultUserInit() {
+func DefaultUserInit() int64 {
 	err := global.DB.Exec(fmt.Sprintf("TRUNCATE TABLE %s RESTART IDENTITY", table.User)).Error
 	if err != nil {
 		panic(fmt.Errorf("clear user table failed: (%s)", err.Error()))
@@ -104,7 +106,7 @@ func DefaultUserInit() {
 	}
 	name := "管理员"
 	fullName, shortName := common.ConvertCnToLetter(name)
-	err = global.DB.Table(table.User).Create(&user.User{
+	u := user.User{
 		Id:        utils.GenID(),
 		Account:   "root",
 		Password:  utils.BcryptHash("123456"),
@@ -113,20 +115,22 @@ func DefaultUserInit() {
 		FullName:  fullName,
 		ShortName: shortName,
 		IsSystem:  true,
-	}).Error
+	}
+	err = global.DB.Table(table.User).Create(&u).Error
 	if err != nil {
 		panic(fmt.Errorf("create user failed: (%s)", err.Error()))
 	}
+	return u.Id
 }
 
-func DefaultUserRoleInit() {
+func DefaultUserRoleInit(userId int64, adminRoleId int64) {
 	err := global.DB.Exec(fmt.Sprintf("TRUNCATE TABLE %s RESTART IDENTITY", table.UserRole)).Error
 	if err != nil {
 		panic(fmt.Errorf("clear user_role table failed: (%s)", err.Error()))
 	}
 	err = global.DB.Table(table.UserRole).Create(&user.UserRole{
-		UserId: 1,
-		RoleId: 1,
+		UserId: userId,
+		RoleId: adminRoleId,
 	}).Error
 	if err != nil {
 		panic(fmt.Errorf("create user role failed: (%s)", err.Error()))

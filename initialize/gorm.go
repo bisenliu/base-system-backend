@@ -80,13 +80,13 @@ func DefaultDataInit() {
 		internal.DefaultPrivilegeInit()
 
 		global.LOG.Info("init role ...")
-		internal.DefaultRoleInit()
+		adminRoleId := internal.DefaultRoleInit()
 
 		global.LOG.Info("init user ...")
-		internal.DefaultUserInit()
+		userId := internal.DefaultUserInit()
 
 		global.LOG.Info("init user role ...")
-		internal.DefaultUserRoleInit()
+		internal.DefaultUserRoleInit(userId, adminRoleId)
 	}
 
 }
