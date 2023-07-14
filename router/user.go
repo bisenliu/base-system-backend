@@ -17,9 +17,9 @@ func (u UserRouter) InitUserRouter(Router *gin.RouterGroup) {
 	Router.POST("logout/", userApi.UserLogoutApi)
 
 	// 用户列表
-	Router.GET("list/", middleware.PrivilegeVerify(enums.UserListPrivilege), userApi.UserListApi)
+	Router.GET("list/", middleware.PrivilegeVerify(enums.AccountList), userApi.UserListApi)
 	// 创建用户
-	Router.POST("create/", userApi.UserCreateApi)
+	Router.POST("create/", middleware.PrivilegeVerify(enums.AccountCreate), userApi.UserCreateApi)
 	// 查询|修改当前登录用户信息
 	detailRouterGroup := Router.Group("detail/")
 	{
@@ -31,14 +31,14 @@ func (u UserRouter) InitUserRouter(Router *gin.RouterGroup) {
 	//上传头像
 	Router.PATCH("avatar/", userApi.UserUploadAvatarApi)
 	//重置指定账号密码
-	Router.PUT("reset_pwd/:user_id/", userApi.UserResetPwdByIdApi)
+	Router.PUT("reset_pwd/:user_id/", middleware.PrivilegeVerify(enums.ResetPwdOther), userApi.UserResetPwdByIdApi)
 	// 修改指定账户状态
-	Router.PUT("change_status/:user_id/", userApi.UserStatusChangeByIdApi)
+	Router.PUT("change_status/:user_id/", middleware.PrivilegeVerify(enums.ChangeStatusOther), userApi.UserStatusChangeByIdApi)
 	// 查询|编辑指定账户信息
 	RURouterGroup := Router.Group(":user_id/")
 	{
-		RURouterGroup.GET("", userApi.UserDetailByIdApi)
-		RURouterGroup.PUT("", userApi.UserUpdateByIdApi)
+		RURouterGroup.GET("", middleware.PrivilegeVerify(enums.AccountDetailOther), userApi.UserDetailByIdApi)
+		RURouterGroup.PUT("", middleware.PrivilegeVerify(enums.AccountUpdateOther), userApi.UserUpdateByIdApi)
 	}
 
 }
