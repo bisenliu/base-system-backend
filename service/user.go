@@ -378,7 +378,15 @@ func (UserService) UserUpdateByIdService(userId string, params *request.UserUpda
 	if err = global.DB.Table(table.User).Where("id = ?", userId).First(&u).Error; err != nil {
 		return fmt.Errorf("用户%w", errmsg.QueryFailed), err.Error()
 	}
+
 	tx := global.DB.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+			err = fmt.Errorf("用户%w", errmsg.UpdateFailed)
+		}
+	}()
+
 	if params.Name != "" && params.Name != u.Name {
 		//全拼简拼
 		params.FullName, params.ShortName = common.ConvertCnToLetter(params.Name)
@@ -402,13 +410,10 @@ func (UserService) UserUpdateByIdService(userId string, params *request.UserUpda
 		}
 		//删除旧绑定
 		if err = tx.Table(table.UserRole).Where("user_id =?", u.Id).Delete(&user.UserRole{}).Error; err != nil {
-			tx.Rollback()
 			return fmt.Errorf("用户绑定角色%w", errmsg.DeleteFailed), err.Error()
-
 		}
 		//重新绑定
 		if err = tx.Table(table.UserRole).Create(&userRoles).Error; err != nil {
-			tx.Rollback()
 			return fmt.Errorf("用户角色#{msg.ErrorSaveFailed}"), err.Error()
 		}
 	}
