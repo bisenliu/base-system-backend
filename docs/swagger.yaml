@@ -399,6 +399,11 @@ definitions:
     x-enum-varnames:
     - PwdChange
     - SmsChange
+  version.Version:
+    properties:
+      version:
+        type: string
+    type: object
 host: http://127.0.0.1:8001
 info:
   contact: {}
@@ -1109,9 +1114,14 @@ paths:
       - application/json
       responses:
         "200":
-          description: '{"status": 0, data: {"version": "1.0.0.30.000"}}'
+          description: OK
           schema:
-            type: string
+            allOf:
+            - $ref: '#/definitions/response.Data'
+            - properties:
+                data:
+                  $ref: '#/definitions/version.Version'
+              type: object
       security:
       - ApiKeyAuth: []
       summary: 获取版本号

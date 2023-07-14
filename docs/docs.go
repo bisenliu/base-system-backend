@@ -1176,9 +1176,21 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "{\"status\": 0, data: {\"version\": \"1.0.0.30.000\"}}",
+                        "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Data"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/version.Version"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     }
                 }
@@ -1779,6 +1791,14 @@ const docTemplate = `{
                 "PwdChange",
                 "SmsChange"
             ]
+        },
+        "version.Version": {
+            "type": "object",
+            "properties": {
+                "version": {
+                    "type": "string"
+                }
+            }
         }
     }
 }`
