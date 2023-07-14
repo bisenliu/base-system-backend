@@ -20,7 +20,7 @@ type OperateLogDetail struct {
 	UserId      *int64            `json:"user_id"`
 	UserName    string            `json:"user_name"`
 	UserAccount string            `json:"user_account"`
-	AccessTime  *field.CustomTime `json:"access_time"`
+	AccessTime  *field.CustomTime `json:"access_time" swaggertype:"integer"`
 	Success     bool              `json:"success"`
 	Detail      *datatypes.JSON   `json:"-"`
 	OperateLogErrMessage

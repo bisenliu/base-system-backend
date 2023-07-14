@@ -85,15 +85,7 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
-                        "enum": [
-                            0,
-                            1
-                        ],
-                        "type": "integer",
-                        "x-enum-varnames": [
-                            "False",
-                            "True"
-                        ],
+                        "type": "boolean",
                         "name": "success",
                         "in": "query"
                     },
@@ -170,15 +162,7 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
-                        "enum": [
-                            0,
-                            1
-                        ],
-                        "type": "integer",
-                        "x-enum-varnames": [
-                            "False",
-                            "True"
-                        ],
+                        "type": "boolean",
                         "name": "success",
                         "in": "query"
                     },
@@ -1162,20 +1146,46 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/version/": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "获取版本号",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "VersionApi"
+                ],
+                "summary": "获取版本号",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Token 令牌",
+                        "name": "Identification",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"status\": 0, data: {\"version\": \"1.0.0.30.000\"}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
-        "enums.BoolSign": {
-            "type": "integer",
-            "enum": [
-                0,
-                1
-            ],
-            "x-enum-varnames": [
-                "False",
-                "True"
-            ]
-        },
         "gender.Gender": {
             "type": "integer",
             "enum": [
@@ -1284,7 +1294,7 @@ const docTemplate = `{
                     "maxLength": 20
                 },
                 "createTime": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "email": {
                     "type": "string"
@@ -1329,7 +1339,7 @@ const docTemplate = `{
                     "$ref": "#/definitions/user.AccStatus"
                 },
                 "updateTime": {
-                    "type": "string"
+                    "type": "integer"
                 }
             }
         },
@@ -1366,7 +1376,7 @@ const docTemplate = `{
             ],
             "properties": {
                 "createTime": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "email": {
                     "type": "string"
@@ -1402,7 +1412,7 @@ const docTemplate = `{
                     "$ref": "#/definitions/user.AccStatus"
                 },
                 "updateTime": {
-                    "type": "string"
+                    "type": "integer"
                 }
             }
         },
@@ -1413,7 +1423,7 @@ const docTemplate = `{
             ],
             "properties": {
                 "createTime": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "email": {
                     "type": "string"
@@ -1445,7 +1455,7 @@ const docTemplate = `{
                     "$ref": "#/definitions/user.AccStatus"
                 },
                 "updateTime": {
-                    "type": "string"
+                    "type": "integer"
                 }
             }
         },
@@ -1479,7 +1489,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "create_time": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "email": {
                     "type": "string"
@@ -1494,10 +1504,10 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "is_system": {
-                    "type": "integer"
+                    "type": "boolean"
                 },
                 "last_time": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "login_type": {
                     "type": "integer"
@@ -1532,7 +1542,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "access_time": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "access_url": {
                     "type": "string"
@@ -1553,7 +1563,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "success": {
-                    "$ref": "#/definitions/enums.BoolSign"
+                    "type": "boolean"
                 },
                 "user_account": {
                     "type": "string"
@@ -1643,7 +1653,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "create_time": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "email": {
                     "type": "string"
@@ -1658,10 +1668,10 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "is_system": {
-                    "type": "integer"
+                    "type": "boolean"
                 },
                 "last_time": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "login_type": {
                     "type": "integer"
@@ -1727,7 +1737,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "is_system": {
-                    "$ref": "#/definitions/enums.BoolSign"
+                    "type": "boolean"
                 },
                 "name": {
                     "type": "string"
