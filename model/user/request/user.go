@@ -71,7 +71,6 @@ type UserUpdateById struct {
 	Status  user.AccStatus `json:"status" binding:"enum" label:"账号状态"`
 	RoleIds *[]int64       `json:"role_ids" gorm:"-" label:"角色ID列表"`
 	UserFullNameAndShortName
-	field.CUTime
 }
 
 type UserChangePwdBase struct {
