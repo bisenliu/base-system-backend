@@ -123,7 +123,6 @@ func GetResponseData(c *gin.Context) (success bool, detailByte []byte) {
 					c.Abort()
 					return
 				}
-				success = false
 			} else {
 				success = false
 			}
