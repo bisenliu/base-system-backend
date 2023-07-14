@@ -6,6 +6,7 @@ import (
 	"base-system-backend/global"
 	"base-system-backend/model/common/field"
 	"base-system-backend/model/log/request"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"reflect"
@@ -63,4 +64,12 @@ func CreateOperateLog(c *gin.Context, success bool, detailByte []byte) {
 		global.LOG.Error("create operate log info failed: %s", zap.Error(err))
 	}
 
+	global.LOG.Info(c.Request.URL.Path,
+		zap.Bool("status", success),
+		zap.String("method", c.Request.Method),
+		zap.String("query", c.Request.URL.RawQuery),
+		zap.String("ip", c.ClientIP()),
+		zap.String("user-agent", c.Request.UserAgent()),
+		zap.String("errors", fmt.Sprintf("%s", detailByte)),
+	)
 }
