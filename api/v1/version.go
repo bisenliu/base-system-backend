@@ -15,6 +15,16 @@ import (
 
 type VersionApi struct{}
 
+// GetVersionApi
+// @Summary 获取版本号
+// @Description 获取版本号
+// @Tags VersionApi
+// @Accept application/json
+// @Produce application/json
+// @Param Identification header string true "Token 令牌"
+// @Security ApiKeyAuth
+// @Success 200 {object} response.Data{data=version.Version}
+// @Router /version/ [get]
 func (VersionApi) GetVersionApi(c *gin.Context) {
 	baseDir, err := os.Getwd()
 	if err != nil {
