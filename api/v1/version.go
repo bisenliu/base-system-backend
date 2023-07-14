@@ -21,8 +21,6 @@ type VersionApi struct{}
 // @Tags VersionApi
 // @Accept application/json
 // @Produce application/json
-// @Param Identification header string true "Token 令牌"
-// @Security ApiKeyAuth
 // @Success 200 {object} response.Data{data=version.Version}
 // @Router /version/ [get]
 func (VersionApi) GetVersionApi(c *gin.Context) {
