@@ -138,7 +138,7 @@ swag init --parseDependency
 
 type User struct {
   Phone       field.PlainEncrypt           `gorm:"column:phone;size:11;comment:手机号"`
-	Phone2      field.SplitEncrypt           `gorm:"column:phone2;size:11;comment:手机号2"`
+  Phone2      field.SplitEncrypt           `gorm:"column:phone2;size:11;comment:手机号2"`
 }
 
 ```
