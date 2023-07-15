@@ -13,7 +13,7 @@ type OperateLogFilter struct {
 	UserId          *int64 `json:"user_id" form:"user_id" label:"请求者的用户ID"`
 	StartAccessTime *int64 `json:"start_access_time" form:"start_access_time" label:"访问开始时间"`
 	EndAccessTime   *int64 `json:"end_access_time" form:"end_access_time" label:"访问结束时间"`
-	Success         bool   `json:"success" form:"success" binding:"enum" label:"操作是否成功"`
+	Success         bool   `json:"success" form:"success" label:"操作是否成功"`
 	request.PageInfo
 }
 
