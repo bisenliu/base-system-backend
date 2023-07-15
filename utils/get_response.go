@@ -115,21 +115,19 @@ func GetResponseData(c *gin.Context) (success bool, detailByte []byte) {
 			c.Abort()
 			return
 		}
-		status, ok := rsp["status"].(float64)
-		if ok && status == 0 && method == "GET" {
-			c.Abort()
-			return
-		}
-		success = status != 0
-		errInfo, ok := rsp["status_info"].(map[string]interface{})
-		if ok && errInfo["message"] != nil {
-			detail := map[string]interface{}{
-				"message": errInfo["message"],
-			}
-			detailByte, _ = json.Marshal(detail)
-		}
-
 	}
-
+	status, ok := rsp["status"].(float64)
+	if ok && status == 0 && method == "GET" {
+		c.Abort()
+		return
+	}
+	success = status == 0
+	errInfo, ok := rsp["status_info"].(map[string]interface{})
+	if ok && errInfo["message"] != nil {
+		detail := map[string]interface{}{
+			"message": errInfo["message"],
+		}
+		detailByte, _ = json.Marshal(detail)
+	}
 	return
 }
