@@ -127,4 +127,19 @@ swag init --parseDependency
 
 - api管理：不同用户可调用的api接口的权限不同。
 
-  
+
+## 6.说明
+
+```go
+// model/common/field/aes
+// 自定义字段,对于一些敏感数据可对其进行加密,返回数据时进行解密
+// field.PlainEncrypt 对内容进行整体加密
+// field.SplitEncrypt 对单个字符进行加密,并组合(需要进行模糊查询用此字段)
+
+type User struct {
+  Phone       field.PlainEncrypt           `gorm:"column:phone;size:11;comment:手机号"`
+	Phone2      field.SplitEncrypt           `gorm:"column:phone2;size:11;comment:手机号2"`
+}
+
+```
+
