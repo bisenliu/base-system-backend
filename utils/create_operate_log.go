@@ -12,7 +12,6 @@ import (
 	"reflect"
 	"regexp"
 	"runtime"
-	"strings"
 	"time"
 )
 
@@ -38,7 +37,7 @@ func CreateOperateLog(c *gin.Context, success bool, detailByte []byte) {
 	if c.Request.TLS != nil {
 		scheme = "https"
 	}
-	accessUrl := strings.Join([]string{scheme, "://", c.Request.Host, c.Request.RequestURI}, "")
+	accessUrl := fmt.Sprintf("%s://%s%s", scheme, c.Request.Host, c.Request.RequestURI)
 	userAgent := c.Request.UserAgent()
 	userInstance, err, _ := GetCurrentUser(c)
 	if err != nil {
@@ -54,9 +53,7 @@ func CreateOperateLog(c *gin.Context, success bool, detailByte []byte) {
 		Module:     model,
 		AccessUrl:  accessUrl,
 		RequestIp:  c.ClientIP(),
-
-		UserAgent: userAgent,
-
+		UserAgent:  userAgent,
 		Success:    success,
 		Detail:     detailByte,
 		AccessTime: field.CustomTime(time.Now()),
@@ -64,12 +61,19 @@ func CreateOperateLog(c *gin.Context, success bool, detailByte []byte) {
 		global.LOG.Error("create operate log info failed: %s", zap.Error(err))
 	}
 
-	global.LOG.Info(c.Request.URL.Path,
+	logFields := []zap.Field{
 		zap.Bool("status", success),
 		zap.String("method", c.Request.Method),
 		zap.String("query", c.Request.URL.RawQuery),
 		zap.String("ip", c.ClientIP()),
 		zap.String("user-agent", c.Request.UserAgent()),
-		zap.String("errors", fmt.Sprintf("%s", detailByte)),
-	)
+	}
+	if len(detailByte) > 0 {
+		logFields = append(logFields, zap.String("errors", string(detailByte)))
+	}
+	if success {
+		global.LOG.Info(c.Request.URL.Path, logFields...)
+	} else {
+		global.LOG.Error(c.Request.URL.Path, logFields...)
+	}
 }
