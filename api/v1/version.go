@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 )
@@ -29,7 +30,7 @@ func (VersionApi) GetVersionApi(c *gin.Context) {
 		response.Error(c, code.QueryFailed, fmt.Sprintf(errmsg.ReadFailed.Error(), "当前路径"), err.Error())
 		return
 	}
-	versionFilePath := strings.Join([]string{baseDir, "/version.txt"}, "")
+	versionFilePath := filepath.Join(baseDir, "version.txt")
 	versionByte, err := os.ReadFile(versionFilePath)
 	if err != nil {
 		response.Error(c, code.QueryFailed, fmt.Sprintf(errmsg.ReadFailed.Error(), "文件"), err.Error())

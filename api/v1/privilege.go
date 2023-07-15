@@ -72,7 +72,7 @@ func (PrivilegeApi) PrivilegeListApi(c *gin.Context) {
 // @Router /privilege/:role_id/ [put]
 func (PrivilegeApi) RolePrivilegeUpdateApi(c *gin.Context) {
 	params := new(request.RolePrivilegeUpdate)
-	if ok := validate.RequestParamsVerify(c, params); !ok {
+	if !validate.RequestParamsVerify(c, params) {
 		return
 	}
 	roleId := c.Param("role_id")

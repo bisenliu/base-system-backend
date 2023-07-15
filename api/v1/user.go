@@ -29,13 +29,13 @@ type UserApi struct{}
 // @Router /user/login/ [post]
 func (UserApi) UserLoginApi(c *gin.Context) {
 	loginBase := new(request.UserLoginBase)
-	if ok := validate.RequestParamsVerify(c, &loginBase); !ok {
+	if !validate.RequestParamsVerify(c, &loginBase) {
 		return
 	}
 	// 账号密码登录
 	if *loginBase.LoginType == login.AccPwdLogin {
 		accLoginParams := new(request.UserAccountLogin)
-		if ok := validate.RequestParamsVerify(c, accLoginParams); !ok {
+		if !validate.RequestParamsVerify(c, accLoginParams) {
 			return
 		}
 		// 账号密码登录逻辑
@@ -93,7 +93,7 @@ func (UserApi) UserLogoutApi(c *gin.Context) {
 // @Router /user/list/ [get]
 func (UserApi) UserListApi(c *gin.Context) {
 	params := new(request.UserFilter)
-	if ok := validate.QueryParamsVerify(c, &params); !ok {
+	if !validate.QueryParamsVerify(c, &params) {
 		return
 	}
 	userList, err, debugInfo := userService.UserListService(c, params)
@@ -117,7 +117,7 @@ func (UserApi) UserListApi(c *gin.Context) {
 // @Router /user/ [post]
 func (UserApi) UserCreateApi(c *gin.Context) {
 	params := new(request.UserCreate)
-	if ok := validate.RequestParamsVerify(c, params); !ok {
+	if !validate.RequestParamsVerify(c, params) {
 		return
 	}
 	if err, debugInfo := userService.UserCreateService(params); err != nil {
@@ -165,7 +165,7 @@ func (UserApi) UserDetailApi(c *gin.Context) {
 // @Router /user/detail/ [put]
 func (UserApi) UserUpdateApi(c *gin.Context) {
 	params := new(request.UserUpdate)
-	if ok := validate.RequestParamsVerify(c, params); !ok {
+	if !validate.RequestParamsVerify(c, params) {
 		return
 	}
 	u, err, debugInfo := utils.GetCurrentUser(c)
@@ -193,7 +193,7 @@ func (UserApi) UserUpdateApi(c *gin.Context) {
 // @Router /user/change_pwd/ [patch]
 func (UserApi) UserChangePwdApi(c *gin.Context) {
 	params := new(request.UserChangePwdBase)
-	if ok := validate.RequestParamsVerify(c, params); !ok {
+	if !validate.RequestParamsVerify(c, params) {
 		return
 	}
 	u, err, debugInfo := utils.GetCurrentUser(c)
@@ -204,7 +204,7 @@ func (UserApi) UserChangePwdApi(c *gin.Context) {
 	// 密码修改
 	if params.Type == userEnum.PwdChange {
 		pwdChangeParams := new(request.PwdChangeByPwd)
-		if ok := validate.RequestParamsVerify(c, pwdChangeParams); !ok {
+		if !validate.RequestParamsVerify(c, pwdChangeParams) {
 			return
 		}
 		if err, debugInfo = userService.UserChangePwdByPwdService(u, pwdChangeParams); err != nil {
@@ -273,7 +273,7 @@ func (UserApi) UserUploadAvatarApi(c *gin.Context) {
 // @Router /user/reset_pwd/:user_id/ [put]
 func (UserApi) UserResetPwdByIdApi(c *gin.Context) {
 	params := new(request.PwdChangeById)
-	if ok := validate.RequestParamsVerify(c, &params); !ok {
+	if !validate.RequestParamsVerify(c, &params) {
 		return
 	}
 	userId := c.Param("user_id")
@@ -297,7 +297,7 @@ func (UserApi) UserResetPwdByIdApi(c *gin.Context) {
 // @Router /user/change_status/:user_id/ [put]
 func (UserApi) UserStatusChangeByIdApi(c *gin.Context) {
 	params := new(request.StatusChangeById)
-	if ok := validate.RequestParamsVerify(c, &params); !ok {
+	if !validate.RequestParamsVerify(c, &params) {
 		return
 	}
 
@@ -342,7 +342,7 @@ func (UserApi) UserDetailByIdApi(c *gin.Context) {
 // @Router /user/:user_id/ [put]
 func (UserApi) UserUpdateByIdApi(c *gin.Context) {
 	params := new(request.UserUpdateById)
-	if ok := validate.RequestParamsVerify(c, params); !ok {
+	if !validate.RequestParamsVerify(c, params) {
 		return
 	}
 	userId := c.Param("user_id")

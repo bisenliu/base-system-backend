@@ -45,7 +45,7 @@ func (RoleApi) RoleListApi(c *gin.Context) {
 // @Router /role/ [post]
 func (RoleApi) RoleCreateApi(c *gin.Context) {
 	params := new(request.RoleCreate)
-	if ok := validate.RequestParamsVerify(c, params); !ok {
+	if !validate.RequestParamsVerify(c, params) {
 		return
 	}
 	if err, debugInfo := roleService.RoleCreateService(params); err != nil {
@@ -88,7 +88,7 @@ func (RoleApi) RoleDetailApi(c *gin.Context) {
 // @Router /role/:role_id/ [put]
 func (RoleApi) RoleUpdateApi(c *gin.Context) {
 	params := new(request.RoleUpdate)
-	if ok := validate.RequestParamsVerify(c, params); !ok {
+	if !validate.RequestParamsVerify(c, params) {
 		return
 	}
 	roleId := c.Param("role_id")

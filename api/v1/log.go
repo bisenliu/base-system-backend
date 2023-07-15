@@ -23,7 +23,7 @@ type LogApi struct{}
 // @Router /log/operate/list/ [get]
 func (LogApi) OperateLogListApi(c *gin.Context) {
 	params := new(request.OperateLogFilter)
-	if ok := validate.QueryParamsVerify(c, params); !ok {
+	if !validate.QueryParamsVerify(c, params) {
 		return
 	}
 	operateLogList, err, debugInfo := logService.OperateLogListService(c, params)
@@ -46,7 +46,7 @@ func (LogApi) OperateLogListApi(c *gin.Context) {
 // @Router /log/operate/download/ [get]
 func (LogApi) OperateLogDownloadApi(c *gin.Context) {
 	params := new(request.OperateLogFilter)
-	if ok := validate.QueryParamsVerify(c, params); !ok {
+	if !validate.QueryParamsVerify(c, params) {
 		return
 	}
 	content, err, debugInfo := logService.OperateLogDownloadService(c, params)
