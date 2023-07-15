@@ -243,6 +243,13 @@ func (UserService) UserUpdateService(userId int64, params *request.UserUpdate) (
 		return fmt.Errorf("手机号码%w", errmsg.Invalid), nil
 	}
 	tx := global.DB.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+			err = fmt.Errorf("用户%w", errmsg.UpdateFailed)
+		}
+	}()
+
 	var u user.User
 	if err = global.DB.Table(table.User).Where("id = ?", userId).First(&u).Error; err != nil {
 		return fmt.Errorf("用户%w", errmsg.QueryFailed), err.Error()
@@ -251,7 +258,7 @@ func (UserService) UserUpdateService(userId int64, params *request.UserUpdate) (
 		// 全拼简拼
 		params.FullName, params.ShortName = common.ConvertCnToLetter(params.Name)
 	}
-	if err = tx.Model(u).Updates(user.User{
+	if err = tx.Model(&u).Updates(user.User{
 		IdCard:    params.IdCard,
 		Phone:     params.Phone,
 		Email:     params.Email,
@@ -269,12 +276,11 @@ func (UserService) UserUpdateService(userId int64, params *request.UserUpdate) (
 			return fmt.Errorf("角色Id列表%w", errmsg.Invalid), debugInfo
 		}
 		// 删除旧绑定
-		if err = tx.Table(table.UserRole).Where("user id = ?", userId).Delete(&user.UserRole{}).Error; err != nil {
+		if err = tx.Table(table.UserRole).Where("user_id = ?", userId).Delete(&user.UserRole{}).Error; err != nil {
 			return fmt.Errorf("用户角色%w", errmsg.DeleteFailed), err.Error()
 		}
 		// 重新绑定
 		if err = tx.Table(table.UserRole).Create(&userRoles).Error; err != nil {
-			tx.Rollback()
 			return fmt.Errorf("用户角色%w", errmsg.SaveFailed), err.Error()
 		}
 	}
