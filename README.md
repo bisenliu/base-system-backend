@@ -102,7 +102,7 @@ swag init --parseDependency
         ├── config          (配置包)
         ├── core            (核心文件)
         ├── docs            (swagger文档目录)
-        ├── enums           (枚举文件)
+        ├── constants       (常量文件)
         ├── global          (全局对象)                    
         ├── initialize      (初始化)                        
         │   └── internal    (初始化内部函数)                            
