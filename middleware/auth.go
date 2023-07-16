@@ -12,34 +12,38 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+var notNeedAuthPath = []string{
+	"/v1/common/version/",
+	"/v1/user/login/",
+}
+
 // JWTAuthMiddleware 基于JWT的认证中间件
 func JWTAuthMiddleware() func(c *gin.Context) {
 	return func(c *gin.Context) {
 
 		// 获取请求uri
 		requestURI := c.Request.RequestURI
-		// 不需要认证的接口
-		notNeedAuthPath := []string{
-			"/v1/common/version/",
-			"/v1/user/login/",
-		}
+
+		// 检查请求是否不需要认证
 		for _, path := range notNeedAuthPath {
 			if requestURI == path {
 				c.Next()
 				return
 			}
 		}
-		var debugInfo string
 		authHeader := c.Request.Header.Get("Identification")
 		if authHeader == "" {
 			// todo 如果没有 Identification，先校验ak/sk
-			debugInfo = "token not found"
+			response.Error(c, code.InvalidLogin, errmsg.LoginInvalid, "token not found")
+			detailByte, _ := json.Marshal(map[string]string{"message": errmsg.LoginInvalid.Error()})
+			utils.CreateOperateLog(c, false, detailByte)
+			c.Abort()
+			return
 		}
 		// parts[1]是获取到的tokenString，我们使用之前定义好的解析JWT的函数来解析它
 		mc, err := jwt.ParseToken(authHeader)
 		if err != nil {
-			debugInfo = "token parse failed"
-			response.Error(c, code.InvalidLogin, errmsg.LoginInvalid, debugInfo)
+			response.Error(c, code.InvalidLogin, errmsg.LoginInvalid, "token parse failed")
 			detailByte, _ := json.Marshal(map[string]string{"message": errmsg.LoginInvalid.Error()})
 			utils.CreateOperateLog(c, false, detailByte)
 			c.Abort()
@@ -48,14 +52,8 @@ func JWTAuthMiddleware() func(c *gin.Context) {
 		}
 		// 获取redis token
 		cacheToken := cache.GetToken(mc.UserId)
-		if cacheToken == "" {
-			debugInfo = "cache token not found"
-		}
 		if cacheToken != authHeader {
-			debugInfo = "invalid token"
-		}
-		if debugInfo != "" {
-			response.Error(c, code.InvalidLogin, errmsg.LoginInvalid, debugInfo)
+			response.Error(c, code.InvalidLogin, errmsg.LoginInvalid, "invalid token")
 			detailByte, _ := json.Marshal(map[string]string{"message": errmsg.LoginInvalid.Error()})
 			utils.CreateOperateLog(c, false, detailByte)
 			c.Abort()
