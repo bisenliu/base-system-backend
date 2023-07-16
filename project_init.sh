@@ -70,7 +70,7 @@ get_input() {
   echo $value
 }
 
-function mkdirPath() {
+function create_static_folder() {
   path=$1
   #如果文件夹不存在，创建文件夹
   if [ ! -d "$path" ]; then
@@ -95,7 +95,7 @@ aesKey="$(< /dev/urandom LC_CTYPE=C tr -dc 'A-Za-z0-9!a$%S*()_+{}|:<>?=' | head 
 show_suc "$aesKey"
 
 show_title "创建静态文件目录"
-mkdirPath "$staticPath"
+create_static_folder "$staticPath"
 check_error $? "创建文件夹失败"
 
 show_title "替换配置文件"
