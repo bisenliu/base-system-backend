@@ -31,7 +31,7 @@ func PrivilegeVerify(key enums.PrivilegeKey) gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-		if ok := common.In(string(key), privilegeKeys); !ok {
+		if !common.In(string(key), privilegeKeys) {
 			response.Error(c, code.NotPermissions, fmt.Sprintf(errmsg.NotPrivilege.Error(), key), debugInfo)
 			c.Abort()
 			return
