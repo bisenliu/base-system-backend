@@ -4,7 +4,7 @@
 
 ### 1.1 项目介绍
 
-> base-system-backend 是一个基于gin开发的后端基础脚手架，集成jwt鉴权，基础RBAC等功能。
+> base-system-backend 是一个基于 Gin 开发的后端基础脚手架，集成了 JWT 鉴权和基础 RBAC（Role-Based Access Control）功能。
 
 ## 2. 使用说明
 
@@ -15,7 +15,7 @@
 
 ### 2.1 server项目
 
-使用 `Goland` 等编辑工具，打开项目
+使用 `Goland` 或其他编辑工具，打开项目
 
 ```bash
 # 克隆项目
@@ -25,10 +25,10 @@ cd base-system-backend
 
 # 运行初始化脚本
 chmod +x project_init.sh
-# 输入自己的项目名称（这里以base-system-backend 为项目目录），以及静态文件目录
+# 输入您的项目名称（这里以base-system-backend 为项目目录）和静态文件目录
 bash ./project_init.sh
 # 进入项目
-cd base-system-backend # 上面初始化脚本自己输入的项目名称
+cd base-system-backend # 输入的项目名称即为 base-system-backend
 
 # 使用 go mod 并安装go依赖包
 go generate
@@ -123,13 +123,13 @@ swag init --parseDependency
 
 - 用户管理：系统管理员分配用户角色和角色权限。
 
-- 角色管理：创建权限控制的主要对象，可以给角色分配不同api权限和菜单权限。
+- 角色管理：创建权限控制的主要对象，可以给角色分配不同API权限。
 
-- api管理：不同用户可调用的api接口的权限不同。
+- API 管理：不同用户可调用的 API 接口的权限不同。
 
 
 ## 6.说明
-
+在 model/common/field/aes 文件中，自定义了字段加密相关的功能，可以对一些敏感数据进行加密，并在返回数据时进行解密。
 ```go
 // model/common/field/aes
 // 自定义字段,对于一些敏感数据可对其进行加密,返回数据时进行解密
