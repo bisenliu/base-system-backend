@@ -1,10 +1,10 @@
 package v1
 
 import (
-	"base-system-backend/enums/code"
-	"base-system-backend/enums/errmsg"
-	"base-system-backend/enums/login"
-	userEnum "base-system-backend/enums/user"
+	"base-system-backend/constants/code"
+	"base-system-backend/constants/errmsg"
+	"base-system-backend/constants/login"
+	userEnum "base-system-backend/constants/user"
 	"base-system-backend/model/common/response"
 	"base-system-backend/model/user/request"
 	"base-system-backend/utils"

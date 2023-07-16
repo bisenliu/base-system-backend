@@ -1,7 +1,7 @@
 package log
 
 import (
-	"base-system-backend/enums/table"
+	"base-system-backend/constants/table"
 	"base-system-backend/model/common/field"
 	"gorm.io/datatypes"
 )

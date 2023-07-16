@@ -1,4 +1,4 @@
-package enums
+package constants
 
 type PrivilegeKey string
 

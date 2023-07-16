@@ -1,8 +1,8 @@
 package response
 
 import (
-	"base-system-backend/enums/login"
-	"base-system-backend/enums/user"
+	"base-system-backend/constants/login"
+	"base-system-backend/constants/user"
 	"base-system-backend/model/common/field"
 	"base-system-backend/model/common/response"
 )

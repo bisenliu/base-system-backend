@@ -1,7 +1,7 @@
 package v1
 
 import (
-	"base-system-backend/enums/code"
+	"base-system-backend/constants/code"
 	"base-system-backend/model/common/response"
 	"base-system-backend/model/role/request"
 	"base-system-backend/utils/validate"

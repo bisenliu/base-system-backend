@@ -1,7 +1,7 @@
 package validate
 
 import (
-	"base-system-backend/enums/code"
+	"base-system-backend/constants/code"
 	"base-system-backend/global"
 	"base-system-backend/model/common/response"
 	"github.com/gin-gonic/gin"

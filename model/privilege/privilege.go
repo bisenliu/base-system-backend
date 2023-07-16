@@ -1,7 +1,7 @@
 package privilege
 
 import (
-	"base-system-backend/enums/table"
+	"base-system-backend/constants/table"
 	"gorm.io/datatypes"
 )
 

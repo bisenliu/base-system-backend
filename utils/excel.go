@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"base-system-backend/enums/errmsg"
+	"base-system-backend/constants/errmsg"
 	"base-system-backend/global"
 	"base-system-backend/utils/common"
 	"bytes"

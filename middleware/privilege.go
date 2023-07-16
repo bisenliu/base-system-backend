@@ -1,9 +1,9 @@
 package middleware
 
 import (
-	"base-system-backend/enums"
-	"base-system-backend/enums/code"
-	"base-system-backend/enums/errmsg"
+	"base-system-backend/constants"
+	"base-system-backend/constants/code"
+	"base-system-backend/constants/errmsg"
 	"base-system-backend/model/common/response"
 	"base-system-backend/utils"
 	"base-system-backend/utils/common"
@@ -16,7 +16,7 @@ import (
 // @param key 每个url对应的权限key
 // @return gin.HandlerFunc
 
-func PrivilegeVerify(key enums.PrivilegeKey) gin.HandlerFunc {
+func PrivilegeVerify(key constants.PrivilegeKey) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		user, err, debugInfo := utils.GetCurrentUser(c)
 		if err != nil {

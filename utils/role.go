@@ -1,8 +1,8 @@
 package utils
 
 import (
-	"base-system-backend/enums/errmsg"
-	"base-system-backend/enums/table"
+	"base-system-backend/constants/errmsg"
+	"base-system-backend/constants/table"
 	"base-system-backend/global"
 	"fmt"
 )

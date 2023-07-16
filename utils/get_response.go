@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"base-system-backend/enums"
+	"base-system-backend/constants"
 	"base-system-backend/global"
 	"bytes"
 	"encoding/json"
@@ -109,7 +109,7 @@ func GetResponseData(c *gin.Context) (success bool, detailByte []byte) {
 
 	contentType := c.Writer.Header().Get("Content-Type")
 	success = true
-	if contentType != enums.ExcelContentType && blw != nil {
+	if contentType != constants.ExcelContentType && blw != nil {
 		if err := json.Unmarshal(blw.body.Bytes(), &rsp); err != nil {
 			global.LOG.Error("body convert json failed:%w ", zap.Error(err))
 			c.Abort()

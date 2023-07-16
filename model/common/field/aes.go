@@ -1,7 +1,7 @@
 package field
 
 import (
-	"base-system-backend/enums/errmsg"
+	"base-system-backend/constants/errmsg"
 	"base-system-backend/global"
 	"bytes"
 	"crypto/aes"

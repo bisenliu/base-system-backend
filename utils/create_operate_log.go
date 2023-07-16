@@ -1,8 +1,8 @@
 package utils
 
 import (
-	"base-system-backend/enums/code"
-	"base-system-backend/enums/table"
+	"base-system-backend/constants/code"
+	"base-system-backend/constants/table"
 	"base-system-backend/global"
 	"base-system-backend/model/common/field"
 	"base-system-backend/model/log/request"

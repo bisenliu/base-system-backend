@@ -1,9 +1,9 @@
 package response
 
 import (
-	"base-system-backend/enums"
-	"base-system-backend/enums/code"
-	"base-system-backend/enums/errmsg"
+	"base-system-backend/constants"
+	"base-system-backend/constants/code"
+	"base-system-backend/constants/errmsg"
 	"base-system-backend/utils"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -59,7 +59,7 @@ func Error(c *gin.Context, statusCode code.StatusCode, errorInfo interface{}, de
 func File(c *gin.Context, content io.ReadSeeker, fileTag string) {
 	fileName := fmt.Sprintf("%s%s%s.xlsx", time.Now(), `-`, fileTag)
 	c.Writer.Header().Add("Content-Disposition", fmt.Sprintf(`attachment; filename="%s"`, fileName))
-	c.Writer.Header().Add("Content-Type", enums.ExcelContentType)
+	c.Writer.Header().Add("Content-Type", constants.ExcelContentType)
 	http.ServeContent(c.Writer, c.Request, fileName, time.Now(), content)
 }
 

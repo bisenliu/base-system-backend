@@ -1,8 +1,8 @@
 package v1
 
 import (
-	"base-system-backend/enums/code"
-	"base-system-backend/enums/errmsg"
+	"base-system-backend/constants/code"
+	"base-system-backend/constants/errmsg"
 	"base-system-backend/global"
 	"base-system-backend/model/common/response"
 	"base-system-backend/utils/common"

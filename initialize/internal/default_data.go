@@ -1,7 +1,7 @@
 package internal
 
 import (
-	"base-system-backend/enums/table"
+	"base-system-backend/constants/table"
 	"base-system-backend/global"
 	"base-system-backend/model/privilege"
 	"base-system-backend/model/role"

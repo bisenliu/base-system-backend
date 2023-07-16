@@ -1,7 +1,7 @@
 package validate
 
 import (
-	"base-system-backend/enums/errmsg"
+	"base-system-backend/constants/errmsg"
 	"base-system-backend/global"
 	"fmt"
 	"mime/multipart"

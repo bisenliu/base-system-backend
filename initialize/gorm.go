@@ -1,7 +1,7 @@
 package initialize
 
 import (
-	"base-system-backend/enums/errmsg"
+	"base-system-backend/constants/errmsg"
 	"base-system-backend/global"
 	"base-system-backend/initialize/internal"
 	"base-system-backend/model/log"

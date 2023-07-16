@@ -1,7 +1,7 @@
 package common
 
 import (
-	"base-system-backend/enums/errmsg"
+	"base-system-backend/constants/errmsg"
 	"fmt"
 	"os"
 )

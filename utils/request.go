@@ -1,9 +1,9 @@
 package utils
 
 import (
-	"base-system-backend/enums/errmsg"
-	"base-system-backend/enums/table"
-	userEnum "base-system-backend/enums/user"
+	"base-system-backend/constants/errmsg"
+	"base-system-backend/constants/table"
+	userEnum "base-system-backend/constants/user"
 	"base-system-backend/global"
 	"base-system-backend/model/user"
 	"fmt"
