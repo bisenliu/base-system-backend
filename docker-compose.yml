@@ -1,0 +1,41 @@
+version: "3.1"
+services:
+  postgres:
+    image: postgres:latest
+    restart: always
+    container_name: postgres
+    environment:
+      POSTGRES_DB: base-system
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "123456"
+      TZ: Asia/Shanghai
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres/base-system/data:/var/lib/postgresql/data
+    privileged: true
+  redis:
+    image: redis:latest
+    restart: always
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis/conf/redis.conf:/etc/redis/redis.conf
+      - ./redis/data/base-system/:/data
+    command: redis-server /etc/redis/redis.conf
+    privileged: true
+  base-system-backend:
+    build: ./docker-fields/base-system-backend/
+    image: base-system-backend
+    container_name: base-system-backend
+    restart: always
+    volumes:
+      - ./docker-fields/base-system-backend/:/web/base-system-backend/
+    depends_on:
+      - postgresql
+      - redis
+    links:
+      - postgresql
+      - redis
+    command: sh -c "base-system --env dev"
