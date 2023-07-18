@@ -24,5 +24,7 @@ tmp
 *.Log
 .idea/*
 /.air.conf
-/static/
+server/static/
 .vs/*
+deploy/postgres
+deploy/redis/data
