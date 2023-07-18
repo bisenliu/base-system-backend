@@ -133,6 +133,9 @@ else
     sed -i "s#base_aes_key#${aesKey}#g" ./config.yaml & wait
 fi
 
+# 配合 docker-compose 挂载静态文件和日志文件
+mkdir -p ../docker-fields/base-system-backend/static
+echo "" > ../docker-fields/base-system-backend/server.log
 
 #show_msg "替换 base-system-backend 为 $projectName"
 #find . -type f -not -name 'project_init.sh' -not -name 'README.md' -not -path './.git/*' -not -path './.idea/*' -exec sed -i 's/base-system-backend/'$projectName'/g' {} +
