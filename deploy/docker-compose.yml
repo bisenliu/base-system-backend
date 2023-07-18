@@ -1,18 +1,30 @@
 version: "3.1"
 services:
+  nginx:
+    image: nginx:latest
+    restart: always
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ../docker-files/base-system-backend/static/:/usr/share/nginx/html/base-system-backend/static/
+    privileged: true
   postgres:
     image: postgres:latest
     restart: always
     container_name: postgres
     environment:
-      POSTGRES_DB: base-system
+      POSTGRES_DB: base_system
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "123456"
       TZ: Asia/Shanghai
     ports:
       - "5432:5432"
     volumes:
-      - ./postgres/base-system/data:/var/lib/postgresql/data
+      - ./postgres/base-system-backend/data:/var/lib/postgresql/data
     privileged: true
   redis:
     image: redis:latest
@@ -22,20 +34,23 @@ services:
       - "6379:6379"
     volumes:
       - ./redis/conf/redis.conf:/etc/redis/redis.conf
-      - ./redis/data/base-system/:/data
+      - ./redis/data/base-system-backend/:/data
     command: redis-server /etc/redis/redis.conf
     privileged: true
   base-system-backend:
-    build: ./docker-fields/base-system-backend/
+    build: ../server/
     image: base-system-backend
     container_name: base-system-backend
     restart: always
     volumes:
-      - ./docker-fields/base-system-backend/:/web/base-system-backend/
+      - ../docker-fields/base-system-backend/static:/go/src/base-system-backend/static
+      - ../docker-fields/base-system-backend/server.log:/go/src/base-system-backend/server.log
     depends_on:
       - postgresql
       - redis
+      - nginx
     links:
       - postgresql
       - redis
-    command: sh -c "base-system --env dev"
+      - nginx
+    command: sh -c "./server --env dev --system_init true"
