@@ -8,8 +8,6 @@ import (
 	"base-system-backend/utils/common"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"os"
-	"path/filepath"
 	"strconv"
 	"strings"
 )
@@ -25,13 +23,7 @@ type VersionApi struct{}
 // @Success 200 {object} response.Data{data=version.Version}
 // @Router /version/ [get]
 func (VersionApi) GetVersionApi(c *gin.Context) {
-	baseDir, err := os.Getwd()
-	if err != nil {
-		response.Error(c, code.QueryFailed, fmt.Sprintf(errmsg.ReadFailed.Error(), "当前路径"), err.Error())
-		return
-	}
-	versionFilePath := filepath.Join(baseDir, "version.txt")
-	versionByte, err := os.ReadFile(versionFilePath)
+	versionByte, err := global.FS.ReadFile("version.txt")
 	if err != nil {
 		response.Error(c, code.QueryFailed, fmt.Sprintf(errmsg.ReadFailed.Error(), "文件"), err.Error())
 		return

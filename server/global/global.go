@@ -2,6 +2,7 @@ package global
 
 import (
 	"base-system-backend/config"
+	"embed"
 	sf "github.com/bwmarrin/snowflake"
 	ut "github.com/go-playground/universal-translator"
 	"github.com/go-redis/redis/v8"
@@ -12,6 +13,7 @@ import (
 
 var (
 	ENV        string
+	SystemInit bool
 	CONFIG     config.Service
 	LOG        *zap.Logger
 	DB         *gorm.DB
@@ -19,5 +21,5 @@ var (
 	REDIS      *redis.Client
 	TRANS      ut.Translator
 	Node       *sf.Node
-	SystemInit bool
+	FS         embed.FS
 )

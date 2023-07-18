@@ -11,22 +11,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"gorm.io/datatypes"
-	"os"
 	"strconv"
-	"strings"
 )
 
 func DefaultPrivilegeInit() {
-	err := global.DB.Exec(fmt.Sprintf("TRUNCATE TABLE %s RESTART IDENTITY", table.Privilege)).Error
-	if err != nil {
-		panic(fmt.Errorf("clear privilege table failed: (%s)", err.Error()))
-	}
-	baseDir, err := os.Getwd()
-	if err != nil {
-		panic(fmt.Errorf("get current dir failed: (%s)", err.Error()))
-	}
-	privilegeJsonPath := strings.Join([]string{baseDir, "/initialize/internal/privilege.json"}, "")
-	bytePrivilege, err := os.ReadFile(privilegeJsonPath)
+
+	bytePrivilege, err := global.FS.ReadFile("/initialize/internal/privilege.json")
 	if err != nil {
 		panic(fmt.Errorf("read privilege json file failed: (%s)", err.Error()))
 	}

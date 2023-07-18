@@ -4,9 +4,14 @@ import (
 	"base-system-backend/core"
 	"base-system-backend/global"
 	"base-system-backend/initialize"
+	"embed"
 	"fmt"
 	"go.uber.org/zap"
 )
+
+//go:embed initialize/internal/privilege.json
+//go:embed version.txt
+var f embed.FS
 
 // @title 基础后端框架
 // @version 1.0
@@ -19,6 +24,8 @@ import (
 // @host http://127.0.0.1:8001
 // @BasePath /v1/
 func main() {
+	// build 时把静态文件打包到二进制中 []unite
+	global.FS = f
 	// 环境变量
 	global.ENV, global.SystemInit = core.Env()
 	// 初始化viper
