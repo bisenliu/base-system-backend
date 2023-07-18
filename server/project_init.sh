@@ -83,7 +83,7 @@ defaultStatic="./static"
 
 #projectName="$(get_input "请输入您的项目名称(默认为 base-system-backend): " "base-system-backend")"
 #staticPath="$(get_input "请输入项目静态文件地址[绝对路径](默认为项目根目录 static)：" $defaultStatic)"
-
+# mac 系统
 if [[ $systemName =~ "Darwin" ]];then
     show_title "生成相关秘钥"
     show_msg "生成 secretKey"
