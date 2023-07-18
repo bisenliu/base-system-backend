@@ -74,7 +74,7 @@ function create_static_folder() {
   path=$1
   #如果文件夹不存在，创建文件夹
   if [ ! -d "$path" ]; then
-    mkdir $path
+    mkdir -p $path
   fi
 }
 
