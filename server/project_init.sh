@@ -78,12 +78,11 @@ function create_static_folder() {
   fi
 }
 
-absPath=$(cd "$(dirname "$0")";pwd)
 
-defaultStatic="$absPath/static"
+defaultStatic="./static"
 
-projectName="$(get_input "请输入您的项目名称(默认为 base-system-backend): " "base-system-backend")"
-staticPath="$(get_input "请输入项目静态文件地址[绝对路径](默认为项目根目录 static)：" $defaultStatic)"
+#projectName="$(get_input "请输入您的项目名称(默认为 base-system-backend): " "base-system-backend")"
+#staticPath="$(get_input "请输入项目静态文件地址[绝对路径](默认为项目根目录 static)：" $defaultStatic)"
 
 show_title "生成相关秘钥"
 show_msg "生成 secretKey"
@@ -108,11 +107,11 @@ sed -i "" -e "s#base_secret_key#${secretKey}#g" ./config.yaml & wait
 show_msg "替换 aesKey"
 sed -i "" -e "s#base_aes_key#${aesKey}#g" ./config.yaml & wait
 
-show_msg "替换 base-system-backend 为 $projectName"
-find . -type f -not -name 'project_init.sh' -not -name 'README.md' -not -path './.git/*' -not -path './.idea/*' -exec sed -i 's/base-system-backend/'$projectName'/g' {} +
-
-show_msg "修改项目目录"
-cd ../ && mv ./base-system-backend ./$projectName
-
-show_titlle "删除 .git 文件"
-cd $projectName && rm -rf ./.git
+#show_msg "替换 base-system-backend 为 $projectName"
+#find . -type f -not -name 'project_init.sh' -not -name 'README.md' -not -path './.git/*' -not -path './.idea/*' -exec sed -i 's/base-system-backend/'$projectName'/g' {} +
+#
+#show_msg "修改项目目录"
+#cd ../ && mv ./base-system-backend ./$projectName
+#
+#show_titlle "删除 .git 文件"
+#cd $projectName && rm -rf ./.git
