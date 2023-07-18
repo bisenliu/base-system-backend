@@ -46,11 +46,11 @@ services:
       - ../docker-fields/base-system-backend/static:/go/src/base-system-backend/static
       - ../docker-fields/base-system-backend/server.log:/go/src/base-system-backend/server.log
     depends_on:
-      - postgresql
+      - postgres
       - redis
       - nginx
     links:
-      - postgresql
+      - postgres
       - redis
       - nginx
     command: sh -c "./server --env dev --system_init true"
