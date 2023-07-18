@@ -78,34 +78,60 @@ function create_static_folder() {
   fi
 }
 
-
+systemName=`uname  -a`
 defaultStatic="./static"
 
 #projectName="$(get_input "请输入您的项目名称(默认为 base-system-backend): " "base-system-backend")"
 #staticPath="$(get_input "请输入项目静态文件地址[绝对路径](默认为项目根目录 static)：" $defaultStatic)"
 
-show_title "生成相关秘钥"
-show_msg "生成 secretKey"
-secretKey="$(< /dev/urandom LC_CTYPE=C tr -dc 'A-Za-z0-9!0$%=' | head -c64)"
-show_suc "$secretKey"
+if [[ $systemName =~ "Darwin" ]];then
+    show_title "生成相关秘钥"
+    show_msg "生成 secretKey"
+    secretKey="$(< /dev/urandom LC_CTYPE=C tr -dc 'A-Za-z0-9!0$%=' | head -c64)"
+    show_suc "$secretKey"
 
-show_msg "生成 aesKey"
-aesKey="$(< /dev/urandom LC_CTYPE=C tr -dc 'A-Za-z0-9!a$%S*()_+{}|:<>?=' | head -c16)"
-show_suc "$aesKey"
+    show_msg "生成 aesKey"
+    aesKey="$(< /dev/urandom LC_CTYPE=C tr -dc 'A-Za-z0-9!a$%S*()_+{}|:<>?=' | head -c16)"
+    show_suc "$aesKey"
 
-show_title "创建静态文件目录"
-create_static_folder "$staticPath"
-check_error $? "创建文件夹失败"
+    show_title "创建静态文件目录"
+    create_static_folder "$staticPath"
+    check_error $? "创建文件夹失败"
 
-show_title "替换配置文件"
-show_msg "替换静态文件目录"
-sed -i "" -e "s#base_static#${staticPath}#g" ./config.yaml & wait
+    show_title "替换配置文件"
+    show_msg "替换静态文件目录"
+    sed -i "" -e "s#base_static#${staticPath}#g" ./config.yaml & wait
 
-show_msg "替换 secretKey"
-sed -i "" -e "s#base_secret_key#${secretKey}#g" ./config.yaml & wait
+    show_msg "替换 secretKey"
+    sed -i "" -e "s#base_secret_key#${secretKey}#g" ./config.yaml & wait
 
-show_msg "替换 aesKey"
-sed -i "" -e "s#base_aes_key#${aesKey}#g" ./config.yaml & wait
+    show_msg "替换 aesKey"
+    sed -i "" -e "s#base_aes_key#${aesKey}#g" ./config.yaml & wait
+else
+    show_title "生成相关秘钥"
+    show_msg "生成 secretKey"
+    secretKey="$(< /dev/urandom tr -dc 'A-Za-z0-9!0$%=' | head -c64)"
+    show_suc "$secretKey"
+
+    show_msg "生成 aesKey"
+    aesKey="$(< /dev/urandom tr -dc 'A-Za-z0-9!a$%S*()_+{}|:<>?=' | head -c16)"
+    show_suc "$aesKey"
+
+    show_title "创建静态文件目录"
+    create_static_folder "$staticPath"
+    check_error $? "创建文件夹失败"
+
+    show_title "替换配置文件"
+    show_msg "替换静态文件目录"
+    sed -i "s#base_static#${staticPath}#g" ./config.yaml & wait
+
+    show_msg "替换 secretKey"
+    sed -i "s#base_secret_key#${secretKey}#g" ./config.yaml & wait
+
+    show_msg "替换 aesKey"
+    sed -i "s#base_aes_key#${aesKey}#g" ./config.yaml & wait
+fi
+
 
 #show_msg "替换 base-system-backend 为 $projectName"
 #find . -type f -not -name 'project_init.sh' -not -name 'README.md' -not -path './.git/*' -not -path './.idea/*' -exec sed -i 's/base-system-backend/'$projectName'/g' {} +
