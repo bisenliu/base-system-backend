@@ -1,6 +1,5 @@
 package initialize
 
-import "C"
 import (
 	v1 "base-system-backend/api/v1"
 	_ "base-system-backend/docs" // 千万不要忘了导入把你上一步生成的docs
