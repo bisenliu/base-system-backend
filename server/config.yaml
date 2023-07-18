@@ -16,8 +16,8 @@ kev: &Key
 token: &Token
   expired_time: 1  # 过期时间（小时）
 # 静态文件配置
-static:
-  base: &base ""
+static: &Static
+  base: &base  "base_static"
   avatar:
     - *base
     - "/avatar"
@@ -56,13 +56,7 @@ local: &Local
   token:
     <<: *Token
   static:
-    base: &base  "base_static"
-    avatar:
-      - *base
-      - "/avatar"
-    log:
-      - *base
-      - "/log"
+    <<: *Static
   avatar:
     <<: *Avatar
   redis:
