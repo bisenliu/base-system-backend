@@ -43,8 +43,8 @@ services:
     container_name: base-system-backend
     restart: always
     volumes:
-      - ../docker-fields/base-system-backend/static:/go/src/base-system-backend/static
-      - ../docker-fields/base-system-backend/server.log:/go/src/base-system-backend/server.log
+      - ../docker-files/base-system-backend/static:/go/src/base-system-backend/static
+      - ../docker-files/base-system-backend/server.log:/go/src/base-system-backend/server.log
     depends_on:
       - postgres
       - redis
@@ -53,4 +53,4 @@ services:
       - postgres
       - redis
       - nginx
-    command: sh -c "./server --env dev --system_init true"
+    command: sh -c "./server --env dev"
