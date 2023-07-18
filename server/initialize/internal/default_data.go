@@ -15,8 +15,11 @@ import (
 )
 
 func DefaultPrivilegeInit() {
-
-	bytePrivilege, err := global.FS.ReadFile("/initialize/internal/privilege.json")
+	err := global.DB.Exec(fmt.Sprintf("TRUNCATE TABLE %s RESTART IDENTITY", table.Privilege)).Error
+	if err != nil {
+		panic(fmt.Errorf("clear privilege table failed: (%s)", err.Error()))
+	}
+	bytePrivilege, err := global.FS.ReadFile("initialize/internal/privilege.json")
 	if err != nil {
 		panic(fmt.Errorf("read privilege json file failed: (%s)", err.Error()))
 	}
