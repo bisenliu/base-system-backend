@@ -25,6 +25,8 @@ WORKDIR /go/src/base-system-backend/
 
 COPY --from=builder /build/server /build/config.yaml /go/src/base-system-backend/
 
-RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime; \
-    echo 'Asia/Shanghai' > /etc/timezone; \
-    chmod +x /go/src/base-system-backend/server
+RUN apk update \
+    && apk add tzdata \
+    && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+    && echo "Asia/Shanghai" > /etc/timezone \
+    && chmod +x /go/src/base-system-backend/server
