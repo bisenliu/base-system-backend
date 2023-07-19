@@ -24,6 +24,7 @@ tmp
 *.Log
 .idea/*
 .vs/*
+.DS_Store
 
 docker-files
 server/static/
