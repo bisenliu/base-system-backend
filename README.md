@@ -184,5 +184,3 @@ type User struct {
 }
 
 ```
-
-## 7.版本号
