@@ -29,7 +29,6 @@
   git add ./server/version.txt
   ```
 
-
 ### 2.1 server项目
 
 使用 `Goland` 或其他编辑工具，打开项目
@@ -84,8 +83,6 @@ sed -i "s#./server --env dev --system_init true#./server --env dev#g" ./docker-c
 docker-compose up -d
 ```
 
-
-
 ### 2.3 swagger自动化API文档
 
 #### 2.3.1 安装 swagger
@@ -98,7 +95,8 @@ go get -u github.com/swaggo/swag/cmd/swag
 
 ##### （2）无法访问外国网站
 
-由于国内没法安装 go.org/x 包下面的东西，推荐使用 [goproxy.cn](https://goproxy.cn) 或者 [goproxy.io](https://goproxy.io/zh/)
+由于国内没法安装 go.org/x 包下面的东西，推荐使用 [goproxy.cn](https://goproxy.cn)
+或者 [goproxy.io](https://goproxy.io/zh/)
 
 ```bash
 # 如果您使用的 Go 版本是 1.13 - 1.15 需要手动设置GO111MODULE=on, 开启方式如下命令, 如果你的 Go 版本 是 1.16 ~ 最新版 可以忽略以下步骤一
@@ -119,7 +117,8 @@ cd server
 swag init --parseVendor --parseInternal --parseDependency
 ````
 
-> 执行上面的命令后，server目录下会出现docs文件夹里的 `docs.go`, `swagger.json`, `swagger.yaml` 三个文件更新，启动go服务之后, 在浏览器输入 [http://localhost:8888/swagger/index.html](http://localhost:8888/swagger/index.html) 即可查看swagger文档
+> 执行上面的命令后，server目录下会出现docs文件夹里的 `docs.go`, `swagger.json`, `swagger.yaml` 三个文件更新，启动go服务之后,
+> 在浏览器输入 [http://localhost:8888/swagger/index.html](http://localhost:8888/swagger/index.html) 即可查看swagger文档
 
 ## 3. 技术选型
 
@@ -152,16 +151,14 @@ swag init --parseVendor --parseInternal --parseDependency
             ├── model           (模型层)                    
             │   ├── request     (入参结构体)                        
             │   └── response    (出参结构体)                                                      
-            ├── router          (路由层)                    
-            ├── service         (service层)                    
-            ├── source          (source层)                    
-            └── utils           (工具包)                                        
-  
+            ├── router          (路由层)              
+            ├── service         (service层)                               
+            └── utils           (工具包)                                     
 ```
 
 ## 5. 主要功能
 
-- 权限管理：基于`jwt`和`装饰器`实现的权限管理 (后期使用 casbin  进行权限管理)。
+- 权限管理：基于`jwt`和`装饰器`实现的权限管理 (后期使用 casbin 进行权限管理)。
 
 - 用户管理：系统管理员分配用户角色和角色权限。
 
@@ -169,9 +166,10 @@ swag init --parseVendor --parseInternal --parseDependency
 
 - API 管理：不同用户可调用的 API 接口的权限不同。
 
-
 ## 6.说明
+
 在 model/common/field/aes 文件中，自定义了字段加密相关的功能，可以对一些敏感数据进行加密，并在返回数据时进行解密。
+
 ```go
 // model/common/field/aes
 // 自定义字段,对于一些敏感数据可对其进行加密,返回数据时进行解密
@@ -179,8 +177,8 @@ swag init --parseVendor --parseInternal --parseDependency
 // field.SplitEncrypt 对单个字符进行加密,并组合(需要进行模糊查询用此字段)
 
 type User struct {
-  Phone       field.PlainEncrypt           `gorm:"column:phone;size:11;comment:手机号"`
-  Phone2      field.SplitEncrypt           `gorm:"column:phone2;size:11;comment:手机号2"`
+Phone       field.PlainEncrypt           `gorm:"column:phone;size:11;comment:手机号"`
+Phone2      field.SplitEncrypt           `gorm:"column:phone2;size:11;comment:手机号2"`
 }
 
 ```
