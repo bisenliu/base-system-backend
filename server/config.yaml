@@ -5,7 +5,7 @@ system: &System
 # 雪花算法配置
 snow_flake: &SnowFlake
   start_time: "2023-05-01"   # 开始时间(不能大于当前时间否则返回负数）
-  machine_id: 1 # 机器编号
+  machine_id: base_machine_id # 机器编号(0-1023)
 # 系统馝钥
 kev: &Key
   # 项目秘钥
@@ -29,19 +29,21 @@ avatar: &Avatar
   size: 5 # 头像大小限制(MB)
 # redis配置
 redis: &Redis
+  port: "6379"
   prefix: "base-system" # 前缀
   password: # 密码
   default_db: 0 #默认数据率
   token_db: 1 # token DB
   verify_code_db: 2 # 滑块 DB
 pgsql: &Pgsql
+  port: "5432" # 端口
   db_name: "base_system"   # 数据库名称
   username: "postgres"   # psql账号
   password: "123456"   # psql密码
   max_id_le_conns: 10   # 最大空闲连接数
   max_open_conns: 50   # 设置最大打开连校数
 zap: &Zap
-  director: "server.log" # 日志目录
+  director: "./logs/server.log" # 日志目录
   max-age: 30 # 文件最多保存多少天
   max-size: 200 # 每个日志文件保存的最大尺寸 单位：M
   max-backups: 7 # 日志文件最多保存多少个备份
@@ -76,11 +78,9 @@ dev:
   redis:
     <<: *Redis
     host: "redis"
-    port: "6379"
     password: "" # 密码
   pgsql:
     <<: *Pgsql
     host: "postgres" # host
-    port: "5432" # 端口
 test:
 product:
