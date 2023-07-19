@@ -9,7 +9,7 @@
 ## 2. 使用说明
 
 ```
-- golang版本 >= v1.18
+- golang版本 >= v1.20
 - IDE推荐：Goland
 ```
 
@@ -17,25 +17,25 @@
 
 使用 `Goland` 或其他编辑工具，打开项目
 
+#### 2.1.1 本地启动项目
+
 ```bash
 # 克隆项目
 git clone -b develop https://github.com/bisenliu/base-system-backend.git
-# 进入 base-system-backend 文件夹
-cd base-system-backend
-
+# 进入 server 文件夹
+cd base-system-backend/server
 # 运行初始化脚本
-chmod +x project_init.sh
-# 输入您的项目名称（这里以base-system-backend 为项目目录）和静态文件目录
-bash ./project_init.sh
-# 进入项目
-cd base-system-backend # 输入的项目名称即为 base-system-backend
+chmod +x ./project_init.sh && bash ./project_init.sh
 
 # 使用 go mod 并安装go依赖包
-go generate
+go mod download
 
 # 第一次运行请初始化(自动创建表以及账号角色,账号 root 密码 123456)
 # 可在 initialize/internal/default_data.go 去修改
-go run main.go --system_init true
+go run main.go --env local --system_init true
+
+#后续使用下面启动项目，否则每次启动项目都会重置相关表--env local/dev/test/product（缺省默认是local）
+go run main.go --env local
 
 # 编译 
 go build -o server main.go (windows编译命令为go build -o server.exe main.go )
@@ -43,6 +43,31 @@ go build -o server main.go (windows编译命令为go build -o server.exe main.go
 # 运行二进制
 ./server (windows运行命令为 server.exe)
 ```
+
+#### 2.1.2 Docker-compose 启动项目
+
+- 使用前请安装Docker和Docker-compose
+
+- 请不要移动docker-compose.yml,移动需修改docker-compose.yml配置
+
+```bash
+# 克隆项目
+git clone -b develop https://github.com/bisenliu/base-system-backend.git
+
+# 进入 deploy 文件夹
+cd base-system-backend/deploy
+
+# 部署项目
+docker-compose up -d
+
+# 安装完成后修改 docker-compose.yml base-system-backend 容器的 command(删除---system_init true) 否则每次重启容器都会重置相关表
+sed -i "s#./server --env dev --system_init true#./server --env dev#g" ./docker-compose.yml
+
+# 修改完成后重启容器
+docker-compose up -d
+```
+
+
 
 ### 2.3 swagger自动化API文档
 
@@ -62,12 +87,9 @@ go get -u github.com/swaggo/swag/cmd/swag
 # 如果您使用的 Go 版本是 1.13 - 1.15 需要手动设置GO111MODULE=on, 开启方式如下命令, 如果你的 Go 版本 是 1.16 ~ 最新版 可以忽略以下步骤一
 # 步骤一、启用 Go Modules 功能
 go env -w GO111MODULE=on 
+
 # 步骤二、配置 GOPROXY 环境变量
 go env -w GOPROXY=https://goproxy.cn,https://goproxy.io,direct
-
-# 如果嫌弃麻烦,可以使用go generate 编译前自动执行代码, 不过这个不能使用 `Goland` 或者 `Vscode` 的 命令行终端
-cd server
-go generate -run "go env -w .*?"
 
 # 使用如下命令下载swag
 go get -u github.com/swaggo/swag/cmd/swag
@@ -77,7 +99,7 @@ go get -u github.com/swaggo/swag/cmd/swag
 
 ```` shell
 cd server
-swag init --parseDependency
+swag init --parseVendor --parseInternal --parseDependency
 ````
 
 > 执行上面的命令后，server目录下会出现docs文件夹里的 `docs.go`, `swagger.json`, `swagger.yaml` 三个文件更新，启动go服务之后, 在浏览器输入 [http://localhost:8888/swagger/index.html](http://localhost:8888/swagger/index.html) 即可查看swagger文档
@@ -90,6 +112,7 @@ swag init --parseDependency
 - API文档：使用`Swagger`构建自动化文档。
 - 配置文件：使用 [viper](https://github.com/spf13/viper) 实现`yaml`格式的配置文件。
 - 日志：使用 [zap](https://github.com/uber-go/zap) 实现日志记录。
+- 限流：使用 [Ratelimit](https://github.com/juju/ratelimit) 令牌桶，限制到达系统的并发请求数。
 
 ## 4. 项目架构
 
