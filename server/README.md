@@ -15,7 +15,6 @@
 │   └── response
 ├── router
 ├── service
-├── source
 └── utils
 ```
 
@@ -35,7 +34,6 @@
 | `--response` | 出参结构体              | 返回给前端的数据结构体      |
 | `router`     | 路由层                  | 路由层 |
 | `service`    | service层               | 存放业务逻辑问题 |
-| `source` | source层 | 存放初始化数据的函数 |
 | `utils`      | 工具包                  | 工具函数封装            |
 
 
