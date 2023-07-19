@@ -23,8 +23,11 @@ go.work
 tmp
 *.Log
 .idea/*
-/.air.conf
-server/static/
 .vs/*
+
+server/.air.conf
+docker-files
+server/static/
+server/logs/
 deploy/postgres
 deploy/redis/data
