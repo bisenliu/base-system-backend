@@ -98,8 +98,6 @@ definitions:
         type: string
       short_name:
         type: string
-      status:
-        $ref: '#/definitions/user.AccStatus'
       updateTime:
         type: integer
     required:
@@ -125,8 +123,6 @@ definitions:
     type: object
   request.UserUpdate:
     properties:
-      createTime:
-        type: integer
       email:
         type: string
       full_name:
@@ -150,15 +146,11 @@ definitions:
         type: string
       status:
         $ref: '#/definitions/user.AccStatus'
-      updateTime:
-        type: integer
     required:
     - name
     type: object
   request.UserUpdateById:
     properties:
-      createTime:
-        type: integer
       email:
         type: string
       full_name:
@@ -179,8 +171,6 @@ definitions:
         type: string
       status:
         $ref: '#/definitions/user.AccStatus'
-      updateTime:
-        type: integer
     required:
     - name
     type: object
@@ -1104,12 +1094,6 @@ paths:
       consumes:
       - application/json
       description: 获取版本号
-      parameters:
-      - description: Token 令牌
-        in: header
-        name: Identification
-        required: true
-        type: string
       produces:
       - application/json
       responses:
@@ -1122,8 +1106,6 @@ paths:
                 data:
                   $ref: '#/definitions/version.Version'
               type: object
-      security:
-      - ApiKeyAuth: []
       summary: 获取版本号
       tags:
       - VersionApi

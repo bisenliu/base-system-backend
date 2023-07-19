@@ -1149,11 +1149,6 @@ const docTemplate = `{
         },
         "/version/": {
             "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "获取版本号",
                 "consumes": [
                     "application/json"
@@ -1165,15 +1160,6 @@ const docTemplate = `{
                     "VersionApi"
                 ],
                 "summary": "获取版本号",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Token 令牌",
-                        "name": "Identification",
-                        "in": "header",
-                        "required": true
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1347,9 +1333,6 @@ const docTemplate = `{
                 "short_name": {
                     "type": "string"
                 },
-                "status": {
-                    "$ref": "#/definitions/user.AccStatus"
-                },
                 "updateTime": {
                     "type": "integer"
                 }
@@ -1387,9 +1370,6 @@ const docTemplate = `{
                 "name"
             ],
             "properties": {
-                "createTime": {
-                    "type": "integer"
-                },
                 "email": {
                     "type": "string"
                 },
@@ -1422,9 +1402,6 @@ const docTemplate = `{
                 },
                 "status": {
                     "$ref": "#/definitions/user.AccStatus"
-                },
-                "updateTime": {
-                    "type": "integer"
                 }
             }
         },
@@ -1434,9 +1411,6 @@ const docTemplate = `{
                 "name"
             ],
             "properties": {
-                "createTime": {
-                    "type": "integer"
-                },
                 "email": {
                     "type": "string"
                 },
@@ -1465,9 +1439,6 @@ const docTemplate = `{
                 },
                 "status": {
                     "$ref": "#/definitions/user.AccStatus"
-                },
-                "updateTime": {
-                    "type": "integer"
                 }
             }
         },
