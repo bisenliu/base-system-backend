@@ -9,6 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	"net/http"
+	"time"
 
 	gs "github.com/swaggo/gin-swagger"
 )
@@ -24,6 +25,11 @@ func Routers() *gin.Engine {
 		gin.SetMode(gin.DebugMode)
 	}
 	r := gin.New()
+
+	// 令牌桶初始化后里面就有 100 个令牌
+	// 每秒钟会产生 100 个令牌, 保证每秒最多有 100 个请求通过限流器, 也就是说 QPS 的上限是 100
+	// 流量过大时能够启动限流, 在限流过程中, 仍然能让部分流量通过
+	r.Use(middleware.RateLimitMiddleware(time.Second, 100, 100))
 
 	r.GET("/swagger/*any", gs.WrapHandler(swaggerFiles.Handler))
 	baseRouterGroup := r.Group("v1")

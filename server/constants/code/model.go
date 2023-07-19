@@ -7,6 +7,7 @@ var ModelMapping = map[string]Model{
 	"role":      Role,
 	"privilege": Privilege,
 	"log":       Log,
+	"version":   Version,
 }
 
 var (
@@ -14,6 +15,7 @@ var (
 	Role      Model = []string{"101", "role", "角色管理"}
 	Privilege Model = []string{"102", "privilege", "权限管理"}
 	Log       Model = []string{"103", "log", "日志管理"}
+	Version   Model = []string{"104", "version", "版本管理"}
 	Unknown   Model = []string{"999", "unknown", "未知"}
 )
 

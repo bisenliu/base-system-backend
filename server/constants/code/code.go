@@ -17,6 +17,8 @@ const (
 	DeleteFailed   StatusCode = "006"
 	NotPermissions StatusCode = "007"
 
+	RequestLimit StatusCode = "100"
+
 	UnknownExc StatusCode = "999"
 )
 
@@ -29,6 +31,7 @@ var statusCodeMapping = map[StatusCode]string{
 	UpdateFailed:   "更新失败",
 	DeleteFailed:   "删除失败",
 	NotPermissions: "权限不足",
+	RequestLimit:   "请求次数限制",
 	UnknownExc:     "未知错误",
 }
 

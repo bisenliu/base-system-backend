@@ -27,4 +27,5 @@ var (
 	TimeCalcFiled         = errors.New("时间计算失败")
 	DecryptFailed         = errors.New("字段解密失败")
 	DatabaseConnectFailed = errors.New("数据库连接失败")
+	RequestLimit          = errors.New("您已达到系统的最大并发请求数,请稍后重试")
 )
