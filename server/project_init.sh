@@ -78,11 +78,15 @@ create_static_folder() {
   fi
 }
 
-systemName=$(uname -a)
-
-#staticPath="./static"
 #projectName="$(get_input "请输入您的项目名称(默认为 base-system-backend): " "base-system-backend")"
 #staticPath="$(get_input "请输入项目静态文件地址[绝对路径](默认为项目根目录 static)：" $defaultStatic)"
+
+systemName=$(uname -a)
+staticPath="./static"
+
+show_msg"生成 SnowFake machineID"
+machineID=$((RANDOM % 1024))  # 雪花算法机器ID (0-1023)
+show_suc "$machineID"
 
 # mac 系统
 if [[ $systemName =~ "Darwin" ]]; then
@@ -94,10 +98,6 @@ if [[ $systemName =~ "Darwin" ]]; then
   show_msg "生成 aesKey"
   aesKey="$(LC_CTYPE=C tr </dev/urandom -dc 'A-Za-z0-9!a$%S*()_+{}|:<>?=' | head -c16)"
   show_suc "$aesKey"
-
-  #    show_title "创建静态文件目录"
-  #    create_static_folder "$staticPath"
-  #    check_error $? "创建文件夹失败"
 
   show_title "替换配置文件"
   show_msg "替换静态文件目录"
@@ -111,6 +111,11 @@ if [[ $systemName =~ "Darwin" ]]; then
   show_msg "替换 aesKey"
   sed -i "" -e "s#base_aes_key#${aesKey}#g" ./config.yaml &
   wait
+
+  show_msg "替换 base_machine_id"
+  sed -i "" -e "s#base_machine_id#${machineID}#g" ./config.yaml &
+  wait
+
 else
   show_title "生成相关秘钥"
   show_msg "生成 secretKey"
@@ -121,9 +126,6 @@ else
   aesKey="$(tr </dev/urandom -dc 'A-Za-z0-9!a$%S*()_+{}|:<>?=' | head -c16)"
   show_suc "$aesKey"
 
-  #    show_title "创建静态文件目录"
-  #    create_static_folder "$staticPath"
-  #    check_error $? "创建文件夹失败"
 
   show_title "替换配置文件"
   show_msg "替换静态文件目录"
@@ -137,11 +139,15 @@ else
   show_msg "替换 aesKey"
   sed -i "s#base_aes_key#${aesKey}#g" ./config.yaml &
   wait
+
+  show_msg "替换 base_machine_id"
+  sed -i "s#base_machine_id#${machineID}#g" ./config.yaml &
+  wait
 fi
 
 # 配合 docker-compose 挂载静态文件和日志文件
 create_static_folder "../docker-files/base-system-backend/static"
-echo "" >../docker-files/base-system-backend/server.log
+touch ../docker-files/base-system-backend/server.log
 
 #show_msg "替换 base-system-backend 为 $projectName"
 #find . -type f -not -name 'project_init.sh' -not -name 'README.md' -not -path './.git/*' -not -path './.idea/*' -exec sed -i 's/base-system-backend/'$projectName'/g' {} +
