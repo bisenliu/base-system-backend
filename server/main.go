@@ -25,7 +25,6 @@ var f embed.FS
 // @BasePath /v1/
 func main() {
 	// build 时把静态文件打包到二进制中 []uint64
-
 	global.FS = f
 	// 环境变量
 	global.ENV, global.SystemInit = core.Env()
