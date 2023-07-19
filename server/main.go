@@ -24,7 +24,7 @@ var f embed.FS
 // @host http://127.0.0.1:8001
 // @BasePath /v1/
 func main() {
-	// build 时把静态文件打包到二进制中 []unite
+	// build 时把静态文件打包到二进制中 []uint
 	global.FS = f
 	// 环境变量
 	global.ENV, global.SystemInit = core.Env()
