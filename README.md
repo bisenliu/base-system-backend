@@ -8,10 +8,27 @@
 
 ## 2. 使用说明
 
-```
 - golang版本 >= v1.20
 - IDE推荐：Goland
-```
+- 使用版本号接口,需要打开 .git 钩子 .git/hooks/pre-commit.sample
+
+  ```bash
+  # 复制 pre-commit
+  cp .git/hooks/pre-commit.sample .git/hooks/pre-commit
+  # 编辑 pre-commit
+  vim .git/hooks/pre-commit
+  # 写入以下内容
+  ```
+
+  ```bash
+  # 获取当前时间戳
+  timestamp=$(date +%s)
+  # 写入到 ./server/version.txt 文件里
+  printf "%s" "$timestamp" > ./server/version.txt
+  # 提交
+  git add ./server/version.txt
+  ```
+
 
 ### 2.1 server项目
 
@@ -168,3 +185,4 @@ type User struct {
 
 ```
 
+## 7.版本号
