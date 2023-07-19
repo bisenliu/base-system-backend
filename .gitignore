@@ -25,7 +25,6 @@ tmp
 .idea/*
 .vs/*
 
-server/.air.conf
 docker-files
 server/static/
 server/logs/
