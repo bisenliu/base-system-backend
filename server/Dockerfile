@@ -31,3 +31,6 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/re
     && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo "Asia/Shanghai" > /etc/timezone \
     && chmod +x /go/src/base-system-backend/server
+
+#EXPOSE 8888
+#ENTRYPOINT ./server --env dev --system_init true
