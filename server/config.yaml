@@ -29,6 +29,7 @@ avatar: &Avatar
   size: 5 # 头像大小限制(MB)
 # redis配置
 redis: &Redis
+  host: "127.0.0.1" # host
   port: "6379"
   prefix: "base-system" # 前缀
   password: # 密码
@@ -36,6 +37,7 @@ redis: &Redis
   token_db: 1 # token DB
   verify_code_db: 2 # 滑块 DB
 pgsql: &Pgsql
+  host: "127.0.0.1" # host
   port: "5432" # 端口
   db_name: "base_system"   # 数据库名称
   username: "postgres"   # psql账号
@@ -63,13 +65,8 @@ local: &Local
     <<: *Avatar
   redis:
     <<: *Redis
-    host: "127.0.0.1"
-    port: "6379"
-    password: "" # 密码
   pgsql:
     <<: *Pgsql
-    host: "127.0.0.1" # host
-    port: "5432" # 端口
   zap:
     <<: *Zap
     level: "debug" # 日志等级
@@ -78,7 +75,6 @@ dev:
   redis:
     <<: *Redis
     host: "redis"
-    password: "" # 密码
   pgsql:
     <<: *Pgsql
     host: "postgres" # host
