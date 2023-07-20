@@ -26,7 +26,7 @@
 | `core`       | 核心文件                | 核心组件(zap, viper, server)的初始化                             |
 | `docs`       | swagger文档目录         | swagger文档目录                                              |
 | `global`     | 全局对象                | 全局对象                                                     |
-| `initialize` | 初始化 | router,redis,gorm,validator, timer的初始化                   |
+| `initialize` | 初始化 | router,redis,gorm,validator, snow_flake 的初始化             |
 | `--internal` | 初始化内部函数 | validator 的自定义校验, 初始化默认数据,在此文件夹的函数只能由 `initialize` 层进行调用 |
 | `middleware` | 中间件层 | 用于存放 `gin` 中间件代码                                         |
 | `model`      | 模型层                  | 模型对应数据表                                                  |
