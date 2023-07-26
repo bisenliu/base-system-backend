@@ -3,9 +3,9 @@ package login
 type LoginType int
 
 const (
-	AccPwdLogin   = iota // 账号密码登录
-	PhoneLogin           // 手机号登录
-	KeycloakLogin        // keycloak登录
+	AccPwdLogin   LoginType = iota // 账号密码登录
+	PhoneLogin                     // 手机号登录
+	KeycloakLogin                  // keycloak登录
 
 )
 
