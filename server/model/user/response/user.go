@@ -27,7 +27,7 @@ type UserDetail struct {
 	Id            int64             `json:"id"`
 	Gender        int               `json:"gender"`
 	IsSystem      bool              `json:"is_system"`
-	Accounts      string            `json:"accounts"`
+	Account       string            `json:"account"`
 	Phone         *string           `json:"phone"`
 	Email         *string           `json:"email"`
 	Name          string            `json:"name"`
