@@ -420,7 +420,7 @@ func (UserService) UserUpdateByIdService(userId string, params *request.UserUpda
 		}
 		//重新绑定
 		if err = tx.Table(table.UserRole).Create(&userRoles).Error; err != nil {
-			return fmt.Errorf("用户角色#{msg.ErrorSaveFailed}"), err.Error()
+			return fmt.Errorf("用户角色%w", errmsg.SaveFailed), err.Error()
 		}
 	}
 	tx.Commit()
