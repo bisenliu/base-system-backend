@@ -74,7 +74,7 @@ func (UserApi) UserLogoutApi(c *gin.Context) {
 		response.Error(c, code.QueryFailed, err, debugInfo)
 		return
 	}
-	//todo keycloak 登录也需要退出受录
+	//todo keycloak 也需要退出登录
 	//清除token
 	cache.DeleteToken(user.Id)
 	response.OK(c, nil)
