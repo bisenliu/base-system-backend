@@ -33,7 +33,7 @@ func GormPgSql() *gorm.DB {
 			SingularTable: true,
 		},
 	}); err != nil {
-		panic(errmsg.DatabaseConnectFailed)
+		panic(fmt.Errorf("database connect failed: (%w)", err))
 	} else {
 		sqlDB, _ := db.DB()
 		sqlDB.SetMaxIdleConns(p.MaxIdleConns)
