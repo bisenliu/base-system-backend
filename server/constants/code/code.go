@@ -1,7 +1,6 @@
 package code
 
 import (
-	"fmt"
 	"strconv"
 )
 
@@ -35,12 +34,17 @@ var statusCodeMapping = map[StatusCode]string{
 	UnknownExc:     "未知错误",
 }
 
-func (receiver StatusCode) Msg() string {
-	msg, ok := statusCodeMapping[receiver]
+func (s StatusCode) Msg() string {
+	msg, ok := statusCodeMapping[s]
 	if !ok {
 		msg = statusCodeMapping[UnknownExc]
 	}
 	return msg
+}
+
+func (s StatusCode) String() string {
+
+	return string(s)
 }
 
 func GetStatusCodeByModelCode(urlPrefix string, statusCode StatusCode) int {
@@ -52,6 +56,6 @@ func GetStatusCodeByModelCode(urlPrefix string, statusCode StatusCode) int {
 	if statusCode == InvalidLogin {
 		modelCode = User
 	}
-	code, _ := strconv.Atoi(fmt.Sprintf("%s", modelCode.Code()) + fmt.Sprintf("%s", statusCode))
+	code, _ := strconv.Atoi(modelCode.Code() + statusCode.String())
 	return code
 }
