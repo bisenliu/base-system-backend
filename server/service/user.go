@@ -58,7 +58,7 @@ func (UserService) AccountLoginService(params *request.UserAccountLogin) (err er
 				nextLoginMinute = 1
 			}
 			debugInfo = map[string]interface{}{
-				"next_time":  time.Time(blackList.NextTime).Unix() * 1000,
+				"next_time":  time.Time(blackList.NextTime).Unix(),
 				"failed_num": blackList.FailedNum,
 				"login_time": nextLoginMinute,
 			}
