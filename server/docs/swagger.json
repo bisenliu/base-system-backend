@@ -1192,6 +1192,24 @@
                 "Male"
             ]
         },
+        "login.LoginType": {
+            "type": "integer",
+            "enum": [
+                0,
+                1,
+                2
+            ],
+            "x-enum-comments": {
+                "AccPwdLogin": "账号密码登录",
+                "KeycloakLogin": "keycloak登录",
+                "PhoneLogin": "手机号登录"
+            },
+            "x-enum-varnames": [
+                "AccPwdLogin",
+                "PhoneLogin",
+                "KeycloakLogin"
+            ]
+        },
         "request.PwdChangeById": {
             "type": "object",
             "required": [
@@ -1344,7 +1362,7 @@
                     "type": "string"
                 },
                 "login_type": {
-                    "type": "integer"
+                    "$ref": "#/definitions/login.LoginType"
                 },
                 "password": {
                     "type": "string"
@@ -1458,7 +1476,7 @@
         "response.LoginSuccess": {
             "type": "object",
             "properties": {
-                "accounts": {
+                "account": {
                     "type": "string"
                 },
                 "avatar": {
@@ -1486,7 +1504,7 @@
                     "type": "integer"
                 },
                 "login_type": {
-                    "type": "integer"
+                    "$ref": "#/definitions/login.LoginType"
                 },
                 "name": {
                     "type": "string"
@@ -1622,7 +1640,7 @@
         "response.UserDetail": {
             "type": "object",
             "properties": {
-                "accounts": {
+                "account": {
                     "type": "string"
                 },
                 "avatar": {
@@ -1650,7 +1668,7 @@
                     "type": "integer"
                 },
                 "login_type": {
-                    "type": "integer"
+                    "$ref": "#/definitions/login.LoginType"
                 },
                 "name": {
                     "type": "string"

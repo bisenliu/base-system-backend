@@ -11,6 +11,20 @@ definitions:
     x-enum-varnames:
     - Female
     - Male
+  login.LoginType:
+    enum:
+    - 0
+    - 1
+    - 2
+    type: integer
+    x-enum-comments:
+      AccPwdLogin: 账号密码登录
+      KeycloakLogin: keycloak登录
+      PhoneLogin: 手机号登录
+    x-enum-varnames:
+    - AccPwdLogin
+    - PhoneLogin
+    - KeycloakLogin
   request.PwdChangeById:
     properties:
       password:
@@ -111,7 +125,7 @@ definitions:
       code:
         type: string
       login_type:
-        type: integer
+        $ref: '#/definitions/login.LoginType'
       password:
         type: string
       phone:
@@ -189,7 +203,7 @@ definitions:
     type: object
   response.LoginSuccess:
     properties:
-      accounts:
+      account:
         type: string
       avatar:
         type: string
@@ -208,7 +222,7 @@ definitions:
       last_time:
         type: integer
       login_type:
-        type: integer
+        $ref: '#/definitions/login.LoginType'
       name:
         type: string
       phone:
@@ -297,7 +311,7 @@ definitions:
     type: object
   response.UserDetail:
     properties:
-      accounts:
+      account:
         type: string
       avatar:
         type: string
@@ -316,7 +330,7 @@ definitions:
       last_time:
         type: integer
       login_type:
-        type: integer
+        $ref: '#/definitions/login.LoginType'
       name:
         type: string
       phone:

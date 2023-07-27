@@ -1199,6 +1199,24 @@ const docTemplate = `{
                 "Male"
             ]
         },
+        "login.LoginType": {
+            "type": "integer",
+            "enum": [
+                0,
+                1,
+                2
+            ],
+            "x-enum-comments": {
+                "AccPwdLogin": "账号密码登录",
+                "KeycloakLogin": "keycloak登录",
+                "PhoneLogin": "手机号登录"
+            },
+            "x-enum-varnames": [
+                "AccPwdLogin",
+                "PhoneLogin",
+                "KeycloakLogin"
+            ]
+        },
         "request.PwdChangeById": {
             "type": "object",
             "required": [
@@ -1351,7 +1369,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "login_type": {
-                    "type": "integer"
+                    "$ref": "#/definitions/login.LoginType"
                 },
                 "password": {
                     "type": "string"
@@ -1465,7 +1483,7 @@ const docTemplate = `{
         "response.LoginSuccess": {
             "type": "object",
             "properties": {
-                "accounts": {
+                "account": {
                     "type": "string"
                 },
                 "avatar": {
@@ -1493,7 +1511,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "login_type": {
-                    "type": "integer"
+                    "$ref": "#/definitions/login.LoginType"
                 },
                 "name": {
                     "type": "string"
@@ -1629,7 +1647,7 @@ const docTemplate = `{
         "response.UserDetail": {
             "type": "object",
             "properties": {
-                "accounts": {
+                "account": {
                     "type": "string"
                 },
                 "avatar": {
@@ -1657,7 +1675,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "login_type": {
-                    "type": "integer"
+                    "$ref": "#/definitions/login.LoginType"
                 },
                 "name": {
                     "type": "string"
