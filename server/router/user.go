@@ -11,6 +11,8 @@ type UserRouter struct{}
 
 func (u UserRouter) InitUserRouter(Router *gin.RouterGroup) {
 	userApi := v1.ApiGroupApp.UserApi
+	// 创建用户
+	Router.POST("", middleware.PrivilegeVerify(constants.AccountCreate), userApi.UserCreateApi)
 	// 登录
 	Router.POST("login/", userApi.UserLoginApi)
 	// 登出
@@ -18,8 +20,6 @@ func (u UserRouter) InitUserRouter(Router *gin.RouterGroup) {
 
 	// 用户列表
 	Router.GET("list/", middleware.PrivilegeVerify(constants.AccountList), userApi.UserListApi)
-	// 创建用户
-	Router.POST("create/", middleware.PrivilegeVerify(constants.AccountCreate), userApi.UserCreateApi)
 	// 查询|修改当前登录用户信息
 	detailRouterGroup := Router.Group("detail/")
 	{

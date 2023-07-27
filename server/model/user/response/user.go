@@ -11,10 +11,6 @@ type Token struct {
 	Token string `json:"token"`
 }
 
-type Create struct {
-	Id int64 `json:"id"`
-}
-
 type LoginSuccess struct {
 	UserDetail
 	Token
