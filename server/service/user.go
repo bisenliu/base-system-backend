@@ -137,25 +137,18 @@ func (UserService) LoginSuccess(c *gin.Context, loginBase *request.UserLoginBase
 //	@return debugInfo 错误调试信息
 
 func (receiver UserService) UserListService(c *gin.Context, params *request.UserFilter) (userList *response.UserList, err error, debugInfo interface{}) {
-	// 过滤
-	filter := make(map[string]map[string]string)
+	tx := global.DB.Table(table.User)
 	// 账号/姓名
 	if params.Name != "" {
-		filter["LIKE"] = map[string]string{
-			"name":    fmt.Sprintf("%%%s", params.Name),
-			"account": fmt.Sprintf("%%%s", params.Name),
-		}
+		tx = tx.Where("name LIKE ? ", fmt.Sprintf("%%%s%%", params.Name)).
+			Or("account LIKE ? ", fmt.Sprintf("%%%s%%", params.Name))
 	}
-	// 状态
+	//状态
 	if c.Query("status") != "" {
-		filter["AND"] = map[string]string{
-			"status": c.Query("status"),
-		}
+		tx = tx.Where("status = ?", params.Status)
 	}
 	userList = new(response.UserList)
-	if err = global.DB.Table(table.User).
-		Scopes(orm.Paginate(params.Page, params.PageSize)).
-		Scopes(orm.Where(filter)).
+	if err = tx.Scopes(orm.Paginate(params.Page, params.PageSize)).
 		Order("id").
 		Find(&userList.Results).
 		Limit(-1).Offset(-1).Count(&userList.TotalCount).Error; err != nil {
