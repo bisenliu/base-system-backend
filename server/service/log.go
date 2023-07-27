@@ -135,5 +135,6 @@ func (LogService) operateLogQuery(isPage bool, c *gin.Context, params *request.O
 			operateLogList.Results[index].Message = errMsg.Message
 		}
 	}
+	operateLogList.GetPageInfo(&operateLogList.PageInfo, params.Page, params.PageSize)
 	return
 }
