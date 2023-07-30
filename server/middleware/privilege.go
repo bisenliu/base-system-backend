@@ -32,7 +32,7 @@ func PrivilegeVerify(key constants.PrivilegeKey) gin.HandlerFunc {
 			return
 		}
 		if !common.In(string(key), privilegeKeys) {
-			response.Error(c, code.NotPermissions, fmt.Sprintf(errmsg.NotPrivilege.Error(), key), debugInfo)
+			response.Error(c, code.NotPermissions, fmt.Sprintf(errmsg.NotPrivilege.Error(), key.Desc()), debugInfo)
 			c.Abort()
 			return
 		}

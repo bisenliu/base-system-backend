@@ -27,7 +27,7 @@ const (
 	AccountUpdateOther PrivilegeKey = "account_update_other"
 )
 
-func (PrivilegeKey) PrivilegeKey(key PrivilegeKey) string {
+func (p PrivilegeKey) Desc() string {
 	privilegeMap := map[PrivilegeKey]string{
 		SystemPrivilege:    "系统权限",
 		SystemManage:       "系统管理",
@@ -52,5 +52,9 @@ func (PrivilegeKey) PrivilegeKey(key PrivilegeKey) string {
 		AccountDetailOther: "查询指定账号信息",
 		AccountUpdateOther: "修改指定账号信息",
 	}
-	return privilegeMap[key]
+	return privilegeMap[p]
+}
+
+func (p PrivilegeKey) String() string {
+	return string(p)
 }
