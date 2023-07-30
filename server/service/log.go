@@ -4,6 +4,7 @@ import (
 	"base-system-backend/constants/errmsg"
 	"base-system-backend/constants/table"
 	"base-system-backend/global"
+	"base-system-backend/model/log"
 	"base-system-backend/model/log/request"
 	"base-system-backend/model/log/response"
 	"base-system-backend/model/user"
@@ -13,8 +14,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 	"io"
 	"strconv"
+	"time"
 )
 
 type LogService struct{}
@@ -137,4 +140,11 @@ func (LogService) operateLogQuery(isPage bool, c *gin.Context, params *request.O
 	}
 	operateLogList.GetPageInfo(&operateLogList.PageInfo, params.Page, params.PageSize)
 	return
+}
+
+func (LogService) DeleteOperateLog() {
+	day := time.Now().AddDate(0, -1, 0)
+	if err := global.DB.Where("access_time <=?", day).Delete(&log.OperateLog{}).Error; err != nil {
+		global.LOG.Error("login success delete operation log failed: ", zap.Error(err))
+	}
 }

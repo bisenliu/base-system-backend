@@ -55,6 +55,8 @@ func (UserApi) UserLoginApi(c *gin.Context) {
 		response.Error(c, code.InvalidLogin, err, debugInfo)
 		return
 	}
+	// 删除一个月以前的操作日志
+	go logService.DeleteOperateLog()
 	response.OK(c, loginInfo)
 }
 
