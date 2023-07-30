@@ -6,30 +6,38 @@ import (
 	"base-system-backend/global"
 	"base-system-backend/model/privilege/response"
 	"base-system-backend/utils/common"
+	"encoding/json"
 	"fmt"
-	"strconv"
 )
 
-func GetPrivilegeKeysByUserId(userID int64) (privilegeKeys []string, userRoleIds []int64, err error, debugInfo interface{}) {
-	// 获取用户角色 ID 列表
-	userRoleIds, err, debugInfo = GetUserRoleIdsByUserId(userID)
-	if err != nil {
-		return nil, nil, err, debugInfo
+func GetPrivilegeKeysByUserId(userID interface{}) (privilegeKeys []string, userRoleIds []int64, err error, debugInfo interface{}) {
+	var (
+		rolePrivilege []response.RoleIdPrivilege
+		privilege     []string
+	)
+	err = global.DB.Table(table.Role).
+		Select("privilege_keys", "role_id").
+		Joins(fmt.Sprintf("LEFT join %s ur ON %s.id = ur.role_id", table.UserRole, table.Role)).
+		Where("ur.user_id =?", userID).Find(&rolePrivilege).Error
+	for _, value := range rolePrivilege {
+		if err = json.Unmarshal(value.PrivilegeKeys, &privilege); err != nil {
+			return nil, nil, fmt.Errorf("角色权限%w", errmsg.JsonConvertFiled), err.Error()
+		}
+		privilegeKeys = append(privilegeKeys, privilege...)
+		userRoleIds = append(userRoleIds, value.RoleId)
 	}
-	// 获取角色权限 key 列表(根据角色 Id 列表)
-	privilegeKeys, err, debugInfo = GetRolePrivilegeKeysByRoleId(userRoleIds)
-	if err != nil {
-		return nil, nil, err, debugInfo
-	}
+	//去重
+	privilegeKeys = common.RemoveDuplication(privilegeKeys)
 	return
+
 }
 
-func GetRolePrivilegeKeysByRoleId(userRoleIds []int64) (privilegeKeys []string, err error, debugInfo interface{}) {
+func GetRolePrivilegeKeysByRoleId(roleId interface{}) (privilegeKeys []string, err error, debugInfo interface{}) {
 	// 获取权限 key 列表
 	var userPrivilegeKeys []string
 	if err = global.DB.Table(table.Role).
 		Select("privilege_keys").
-		Where("id in ?", userRoleIds).
+		Where("id = ?", roleId).
 		Find(&userPrivilegeKeys).Error; err != nil {
 		return nil, fmt.Errorf("角色%w", errmsg.QueryFailed), err.Error()
 	}
@@ -54,29 +62,4 @@ func RecursionGetChildPrivilege(privilege []*response.PrivilegeList, parentID in
 		}
 	}
 	return res
-}
-
-func PrivilegeRoleIdFilter(roleIdString string) (privilegeKeys []string, err error, debugInfo interface{}) {
-	roleId, err := strconv.Atoi(roleIdString)
-	if err != nil {
-		return nil, fmt.Errorf("角色Id%w", errmsg.Invalid), err.Error()
-	}
-	privilegeKeys, err, debugInfo = GetRolePrivilegeKeysByRoleId([]int64{int64(roleId)})
-	if err != nil {
-		return nil, err, debugInfo
-	}
-	return
-}
-
-func PrivilegeUserIdFilter(userIdString string) (privilegeKeys []string, err error, debugInfo interface{}) {
-	userId, err := strconv.Atoi(userIdString)
-	if err != nil {
-		return nil, fmt.Errorf("用户Id%w", errmsg.Invalid), err.Error()
-	}
-
-	privilegeKeys, _, err, debugInfo = GetPrivilegeKeysByUserId(int64(userId))
-	if err != nil {
-		return nil, err, debugInfo
-	}
-	return
 }

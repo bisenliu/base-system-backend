@@ -8,18 +8,62 @@ import (
 	"base-system-backend/model/privilege/response"
 	"base-system-backend/model/role"
 	"base-system-backend/utils"
+	"base-system-backend/utils/common"
 	"encoding/json"
 	"fmt"
+	"gorm.io/datatypes"
 )
 
 type PrivilegeService struct{}
 
-func (PrivilegeService) PrivilegeListService() (res []*response.PrivilegeList, err error, debugInfo interface{}) {
-	var privileges []*response.PrivilegeList
-	if err = global.DB.Table(table.Privilege).Find(&privileges).Error; err != nil {
-		return nil, fmt.Errorf("权限信息%w", errmsg.QueryFailed), err.Error()
+func (PrivilegeService) PrivilegeListService(userId, roleId string) (res interface{}, err error, debugInfo interface{}) {
+	var (
+		data          []string
+		privilegeKey  []string
+		privilegeKeys []datatypes.JSON
+		privilegeList []*response.PrivilegeList
+	)
+
+	switch {
+	//合并查询
+	case userId != "" && roleId != "":
+		if err = global.DB.Debug().Table(table.Role).
+			Joins(fmt.Sprintf("LEFT join %s ur ON %s.id = ur.role_id", table.UserRole, table.Role)).
+			Where("ur.user_id = ?", userId).
+			Where("ur.role_id = ?", roleId).
+			Pluck("privilege_keys", &privilegeKeys).Error; err != nil {
+			return
+		}
+		for _, value := range privilegeKeys {
+			if err = json.Unmarshal(value, &data); err != nil {
+				return nil, fmt.Errorf("角色权限%w", errmsg.JsonConvertFiled), err.Error()
+			}
+			privilegeKey = append(privilegeKey, data...)
+		}
+		res = common.RemoveDuplication(privilegeKey)
+		return
+		// userId 查询
+	case userId != "":
+		res, _, err, debugInfo = utils.GetPrivilegeKeysByUserId(userId)
+		if err != nil {
+			return nil, err, debugInfo
+		}
+		return
+		// roleId 查询
+	case roleId != "":
+		res, err, debugInfo = utils.GetRolePrivilegeKeysByRoleId(roleId)
+		if err != nil {
+			return nil, err, debugInfo
+		}
+		return
+		//无查询条件
+	default:
+
+		if err = global.DB.Table(table.Privilege).Find(&privilegeList).Error; err != nil {
+			return nil, fmt.Errorf("权限信息%w", errmsg.QueryFailed), err.Error()
+		}
 	}
-	res = utils.RecursionGetChildPrivilege(privileges, 1)
+	res = utils.RecursionGetChildPrivilege(privilegeList, 1)
 	return
 }
 
