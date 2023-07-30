@@ -60,9 +60,42 @@ func InitTrans(locale string) (err error) {
 		default:
 			err = enTranslations.RegisterDefaultTranslations(v, global.TRANS)
 		}
-		// 枚举校验
-		internal.RegisterEnum(v)
+
+		//在校验器注册自定义的校验方法
+		if err = v.RegisterValidation("enum", internal.ValidateEnum); err != nil {
+			return
+		}
+
+		//注意！因为这里会使用到trans实例
+		//所以这一步注册要放到trans初始化的后面
+		if err = v.RegisterTranslation(
+			"enum",
+			global.TRANS,
+			registerTranslator("enum", "{0}不合法"),
+			translate,
+		); err != nil {
+			return
+		}
 		return
 	}
 	return
+}
+
+// registerTranslator为自定义字段添加翻译功能
+func registerTranslator(tag string, msg string) validator.RegisterTranslationsFunc {
+	return func(trans ut.Translator) error {
+		if err := trans.Add(tag, msg, false); err != nil {
+			return err
+		}
+		return nil
+	}
+}
+
+// translate 自定义字段的翻译方法
+func translate(trans ut.Translator, fe validator.FieldError) string {
+	msg, err := trans.T(fe.Tag(), fe.Field())
+	if err != nil {
+		panic(fmt.Errorf("translator failed: %w", fe.(error)))
+	}
+	return msg
 }
