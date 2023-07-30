@@ -100,7 +100,7 @@ func getAllGoFiles() ([]string, error) {
 	return goFiles, nil
 }
 
-func GetResponseData(c *gin.Context) (success bool, detailByte []byte) {
+func GetResponseData(c *gin.Context) (success bool, statusInfo interface{}) {
 	var rsp map[string]interface{}
 	method := c.Request.Method
 	blw := &bodyLogWriter{body: bytes.NewBuffer([]byte{}), ResponseWriter: c.Writer}
@@ -122,12 +122,6 @@ func GetResponseData(c *gin.Context) (success bool, detailByte []byte) {
 		return
 	}
 	success = status == 0
-	errInfo, ok := rsp["status_info"].(map[string]interface{})
-	if ok && errInfo["message"] != nil {
-		detail := map[string]interface{}{
-			"message": errInfo["message"],
-		}
-		detailByte, _ = json.Marshal(detail)
-	}
+	statusInfo = rsp["status_info"]
 	return
 }

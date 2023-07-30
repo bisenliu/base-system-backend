@@ -6,6 +6,7 @@ import (
 	"base-system-backend/global"
 	"base-system-backend/model/common/field"
 	"base-system-backend/model/log/request"
+	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -15,10 +16,11 @@ import (
 	"time"
 )
 
-func CreateOperateLog(c *gin.Context, success bool, detailByte []byte) {
+func CreateOperateLog(c *gin.Context, success bool, statusInfo interface{}) {
 	var (
-		actionName string
-		userId     *int64
+		errorDetail []byte
+		actionName  string
+		userId      *int64
 	)
 	//获取当前请求的处理函数
 	handler := c.Handler()
@@ -47,6 +49,19 @@ func CreateOperateLog(c *gin.Context, success bool, detailByte []byte) {
 	}
 	prefix := GetUrlPrefix(c.Request.RequestURI)
 	model := code.Model{}.Choices(prefix).Desc()
+
+	errInfo, ok := statusInfo.(map[string]interface{})
+	if ok && errInfo["message"] != nil {
+		detail := map[string]interface{}{
+			"message": errInfo["message"],
+		}
+		if errorDetail, err = json.Marshal(detail); err != nil {
+			global.LOG.Error("parse json failed: %s", zap.Error(err))
+			c.Abort()
+			return
+		}
+	}
+
 	if err = global.DB.Table(table.OperateLog).Create(&request.OperateLogCreate{
 		UserId:     userId,
 		ActionName: actionName,
@@ -55,7 +70,7 @@ func CreateOperateLog(c *gin.Context, success bool, detailByte []byte) {
 		RequestIp:  c.ClientIP(),
 		UserAgent:  userAgent,
 		Success:    success,
-		Detail:     detailByte,
+		Detail:     errorDetail,
 		AccessTime: field.CustomTime(time.Now()),
 	}).Error; err != nil {
 		global.LOG.Error("create operate log info failed: %s", zap.Error(err))
@@ -68,12 +83,11 @@ func CreateOperateLog(c *gin.Context, success bool, detailByte []byte) {
 		zap.String("ip", c.ClientIP()),
 		zap.String("user-agent", c.Request.UserAgent()),
 	}
-	if len(detailByte) > 0 {
-		logFields = append(logFields, zap.String("errors", string(detailByte)))
-	}
+
 	if success {
 		global.LOG.Info(c.Request.URL.Path, logFields...)
 	} else {
+		logFields = append(logFields, zap.Any("status_info", errInfo))
 		global.LOG.Error(c.Request.URL.Path, logFields...)
 	}
 }

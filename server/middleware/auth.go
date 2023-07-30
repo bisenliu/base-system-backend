@@ -8,7 +8,7 @@ import (
 	"base-system-backend/utils"
 	"base-system-backend/utils/cache"
 	"base-system-backend/utils/jwt"
-	"encoding/json"
+	"fmt"
 	"github.com/gin-gonic/gin"
 )
 
@@ -20,6 +20,10 @@ var notNeedAuthPath = []string{
 // JWTAuthMiddleware 基于JWT的认证中间件
 func JWTAuthMiddleware() func(c *gin.Context) {
 	return func(c *gin.Context) {
+
+		statusInfo := map[string]interface{}{
+			"message": errmsg.LoginInvalid.Error(),
+		}
 
 		// 获取请求uri
 		requestURI := c.Request.RequestURI
@@ -34,18 +38,20 @@ func JWTAuthMiddleware() func(c *gin.Context) {
 		authHeader := c.Request.Header.Get("Identification")
 		if authHeader == "" {
 			// todo 如果没有 Identification，先校验ak/sk
-			response.Error(c, code.InvalidLogin, errmsg.LoginInvalid, "token not found")
-			detailByte, _ := json.Marshal(map[string]string{"message": errmsg.LoginInvalid.Error()})
-			utils.CreateOperateLog(c, false, detailByte)
+			debugInfo := fmt.Errorf("token%w", errmsg.Required).Error()
+			statusInfo["debug_info"] = debugInfo
+			utils.CreateOperateLog(c, false, statusInfo)
+			response.Error(c, code.InvalidLogin, errmsg.LoginInvalid, debugInfo)
 			c.Abort()
 			return
 		}
 		// parts[1]是获取到的tokenString，我们使用之前定义好的解析JWT的函数来解析它
 		mc, err := jwt.ParseToken(authHeader)
 		if err != nil {
-			response.Error(c, code.InvalidLogin, errmsg.LoginInvalid, "token parse failed")
-			detailByte, _ := json.Marshal(map[string]string{"message": errmsg.LoginInvalid.Error()})
-			utils.CreateOperateLog(c, false, detailByte)
+			debugInfo := fmt.Errorf("token%w", errmsg.ParseFailed).Error()
+			statusInfo["debug_info"] = debugInfo
+			utils.CreateOperateLog(c, false, statusInfo)
+			response.Error(c, code.InvalidLogin, errmsg.LoginInvalid, debugInfo)
 			c.Abort()
 			return
 
@@ -53,9 +59,10 @@ func JWTAuthMiddleware() func(c *gin.Context) {
 		// 获取redis token
 		cacheToken := cache.GetToken(mc.UserId)
 		if cacheToken != authHeader {
-			response.Error(c, code.InvalidLogin, errmsg.LoginInvalid, "invalid token")
-			detailByte, _ := json.Marshal(map[string]string{"message": errmsg.LoginInvalid.Error()})
-			utils.CreateOperateLog(c, false, detailByte)
+			debugInfo := fmt.Errorf("token%w", errmsg.Invalid).Error()
+			statusInfo["debug_info"] = debugInfo
+			utils.CreateOperateLog(c, false, statusInfo)
+			response.Error(c, code.InvalidLogin, errmsg.LoginInvalid, debugInfo)
 			c.Abort()
 			return
 		}

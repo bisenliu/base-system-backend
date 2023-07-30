@@ -7,7 +7,7 @@ import (
 
 func OperateLogMiddleware() func(c *gin.Context) {
 	return func(c *gin.Context) {
-		success, detailByte := utils.GetResponseData(c)
-		utils.CreateOperateLog(c, success, detailByte)
+		success, statusInfo := utils.GetResponseData(c)
+		utils.CreateOperateLog(c, success, statusInfo)
 	}
 }
