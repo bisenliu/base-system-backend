@@ -23,8 +23,9 @@ func (p PlainEncrypt) Value() (driver.Value, error) {
 		if err != nil {
 			global.LOG.Error("plain fields encrypt failed: ", zap.Error(err))
 		}
-		newres, _ := json.Marshal(res)
-		return newres, err
+		newRes, err := json.Marshal(res)
+		global.LOG.Error("plain fields json convert failed: ", zap.Error(err))
+		return newRes, err
 	}
 	return nil, nil
 }
