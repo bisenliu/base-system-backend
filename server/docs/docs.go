@@ -1309,7 +1309,7 @@ const docTemplate = `{
                     "type": "string",
                     "maxLength": 20
                 },
-                "createTime": {
+                "create_time": {
                     "type": "integer"
                 },
                 "email": {
@@ -1351,7 +1351,7 @@ const docTemplate = `{
                 "short_name": {
                     "type": "string"
                 },
-                "updateTime": {
+                "update_time": {
                     "type": "integer"
                 }
             }

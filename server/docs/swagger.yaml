@@ -83,7 +83,7 @@ definitions:
       account:
         maxLength: 20
         type: string
-      createTime:
+      create_time:
         type: integer
       email:
         type: string
@@ -112,7 +112,7 @@ definitions:
         type: string
       short_name:
         type: string
-      updateTime:
+      update_time:
         type: integer
     required:
     - account

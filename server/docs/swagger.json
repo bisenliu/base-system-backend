@@ -1302,7 +1302,7 @@
                     "type": "string",
                     "maxLength": 20
                 },
-                "createTime": {
+                "create_time": {
                     "type": "integer"
                 },
                 "email": {
@@ -1344,7 +1344,7 @@
                 "short_name": {
                     "type": "string"
                 },
-                "updateTime": {
+                "update_time": {
                     "type": "integer"
                 }
             }
