@@ -39,5 +39,5 @@ func (c *CustomTime) Scan(v interface{}) error {
 }
 
 func (c *CustomTime) String() string {
-	return fmt.Sprintf(time.Time(*c).Format("2006-01-02 15:04:05"))
+	return fmt.Sprintf(time.Time(*c).Format(time.DateTime))
 }

@@ -10,8 +10,7 @@ import (
 
 func SnowFlake() (node *sf.Node) {
 	var st time.Time
-	//st, err := time.Parse("2006-01-02", global.CONFIG.SnowFlake.StartTime)
-	st, err := time.Parse("2006-01-02", "2023-05-01")
+	st, err := time.Parse(time.DateOnly, global.CONFIG.SnowFlake.StartTime)
 	if err != nil {
 		panic(fmt.Errorf("snowfake time parse failed: %s", err))
 	}
