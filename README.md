@@ -166,19 +166,23 @@ swag init --parseVendor --parseInternal --parseDependency
 
 - API 管理：不同用户可调用的 API 接口的权限不同。
 
-## 6.说明
+## 6.自定义字段
 
-在 model/common/field/aes 文件中，自定义了字段加密相关的功能，可以对一些敏感数据进行加密，并在返回数据时进行解密。
+- server/model/common/field/
+  - aes.go 可以对一些敏感数据进行加密，并在返回数据时进行解密。
+  - cu_time.go 自动添加创建时间和更新时间,返回数据位时间戳(秒)
 
 ```go
-// model/common/field/aes
-// 自定义字段,对于一些敏感数据可对其进行加密,返回数据时进行解密
-// field.PlainEncrypt 对内容进行整体加密
-// field.SplitEncrypt 对单个字符进行加密,并组合(需要进行模糊查询用此字段)
 
 type User struct {
+// field.PlainEncrypt 对内容进行整体加密
 Phone       field.PlainEncrypt           `gorm:"column:phone;size:11;comment:手机号"`
+// field.SplitEncrypt 对单个字符进行加密,并组合(需要进行模糊查询用此字段)
 Phone2      field.SplitEncrypt           `gorm:"column:phone2;size:11;comment:手机号2"`
+// autoCreateTime 自动添加创建时间
+CreateTime CustomTime `json:"create_time" gorm:"column:create_time;autoCreateTime;comment:创建时间" `
+// autoUpdateTime 自动添加更新时间
+UpdateTime CustomTime `json:"update_time" gorm:"column:update_time;autoUpdateTime;comment:更新时间"`
 }
 
 ```
