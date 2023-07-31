@@ -19,7 +19,7 @@ func Redis() {
 	})
 
 	if pong, err := client.Ping(context.Background()).Result(); err != nil {
-		panic(fmt.Errorf("redis connect failed: %s", err))
+		panic(fmt.Errorf("redis connect failed: %w", err))
 	} else {
 		global.LOG.Info("redis connect info: ", zap.String("pong", pong))
 		global.REDIS = client

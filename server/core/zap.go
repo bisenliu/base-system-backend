@@ -15,7 +15,7 @@ func Zap() (logger *zap.Logger) {
 	encoder := getEncoder()
 	var l = new(zapcore.Level)
 	if err := l.UnmarshalText([]byte(global.CONFIG.Zap.Level)); err != nil {
-		panic(fmt.Errorf("zap l.UnmarshalText failed: %s", err))
+		panic(fmt.Errorf("zap l.UnmarshalText failed: %w", err))
 	}
 	var core zapcore.Core
 	if global.ENV == "local" {

@@ -16,11 +16,11 @@ func Viper() *viper.Viper {
 	configPath := path.Join(currentPath, "config.yaml")
 	v.SetConfigFile(configPath)
 	if err := v.ReadInConfig(); err != nil {
-		panic(fmt.Errorf(" v.ReadInConfig() failed: %s \n", err))
+		panic(fmt.Errorf(" v.ReadInConfig() failed: %w \n", err))
 	}
 
 	if err := mapstructure.Decode(v.Get(global.ENV), &global.CONFIG); err != nil {
-		panic(fmt.Errorf("mapstructure.Decode failed: %s \n", err))
+		panic(fmt.Errorf("mapstructure.Decode failed: %w \n", err))
 	}
 
 	v.WatchConfig()
@@ -28,7 +28,7 @@ func Viper() *viper.Viper {
 	v.OnConfigChange(func(e fsnotify.Event) {
 		fmt.Println("config file changed:", e.Name)
 		if err := mapstructure.Decode(v.Get(global.ENV), &global.CONFIG); err != nil {
-			panic(fmt.Errorf("mapstructure.Decode failed: %s \n", err))
+			panic(fmt.Errorf("mapstructure.Decode failed: %w \n", err))
 		}
 	})
 	return v
