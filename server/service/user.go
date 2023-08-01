@@ -30,6 +30,14 @@ import (
 
 type UserService struct{}
 
+// AccountLoginService
+//
+//	@Description: 登录 Service
+//	@receiver UserService
+//	@param params 登录请求参数
+//	@return err 登录失败异常
+//	@return debugInfo 错误调试信息
+
 func (UserService) AccountLoginService(params *request.UserAccountLogin) (err error, debugInfo interface{}) {
 	var instance user.User
 	params.Account = strings.ToLower(params.Account)
@@ -72,6 +80,16 @@ func (UserService) AccountLoginService(params *request.UserAccountLogin) (err er
 	}
 	return
 }
+
+// LoginSuccess
+//
+//	@Description: 登录成功 Service
+//	@receiver UserService
+//	@param c 上下文信息
+//	@param loginBase 登陆成功基础参数
+//	@return loginInfo 登录成功响应信息
+//	@return err 登录失败异常
+//	@return debugInfo 错误调试信息
 
 func (UserService) LoginSuccess(c *gin.Context, loginBase *request.UserLoginBase) (loginInfo *response.LoginSuccess, err error, debugInfo interface{}) {
 	u := new(user.User)
@@ -129,14 +147,15 @@ func (UserService) LoginSuccess(c *gin.Context, loginBase *request.UserLoginBase
 
 // UserListService
 //
-//	@Description: 用户列表
+//	@Description: 用户列表 Service
+//  @receiver UserService
 //	@param c 上下文信息
 //	@param params 查询参数
 //	@return userList 用户列表
 //	@return err 查询失败异常
 //	@return debugInfo 错误调试信息
 
-func (receiver UserService) UserListService(c *gin.Context, params *request.UserFilter) (userList *response.UserList, err error, debugInfo interface{}) {
+func (UserService) UserListService(c *gin.Context, params *request.UserFilter) (userList *response.UserList, err error, debugInfo interface{}) {
 	tx := global.DB.Table(table.User)
 	// 账号/姓名
 	if params.Name != "" {
@@ -166,6 +185,13 @@ func (receiver UserService) UserListService(c *gin.Context, params *request.User
 	return
 
 }
+
+// UserCreateService
+//  @Description: 用户创建 Service
+//  @receiver UserService
+//  @param params 用户创建请求参数
+//  @return err 创建/参数校验失败异常
+//  @return debugInfo 错误调试信息
 
 func (UserService) UserCreateService(params *request.UserCreate) (err error, debugInfo interface{}) {
 	// 身份证校验
@@ -211,6 +237,14 @@ func (UserService) UserCreateService(params *request.UserCreate) (err error, deb
 	return
 }
 
+// UserDetailService
+//  @Description: 用户详情 Service
+//  @receiver UserService
+//  @param userId 用户 ID
+//  @return userDetail 用户详情
+//  @return err 查询失败异常
+//  @return debugInfo 错误调试信息
+
 func (UserService) UserDetailService(userId int64) (userDetail *response.UserDetail, err error, debugInfo interface{}) {
 	if err = global.DB.Table(table.User).
 		Where("id = ?", userId).
@@ -225,6 +259,14 @@ func (UserService) UserDetailService(userId int64) (userDetail *response.UserDet
 	userDetail.RoleIds = userRoleIds
 	return
 }
+
+// UserUpdateService
+//  @Description: 更新当前用户 Service
+//  @receiver UserService
+//  @param userId 用户ID
+//  @param params 更新请求参数
+//  @return err 参数校验/更新失败异常
+//  @return debugInfo 错误调试信息
 
 func (UserService) UserUpdateService(userId int64, params *request.UserUpdate) (err error, debugInfo interface{}) {
 	//身份证校验
@@ -281,6 +323,14 @@ func (UserService) UserUpdateService(userId int64, params *request.UserUpdate) (
 	return
 }
 
+// UserChangePwdByPwdService
+//  @Description: 修改当前用户密码 Service
+//  @receiver UserService
+//  @param u 当前登录用户
+//  @param params 修改密码请求参数
+//  @return err 参数校验/修改失败异常
+//  @return debugInfo 错误调试信息
+
 func (UserService) UserChangePwdByPwdService(u *user.User, params *request.PwdChangeByPwd) (err error, debugInfo interface{}) {
 	if ok := utils.BcryptCheck(params.OldPassword, u.Password); !ok {
 		return fmt.Errorf("原密码%w", errmsg.Incorrect), nil
@@ -292,6 +342,15 @@ func (UserService) UserChangePwdByPwdService(u *user.User, params *request.PwdCh
 	cache.DeleteToken(u.Id)
 	return
 }
+
+// UserUploadAvatarService
+//  @Description: 上传头像 Service
+//  @receiver UserService
+//  @param c 上下文信息
+//  @param user 当前用户
+//  @param fileHeader 文件请求头
+//  @return err 头像校验/保存失败异常
+//  @return debugInfo 错误调试信息
 
 func (UserService) UserUploadAvatarService(c *gin.Context, user *user.User, fileHeader *multipart.FileHeader) (err error, debugInfo interface{}) {
 	// 拼接路径
@@ -311,6 +370,14 @@ func (UserService) UserUploadAvatarService(c *gin.Context, user *user.User, file
 	}
 	return
 }
+
+// UserResetPwdByIdService
+//  @Description: 重置指定账号密码 Service
+//  @receiver UserService
+//  @param userId 用户 ID
+//  @param params 重置密码请求参数
+//  @return err 校验/重置失败异常
+//  @return debugInfo 错误调试信息
 
 func (UserService) UserResetPwdByIdService(userId string, params *request.PwdChangeById) (err error, debugInfo interface{}) {
 	var u user.User
@@ -332,6 +399,14 @@ func (UserService) UserResetPwdByIdService(userId string, params *request.PwdCha
 	}
 	return
 }
+
+// UserStatusChangeByIdService
+//  @Description: 修改指定用户状态 Service
+//  @receiver UserService
+//  @param userId 用户 ID
+//  @param params 状态
+//  @return err 参数校验/修改失败异常
+//  @return debugInfo 错误调试信息
 
 func (UserService) UserStatusChangeByIdService(userId string, params *request.StatusChangeById) (err error, debugInfo interface{}) {
 	var u user.User
@@ -355,6 +430,14 @@ func (UserService) UserStatusChangeByIdService(userId string, params *request.St
 	return
 }
 
+// UserDetailByIdService
+//  @Description: 查询指定用户详情 Service
+//  @receiver UserService
+//  @param userId 用户 ID
+//  @return userDetail 用户详情信息
+//  @return err 用户不存在异常
+//  @return debugInfo 错误调试信息
+
 func (UserService) UserDetailByIdService(userId string) (userDetail *response.UserDetail, err error, debugInfo interface{}) {
 	if err = global.DB.Table(table.User).Where("id =?", userId).First(&userDetail).Error; err != nil {
 		return nil, fmt.Errorf("用户%w", errmsg.QueryFailed), err.Error()
@@ -367,6 +450,14 @@ func (UserService) UserDetailByIdService(userId string) (userDetail *response.Us
 	userDetail.RoleIds = userRoleIds
 	return
 }
+
+// UserUpdateByIdService
+//  @Description: 更新指定用户信息 Service
+//  @receiver UserService
+//  @param userId 用户 ID
+//  @param params 用户信息请求参数
+//  @return err 参数校验/更新失败异常
+//  @return debugInfo 错误调试信息
 
 func (UserService) UserUpdateByIdService(userId string, params *request.UserUpdateById) (err error, debugInfo interface{}) {
 	// 身份证校验
