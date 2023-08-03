@@ -192,7 +192,7 @@ func (UserApi) UserUpdateApi(c *gin.Context) {
 // @Param object body request.UserChangePwdBase true "用户密码信息"
 // @Security ApiKeyAuth
 // @Success 200 {object} response.Data
-// @Router /user/change_pwd/ [patch]
+// @Router /user/password/ [patch]
 func (UserApi) UserChangePwdApi(c *gin.Context) {
 	params := new(request.UserChangePwdBase)
 	if !validate.RequestParamsVerify(c, params) {
@@ -272,7 +272,7 @@ func (UserApi) UserUploadAvatarApi(c *gin.Context) {
 // @Param object body request.PwdChangeById true "用户密码信息"
 // @Security ApiKeyAuth
 // @Success 200 {object} response.Data
-// @Router /user/reset_pwd/:user_id/ [put]
+// @Router /user/:user_id/password/ [put]
 func (UserApi) UserResetPwdByIdApi(c *gin.Context) {
 	params := new(request.PwdChangeById)
 	if !validate.RequestParamsVerify(c, &params) {
@@ -296,7 +296,7 @@ func (UserApi) UserResetPwdByIdApi(c *gin.Context) {
 // @Param object body request.StatusChangeById true "用户状态"
 // @Security ApiKeyAuth
 // @Success 200 {object} response.Data
-// @Router /user/change_status/:user_id/ [put]
+// @Router /user/:user_id/status/ [put]
 func (UserApi) UserStatusChangeByIdApi(c *gin.Context) {
 	params := new(request.StatusChangeById)
 	if !validate.RequestParamsVerify(c, &params) {
