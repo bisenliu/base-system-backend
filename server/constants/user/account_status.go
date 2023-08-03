@@ -11,23 +11,25 @@ const (
 	AccStop
 )
 
-func (receiver AccStatus) IsValid() bool {
-	switch receiver {
+func (s AccStatus) IsValid() bool {
+	switch s {
 	case AccNormal, AccFreeze, AccChangePwd, AccStop:
 		return true
 	}
 	return false
 }
 
-func (receiver AccStatus) AccStatusDisplay(status AccStatus) string {
-	switch status {
+func (s AccStatus) Choices() string {
+	switch s {
 	case AccNormal:
 		return "正常"
 	case AccFreeze:
 		return "冻结"
 	case AccChangePwd:
 		return "需要修改密码"
+	case AccStop:
+		return "需要修改密码"
 	default:
-		return "停用"
+		return "Unknown"
 	}
 }

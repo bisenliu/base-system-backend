@@ -390,7 +390,7 @@ func (UserService) UserResetPwdByIdService(userId string, params *request.PwdCha
 	}
 	//禁用/冻结
 	if u.Status == userEnum.AccStop || u.Status == userEnum.AccFreeze {
-		return fmt.Errorf(errmsg.ResetPwdFailed.Error(), u.Status.AccStatusDisplay(u.Status)), nil
+		return fmt.Errorf(errmsg.ResetPwdFailed.Error(), u.Status.Choices()), nil
 	}
 	//更新密码
 	if err = global.DB.Model(&u).
