@@ -27,13 +27,13 @@ func (u UserRouter) InitUserRouter(Router *gin.RouterGroup) {
 		detailRouterGroup.PUT("", userApi.UserUpdateApi)
 	}
 	// 修改当前登录用户密码
-	Router.PATCH("change_pwd/", userApi.UserChangePwdApi)
+	Router.PATCH("password/", userApi.UserChangePwdApi)
 	//上传头像
 	Router.PATCH("avatar/", userApi.UserUploadAvatarApi)
 	//重置指定账号密码
-	Router.PUT("reset_pwd/:user_id/", middleware.PrivilegeVerify(constants.ResetPwdOther), userApi.UserResetPwdByIdApi)
+	Router.PUT(":user_id/password/", middleware.PrivilegeVerify(constants.ResetPwdOther), userApi.UserResetPwdByIdApi)
 	// 修改指定账户状态
-	Router.PUT("change_status/:user_id/", middleware.PrivilegeVerify(constants.ChangeStatusOther), userApi.UserStatusChangeByIdApi)
+	Router.PUT(":user_id/status/", middleware.PrivilegeVerify(constants.ChangeStatusOther), userApi.UserStatusChangeByIdApi)
 	// 查询|编辑指定账户信息
 	RURouterGroup := Router.Group(":user_id/")
 	{
