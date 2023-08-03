@@ -7,8 +7,8 @@ const (
 	Male                 // 男
 )
 
-func (receiver Gender) IsValid() bool {
-	switch receiver {
+func (g Gender) IsValid() bool {
+	switch g {
 	case Female, Male:
 		return true
 	}

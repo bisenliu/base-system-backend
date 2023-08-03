@@ -22,19 +22,19 @@ import (
 
 type LogService struct{}
 
-func (service LogService) OperateLogListService(c *gin.Context, params *request.OperateLogFilter) (
+func (l LogService) OperateLogListService(c *gin.Context, params *request.OperateLogFilter) (
 	operateLogList *response.OperateLogList, err error, debugInfo interface{}) {
-	return service.operateLogQuery(true, c, params)
+	return l.operateLogQuery(true, c, params)
 }
 
-func (service LogService) OperateLogDownloadService(c *gin.Context, params *request.OperateLogFilter) (content io.ReadSeeker, err error, debugInfo interface{}) {
+func (l LogService) OperateLogDownloadService(c *gin.Context, params *request.OperateLogFilter) (content io.ReadSeeker, err error, debugInfo interface{}) {
 	var (
 		operateLogList *response.OperateLogList
 		res            []interface{}
 		userID         string
 		accessTime     string
 	)
-	operateLogList, err, debugInfo = service.operateLogQuery(false, c, params)
+	operateLogList, err, debugInfo = l.operateLogQuery(false, c, params)
 	if err != nil {
 		return
 	}
