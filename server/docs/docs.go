@@ -694,14 +694,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/user/avatar/": {
-            "patch": {
+        "/user/:user_id/password/": {
+            "put": {
                 "security": [
                     {
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "用户头像修改",
+                "description": "重置指定账号密码",
                 "consumes": [
                     "application/json"
                 ],
@@ -711,51 +711,7 @@ const docTemplate = `{
                 "tags": [
                     "UserApi"
                 ],
-                "summary": "用户头像修改",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Token 令牌",
-                        "name": "Identification",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "file",
-                        "description": "头像",
-                        "name": "avatar",
-                        "in": "formData",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/response.Data"
-                        }
-                    }
-                }
-            }
-        },
-        "/user/change_pwd/": {
-            "patch": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "用户密码修改",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "UserApi"
-                ],
-                "summary": "用户密码修改",
+                "summary": "重置指定账号密码",
                 "parameters": [
                     {
                         "type": "string",
@@ -770,7 +726,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/request.UserChangePwdBase"
+                            "$ref": "#/definitions/request.PwdChangeById"
                         }
                     }
                 ],
@@ -784,7 +740,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/user/change_status/:user_id/": {
+        "/user/:user_id/status/": {
             "put": {
                 "security": [
                     {
@@ -818,6 +774,50 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/request.StatusChangeById"
                         }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Data"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/avatar/": {
+            "patch": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "用户头像修改",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "UserApi"
+                ],
+                "summary": "用户头像修改",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Token 令牌",
+                        "name": "Identification",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "头像",
+                        "name": "avatar",
+                        "in": "formData",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -1101,14 +1101,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/user/reset_pwd/:user_id/": {
-            "put": {
+        "/user/password/": {
+            "patch": {
                 "security": [
                     {
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "重置指定账号密码",
+                "description": "用户密码修改",
                 "consumes": [
                     "application/json"
                 ],
@@ -1118,7 +1118,7 @@ const docTemplate = `{
                 "tags": [
                     "UserApi"
                 ],
-                "summary": "重置指定账号密码",
+                "summary": "用户密码修改",
                 "parameters": [
                     {
                         "type": "string",
@@ -1133,7 +1133,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/request.PwdChangeById"
+                            "$ref": "#/definitions/request.UserChangePwdBase"
                         }
                     }
                 ],

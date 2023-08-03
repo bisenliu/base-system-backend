@@ -823,39 +823,11 @@ paths:
       summary: 修改指定用户信息
       tags:
       - UserApi
-  /user/avatar/:
-    patch:
+  /user/:user_id/password/:
+    put:
       consumes:
       - application/json
-      description: 用户头像修改
-      parameters:
-      - description: Token 令牌
-        in: header
-        name: Identification
-        required: true
-        type: string
-      - description: 头像
-        in: formData
-        name: avatar
-        required: true
-        type: file
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/response.Data'
-      security:
-      - ApiKeyAuth: []
-      summary: 用户头像修改
-      tags:
-      - UserApi
-  /user/change_pwd/:
-    patch:
-      consumes:
-      - application/json
-      description: 用户密码修改
+      description: 重置指定账号密码
       parameters:
       - description: Token 令牌
         in: header
@@ -867,7 +839,7 @@ paths:
         name: object
         required: true
         schema:
-          $ref: '#/definitions/request.UserChangePwdBase'
+          $ref: '#/definitions/request.PwdChangeById'
       produces:
       - application/json
       responses:
@@ -877,10 +849,10 @@ paths:
             $ref: '#/definitions/response.Data'
       security:
       - ApiKeyAuth: []
-      summary: 用户密码修改
+      summary: 重置指定账号密码
       tags:
       - UserApi
-  /user/change_status/:user_id/:
+  /user/:user_id/status/:
     put:
       consumes:
       - application/json
@@ -907,6 +879,34 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 修改指定账户状态
+      tags:
+      - UserApi
+  /user/avatar/:
+    patch:
+      consumes:
+      - application/json
+      description: 用户头像修改
+      parameters:
+      - description: Token 令牌
+        in: header
+        name: Identification
+        required: true
+        type: string
+      - description: 头像
+        in: formData
+        name: avatar
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Data'
+      security:
+      - ApiKeyAuth: []
+      summary: 用户头像修改
       tags:
       - UserApi
   /user/detail/:
@@ -1074,11 +1074,11 @@ paths:
       summary: 登出
       tags:
       - UserApi
-  /user/reset_pwd/:user_id/:
-    put:
+  /user/password/:
+    patch:
       consumes:
       - application/json
-      description: 重置指定账号密码
+      description: 用户密码修改
       parameters:
       - description: Token 令牌
         in: header
@@ -1090,7 +1090,7 @@ paths:
         name: object
         required: true
         schema:
-          $ref: '#/definitions/request.PwdChangeById'
+          $ref: '#/definitions/request.UserChangePwdBase'
       produces:
       - application/json
       responses:
@@ -1100,7 +1100,7 @@ paths:
             $ref: '#/definitions/response.Data'
       security:
       - ApiKeyAuth: []
-      summary: 重置指定账号密码
+      summary: 用户密码修改
       tags:
       - UserApi
   /version/:
