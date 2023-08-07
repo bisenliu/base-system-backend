@@ -14,6 +14,11 @@ import (
 	"time"
 )
 
+// LoginFiled
+//  @Description: 登录失败计算下次登录时间,并记录到黑名单
+//  @param account 账号
+//  @return debugInfo 错误调试信息
+
 func LoginFiled(account string) (debugInfo interface{}) {
 	blackList, err, debugInfo := addLoginFailedNum(account)
 	if err != nil {

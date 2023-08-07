@@ -41,12 +41,6 @@ func GetRolePrivilegeKeysByRoleId(roleId interface{}) (privilegeKeys []string, e
 		Find(&userPrivilegeKeys).Error; err != nil {
 		return nil, fmt.Errorf("角色%w", errmsg.QueryFailed), err.Error()
 	}
-	// 合并
-	if privilegeKeys, err, debugInfo = common.Merge(userPrivilegeKeys); err != nil {
-		return nil, err, debugInfo
-	}
-	//去重
-	privilegeKeys = common.RemoveDuplication(privilegeKeys)
 	return
 }
 

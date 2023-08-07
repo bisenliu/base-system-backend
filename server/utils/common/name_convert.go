@@ -6,6 +6,12 @@ import (
 	"strings"
 )
 
+// ConvertCnToLetter
+//  @Description: 姓名全/简拼转换
+//  @param cn 姓名
+//  @return fullName 全拼
+//  @return shortName 简拼
+
 func ConvertCnToLetter(cn string) (fullName string, shortName string) {
 	a := pinyin.NewArgs()
 	a.Fallback = func(r rune, a pinyin.Args) []string {
