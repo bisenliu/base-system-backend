@@ -36,6 +36,13 @@ func LoginFiled(account string) (debugInfo interface{}) {
 	return debugInfo
 }
 
+// addLoginFailedNum
+//  @Description: 登录失败,黑名单增加失败次数
+//  @param account 账号
+//  @return blackList 黑名单实例
+//  @return err 获取/更新登录失败次数失败异常
+//  @return debugInfo 错误调试信息
+
 func addLoginFailedNum(account string) (blackList *user.BlackList, err error, debugInfo interface{}) {
 	var userExists bool
 	u := new(user.User)
@@ -87,6 +94,11 @@ func addLoginFailedNum(account string) (blackList *user.BlackList, err error, de
 
 }
 
+// getUserLoginFailedNum
+//  @Description: 获取用户登录失败次数
+//  @param account 账号
+//  @return failedNum 失败次数
+
 func getUserLoginFailedNum(account string) (failedNum int) {
 	if err := global.DB.Table(table.UserBlackList).
 		Select("failed_num").Where("account = ?", account).Take(&failedNum).
@@ -97,6 +109,13 @@ func getUserLoginFailedNum(account string) (failedNum int) {
 	failedNum += 1
 	return
 }
+
+// blackListTimeAddMinute
+//  @Description: 登录失败5次后,增加下次登录时间(每失败一次,下次登录时间为上次的双倍)
+//  @param blacklist 黑名单实例
+//  @param nextLoginMinute 下次登录时间(分钟)
+//  @return err
+//  @return debugInfo
 
 func blackListTimeAddMinute(blacklist *user.BlackList, nextLoginMinute int) (err error, debugInfo interface{}) {
 	nowTime := time.Now()

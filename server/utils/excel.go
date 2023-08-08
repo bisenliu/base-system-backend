@@ -11,6 +11,15 @@ import (
 	"strings"
 )
 
+// ToExcel
+//  @Description: 下载 Excel
+//  @param tableName 表名
+//  @param titleList 标题 Slice
+//  @param dataList 数据 Slice
+//  @return content io 上下文
+//  @return err 创建路径/保存文件失败异常
+//  @return debugInfo 错误调试信息
+
 func ToExcel(tableName string, titleList []string, dataList []interface{}) (content io.ReadSeeker, err error, debugInfo interface{}) {
 	//生成一个新的文件
 	file := xlsx.NewFile()

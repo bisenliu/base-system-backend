@@ -9,6 +9,8 @@ import (
 	"strings"
 )
 
+//  常用图片格式
+
 var imageExtensions = map[string]bool{
 	"jpg":  true,
 	"jpeg": true,
@@ -17,6 +19,12 @@ var imageExtensions = map[string]bool{
 	"bmp":  true,
 	"webp": true,
 }
+
+// ImageVerify
+//  @Description: 上传图片校验
+//  @param fileHeader 文件头
+//  @return err 校验失败异常
+//  @return debugInfo 错误调试信息
 
 func ImageVerify(fileHeader *multipart.FileHeader) (err error, debugInfo interface{}) {
 	if fileHeader.Size > global.CONFIG.Avatar.Size*1024*1024 {

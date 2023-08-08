@@ -8,6 +8,12 @@ import (
 	"fmt"
 )
 
+// RoleIdsVerify
+//  @Description: 角色 ID Slice 校验
+//  @param roleIds 角色 ID Slice
+//  @return err 查询失败异常
+//  @return debugInfo 错误调试信息
+
 func RoleIdsVerify(roleIds *[]int64) (err error, debugInfo interface{}) {
 	var roleIdsCount int64
 	if err = global.DB.Table(table.Role).
@@ -20,6 +26,14 @@ func RoleIdsVerify(roleIds *[]int64) (err error, debugInfo interface{}) {
 	}
 	return
 }
+
+// BindRoleVerify
+//  @Description: 用户绑定角色校验
+//  @param userId 用户 ID
+//  @param roleIds 角色 ID Slice
+//  @return userRoles 绑定实例 Slice
+//  @return err 角色查询失败异常
+//  @return debugInfo 错误调试信息
 
 func BindRoleVerify(userId int64, roleIds *[]int64) (userRoles []user.UserRole, err error, debugInfo interface{}) {
 	if err, debugInfo = RoleIdsVerify(roleIds); err != nil {

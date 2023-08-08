@@ -22,17 +22,27 @@ type bodyLogWriter struct {
 	body *bytes.Buffer //我们记录用的response
 }
 
-// Write 写入响应体数据
+// Write
+//  @Description: Write 写入响应体数据
+//  @receiver w 接收者
+//  @param b 响应数据 bytes
+//  @return int
+//  @return error
+
 func (w bodyLogWriter) Write(b []byte) (int, error) {
 	w.body.Write(b)                  //我们记录一份
 	return w.ResponseWriter.Write(b) //真正写入响应
 }
 
-// 辅助函数，通过函数名称获取注释
+// getFunctionComments
+//  @Description: 辅助函数，通过函数名称获取注释
+//  @param funcName 函数名称
+//  @return string 函数名
+
 func getFunctionComments(funcName string) string {
 	goFiles, err := getAllGoFiles()
 	if err != nil {
-		fmt.Println("获取 Go 文件失败:", err)
+		global.LOG.Error(fmt.Sprintf("获取 Go 文件失败(getFunctionComments): %s ", err))
 		return ""
 	}
 
@@ -40,7 +50,7 @@ func getFunctionComments(funcName string) string {
 		fset := token.NewFileSet()
 		file, err := parser.ParseFile(fset, filePath, nil, parser.ParseComments)
 		if err != nil {
-			fmt.Printf("解析文件 %s 失败: %s\n", filePath, err)
+			global.LOG.Error(fmt.Sprintf("解析文件 %s 失败: %s\n", filePath, err))
 			continue
 		}
 
@@ -57,7 +67,12 @@ func getFunctionComments(funcName string) string {
 	return ""
 }
 
-// 辅助函数，检查函数名是否匹配
+// isFunctionMatch
+//  @Description: 辅助函数，检查函数名是否匹配
+//  @param declName 十进制名称
+//  @param funcName 函数名
+//  @return bool 是否匹配
+
 func isFunctionMatch(declName, funcName string) bool {
 	parts := strings.Split(strings.Join(strings.Split(funcName, "-fm"), ""), "/")
 	if len(parts) > 0 {
@@ -73,7 +88,11 @@ func isFunctionMatch(declName, funcName string) bool {
 	return declName == funcName
 }
 
-// 辅助函数，获取所有 Go 文件
+// getAllGoFiles
+//  @Description: 辅助函数，获取所有 Go 文件
+//  @return []string 当前项目下所有 .go 文件
+//  @return error 读取失败异常
+
 func getAllGoFiles() ([]string, error) {
 	var goFiles []string
 
@@ -99,6 +118,12 @@ func getAllGoFiles() ([]string, error) {
 
 	return goFiles, nil
 }
+
+// GetResponseData
+//  @Description: 获取 http 响应详细数据
+//  @param c 上下文信息
+//  @return success http 请求是否成功
+//  @return statusInfo 错误详细信息
 
 func GetResponseData(c *gin.Context) (success bool, statusInfo interface{}) {
 	var rsp map[string]interface{}

@@ -16,6 +16,12 @@ import (
 	"time"
 )
 
+// CreateOperateLog
+//  @Description: 添加操作日志
+//  @param c 上下文信息
+//  @param success http 请求是否成功
+//  @param statusInfo 错误信息
+
 func CreateOperateLog(c *gin.Context, success bool, statusInfo interface{}) {
 	var (
 		errorDetail []byte
