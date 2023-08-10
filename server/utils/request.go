@@ -11,6 +11,11 @@ import (
 	"strings"
 )
 
+// GetLoginIp
+//  @Description: 获取当前登录用户 IP
+//  @param c 上下文信息
+//  @return requestIp IP
+
 func GetLoginIp(c *gin.Context) (requestIp string) {
 	if c.ClientIP() == "" {
 		requestIp = c.RemoteIP()
@@ -24,6 +29,13 @@ func GetLoginIp(c *gin.Context) (requestIp string) {
 	}
 	return
 }
+
+// GetCurrentUser
+//  @Description: 获取当前登录用户实例
+//  @param c 上下文信息
+//  @return user 登录用户
+//  @return err 查询失败异常
+//  @return debugInfo 错误调试信息
 
 func GetCurrentUser(c *gin.Context) (user *user.User, err error, debugInfo interface{}) {
 	userId, ok := c.Get(userEnum.CtxUserIdKey)
