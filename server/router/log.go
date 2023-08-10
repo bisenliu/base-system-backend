@@ -9,6 +9,11 @@ import (
 
 type LogRouter struct{}
 
+// InitLogRouter
+//  @Description: 操作日志路由
+//  @receiver LogRouter
+//  @param Router routerGroup对象
+
 func (LogRouter) InitLogRouter(Router *gin.RouterGroup) {
 	logApi := v1.ApiGroupApp.LogApi
 	Router.GET("operate/list/", middleware.PrivilegeVerify(constants.OperateLogList), logApi.OperateLogListApi)

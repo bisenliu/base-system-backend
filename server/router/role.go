@@ -9,6 +9,11 @@ import (
 
 type RoleRouter struct{}
 
+// InitRoleRouter
+//  @Description: 角色路由
+//  @receiver RoleRouter
+//  @param Router routerGroup对象
+
 func (RoleRouter) InitRoleRouter(Router *gin.RouterGroup) {
 	roleApi := v1.ApiGroupApp.RoleApi
 	// 角色创建

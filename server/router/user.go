@@ -9,7 +9,12 @@ import (
 
 type UserRouter struct{}
 
-func (u UserRouter) InitUserRouter(Router *gin.RouterGroup) {
+// InitUserRouter
+//  @Description: 用户路由
+//  @receiver u
+//  @param Router routerGroup对象
+
+func (UserRouter) InitUserRouter(Router *gin.RouterGroup) {
 	userApi := v1.ApiGroupApp.UserApi
 	// 创建用户
 	Router.POST("", middleware.PrivilegeVerify(constants.AccountCreate), userApi.UserCreateApi)
