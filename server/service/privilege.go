@@ -16,6 +16,15 @@ import (
 
 type PrivilegeService struct{}
 
+// PrivilegeListService
+//  @Description: 权限列表 service
+//	@receiver PrivilegeService
+//  @param userId 用户 ID
+//  @param roleId 角色 ID
+//  @return res 权限列表
+//  @return err 查询/序列化失败异常
+//  @return debugInfo 错误调试信息
+
 func (PrivilegeService) PrivilegeListService(userId, roleId string) (res interface{}, err error, debugInfo interface{}) {
 	var (
 		data          []string
@@ -66,6 +75,14 @@ func (PrivilegeService) PrivilegeListService(userId, roleId string) (res interfa
 	res = utils.RecursionGetChildPrivilege(privilegeList, 1)
 	return
 }
+
+// RolePrivilegeUpdateService
+//  @Description: 更新角色权限 service
+//	@receiver PrivilegeService
+//  @param roleId 角色 ID
+//  @param params 权限信息
+//  @return err 权限key无效/查询/序列化失败异常
+//  @return debugInfo 错误调试信息
 
 func (PrivilegeService) RolePrivilegeUpdateService(roleId string, params *request.RolePrivilegeUpdate) (err error, debugInfo interface{}) {
 	r := new(role.Role)

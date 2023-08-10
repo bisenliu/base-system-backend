@@ -22,10 +22,28 @@ import (
 
 type LogService struct{}
 
+// OperateLogListService
+//  @Description: 操作日志列表 service
+//  @receiver l 接收者
+//  @param c 上下文信息
+//  @param params 查询参数
+//  @return operateLogList 操作日志列表
+//  @return err 查询失败异常
+//  @return debugInfo 错误调试信息
+
 func (l LogService) OperateLogListService(c *gin.Context, params *request.OperateLogFilter) (
 	operateLogList *response.OperateLogList, err error, debugInfo interface{}) {
 	return l.operateLogQuery(true, c, params)
 }
+
+// OperateLogDownloadService
+//  @Description: 下载操作日志 service
+//  @receiver l 接收者
+//  @param c 上下文信息
+//  @param params 查询参数
+//  @return content 操作日志二进制
+//  @return err 查询失败异常
+//  @return debugInfo 错误调试信息
 
 func (l LogService) OperateLogDownloadService(c *gin.Context, params *request.OperateLogFilter) (content io.ReadSeeker, err error, debugInfo interface{}) {
 	var (
@@ -68,6 +86,15 @@ func (l LogService) OperateLogDownloadService(c *gin.Context, params *request.Op
 
 	return
 }
+
+// operateLogQuery
+//  @Description: 操作日志查询 logic
+//  @param isPage 是否需要分页
+//  @param c 上下文信息
+//  @param params 查询参数
+//  @return operateLogList 操作日志列表
+//  @return err 查询失败异常
+//  @return debugInfo 错误调试信息
 
 func (LogService) operateLogQuery(isPage bool, c *gin.Context, params *request.OperateLogFilter) (operateLogList *response.OperateLogList, err error, debugInfo interface{}) {
 	tx := global.DB.Table(table.OperateLog)
@@ -141,6 +168,9 @@ func (LogService) operateLogQuery(isPage bool, c *gin.Context, params *request.O
 	operateLogList.GetPageInfo(&operateLogList.PageInfo, params.Page, params.PageSize)
 	return
 }
+
+// DeleteOperateLog
+//  @Description: 登录成功删除一个月以前的操作日志
 
 func (LogService) DeleteOperateLog() {
 	day := time.Now().AddDate(0, -1, 0)

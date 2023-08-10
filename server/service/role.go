@@ -13,6 +13,14 @@ import (
 
 type RoleService struct{}
 
+// RoleListService
+//  @Description: 角色列表 service
+//	@receiver RoleService
+//  @param c 上下文信息
+//  @return roleList 角色列表
+//  @return err 查询失败异常
+//  @return debugInfo 错误调试信息
+
 func (RoleService) RoleListService(c *gin.Context) (roleList []role.Role, err error, debugInfo interface{}) {
 	roleName := c.Query("name")
 	tx := global.DB.Table(table.Role)
@@ -25,6 +33,13 @@ func (RoleService) RoleListService(c *gin.Context) (roleList []role.Role, err er
 	return
 }
 
+// RoleCreateService
+//  @Description: 创建角色 service
+//	@receiver RoleService
+//  @param params 角色信息
+//  @return err 创建失败异常
+//  @return debugInfo 错误调试信息
+
 func (RoleService) RoleCreateService(params *request.RoleCreate) (err error, debugInfo interface{}) {
 	if err = global.DB.Table(table.Role).Create(params).Error; err != nil {
 		return fmt.Errorf("角色%w", errmsg.SaveFailed), err.Error()
@@ -32,12 +47,28 @@ func (RoleService) RoleCreateService(params *request.RoleCreate) (err error, deb
 	return
 }
 
+// RoleDetailService
+//  @Description: 角色详情 service
+//	@receiver RoleService
+//  @param roleId 角色 ID
+//  @return roleDetail 角色信息
+//  @return err 查询失败异常
+//  @return debugInfo 错误调试信息
+
 func (RoleService) RoleDetailService(roleId string) (roleDetail *role.Role, err error, debugInfo interface{}) {
 	if err = global.DB.Table(table.Role).Where("id = ?", roleId).First(&roleDetail).Error; err != nil {
 		return nil, fmt.Errorf("角色%w", errmsg.QueryFailed), err.Error()
 	}
 	return
 }
+
+// RoleUpdateService
+//  @Description: 更新角色信息 service
+//	@receiver RoleService
+//  @param roleId 角色 ID
+//  @param params 角色信息
+//  @return err 更新/查询失败异常
+//  @return debugInfo 错误调试信息
 
 func (RoleService) RoleUpdateService(roleId string, params *request.RoleUpdate) (err error, debugInfo interface{}) {
 	var r role.Role
@@ -66,6 +97,13 @@ func (RoleService) RoleUpdateService(roleId string, params *request.RoleUpdate) 
 	}
 	return
 }
+
+// RoleDeleteService
+//  @Description: 删除指定角色 service
+//	@receiver RoleService
+//  @param roleId 角色 ID
+//  @return err 查询/删除失败异常
+//  @return debugInfo 错误调试信息
 
 func (RoleService) RoleDeleteService(roleId string) (err error, debugInfo interface{}) {
 	var r role.Role
