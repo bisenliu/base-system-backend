@@ -7,6 +7,7 @@ import "golang.org/x/crypto/bcrypt"
 //	@Description: 密码加密
 //	@param password 密码
 //	@return string 加密后的密码
+
 func BcryptHash(password string) string {
 	bytes, _ := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	return string(bytes)
