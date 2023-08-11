@@ -17,7 +17,10 @@ var notNeedAuthPath = []string{
 	"/v1/user/login/",
 }
 
-// JWTAuthMiddleware 基于JWT的认证中间件
+// JWTAuthMiddleware
+//
+//	@Description: 基于JWT的认证中间件
+//	@return func(c *gin.Context) 上下文信息
 func JWTAuthMiddleware() func(c *gin.Context) {
 	return func(c *gin.Context) {
 

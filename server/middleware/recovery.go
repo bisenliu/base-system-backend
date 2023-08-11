@@ -13,7 +13,12 @@ import (
 	"strings"
 )
 
-// GinRecovery recover掉项目可能出现的panic，并使用zap记录相关日志
+// GinRecovery
+//
+//	@Description: recover掉项目可能出现的panic，并使用zap记录相关日志
+//	@param stack 是否有异常
+//	@return gin.HandlerFunc
+
 func GinRecovery(stack bool) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		defer func() {
