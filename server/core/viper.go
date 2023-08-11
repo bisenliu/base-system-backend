@@ -10,6 +10,10 @@ import (
 	"path"
 )
 
+// Viper
+//
+//	@Description: 加载配置文件
+//	@return *viper.Viper viper对象
 func Viper() *viper.Viper {
 	v := viper.New()
 	currentPath, _ := os.Getwd()

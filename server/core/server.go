@@ -6,6 +6,9 @@ import (
 	"fmt"
 )
 
+// RunServer
+//
+//	@Description: 运行项目
 func RunServer() {
 	Router := initialize.Routers()
 	address := fmt.Sprintf(":%d", global.CONFIG.System.Port)

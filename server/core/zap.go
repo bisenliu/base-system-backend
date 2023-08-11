@@ -9,7 +9,10 @@ import (
 	"os"
 )
 
-// Zap 初始化Logger
+// Zap
+//
+//	@Description: 初始化Logger
+//	@return logger 全局logger对象
 func Zap() (logger *zap.Logger) {
 	writeSyncer := getLogWriter(global.CONFIG.Zap.Director, global.CONFIG.Zap.MaxSize, global.CONFIG.Zap.MaxBackups, global.CONFIG.Zap.MaxAge)
 	encoder := getEncoder()
