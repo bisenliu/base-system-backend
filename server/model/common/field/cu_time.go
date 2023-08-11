@@ -7,6 +7,9 @@ import (
 	"time"
 )
 
+// CUTime
+//
+//	@Description: 创建/更新数据时自动添加时间
 type CUTime struct {
 	CreateTime CustomTime `json:"create_time" gorm:"column:create_time;autoCreateTime;comment:创建时间" swaggertype:"integer"`
 	UpdateTime CustomTime `json:"update_time" gorm:"column:update_time;autoUpdateTime;comment:更新时间" swaggertype:"integer"`
