@@ -47,6 +47,12 @@ func (s StatusCode) String() string {
 	return string(s)
 }
 
+// GetStatusCodeByModelCode
+//  @Description: 根据 url 前缀获取对应的模块码
+//  @param urlPrefix url 前缀
+//  @param statusCode 错误码
+//  @return int 状态码
+
 func GetStatusCodeByModelCode(urlPrefix string, statusCode StatusCode) int {
 
 	modelCode, ok := ModelMapping[urlPrefix]
