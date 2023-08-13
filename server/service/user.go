@@ -32,10 +32,10 @@ type UserService struct{}
 
 // AccountLoginService
 //
-//	@Description: 登录 Service
+//	@Description: 登陆 Service
 //	@receiver UserService
-//	@param params 登录请求参数
-//	@return err 登录失败异常
+//	@param params 登陆请求参数
+//	@return err 登陆失败异常
 //	@return debugInfo 错误调试信息
 
 func (UserService) AccountLoginService(params *request.UserAccountLogin) (err error, debugInfo interface{}) {
@@ -59,9 +59,9 @@ func (UserService) AccountLoginService(params *request.UserAccountLogin) (err er
 			Where("account = ?", params.Account).
 			First(&blackList).Error
 		if !errors.Is(err, gorm.ErrRecordNotFound) && blackList != nil && time.Now().Unix() <= time.Time(blackList.NextTime).Unix() {
-			//下次登录时间大于当前,则仍不能登录。返回剩余时间
+			//下次登陆时间大于当前,则仍不能登陆。返回剩余时间
 			var nextLoginMinute int
-			nextLoginMinute = int(math.Pow(2, float64(blackList.FailedNum-login.LoginFailedMaxNum)))
+			nextLoginMinute = int(math.Pow(2, float64(blackList.FailedNum-login.MaxLoginFailedNum)))
 			if nextLoginMinute == 0 {
 				nextLoginMinute = 1
 			}
@@ -75,7 +75,7 @@ func (UserService) AccountLoginService(params *request.UserAccountLogin) (err er
 	}
 	// 密码错误
 	if ok := utils.BcryptCheck(params.Password, instance.Password); !ok {
-		// 登录失败后,更新黑名单信息
+		// 登陆失败后,更新黑名单信息
 		return errmsg.AccPwdInvalid, userUtils.LoginFiled(params.Account)
 	}
 	return
@@ -83,20 +83,20 @@ func (UserService) AccountLoginService(params *request.UserAccountLogin) (err er
 
 // LoginSuccess
 //
-//	@Description: 登录成功 Service
+//	@Description: 登陆成功 Service
 //	@receiver UserService
 //	@param c 上下文信息
 //	@param loginBase 登陆成功基础参数
-//	@return loginInfo 登录成功响应信息
-//	@return err 登录失败异常
+//	@return loginInfo 登陆成功响应信息
+//	@return err 登陆失败异常
 //	@return debugInfo 错误调试信息
 
 func (UserService) LoginSuccess(c *gin.Context, loginBase *request.UserLoginBase) (loginInfo *response.LoginSuccess, err error, debugInfo interface{}) {
 	u := new(user.User)
 	if *loginBase.LoginType == login.KeycloakLogin {
-		// keycloak 登录成功
+		// keycloak 登陆成功
 	} else {
-		// 账号密码/短信登录成功
+		// 账号密码/短信登陆成功
 		if loginBase.Phone != nil {
 			global.DB.Table(table.User).Where("phone = ?", *loginBase.Phone).First(&u)
 		} else {
@@ -104,20 +104,20 @@ func (UserService) LoginSuccess(c *gin.Context, loginBase *request.UserLoginBase
 		}
 		currentTime := &u.CurrentTime
 		currentIp := &u.CurrentIp
-		// 以前有登录记录后把上次当前登录时间/ip改为最后一次登录时间/ip
+		// 以前有登陆记录后把上次当前登陆时间/ip改为最后一次登陆时间/ip
 		if currentTime != nil && currentIp != nil {
 			u.LastTime = *currentTime
 			u.LastIp = *currentIp
 		}
-		// 当前登录时间
+		// 当前登陆时间
 		u.CurrentTime = field.CustomTime(time.Now())
-		// 当前登录IP
+		// 当前登陆IP
 		u.CurrentIp = utils.GetLoginIp(c)
 		u.LoginType = *loginBase.LoginType
 		// 修改用户状态为正常
 		u.Status = userEnum.AccNormal
 		if err = global.DB.Table(table.User).Save(&u).Error; err != nil {
-			return nil, fmt.Errorf("登录信息%w", errmsg.UpdateFailed), err.Error()
+			return nil, fmt.Errorf("登陆信息%w", errmsg.UpdateFailed), err.Error()
 		}
 		// 如果黑名单有错误记录则清除记录
 		if err = global.DB.Table(table.UserBlackList).
@@ -133,7 +133,7 @@ func (UserService) LoginSuccess(c *gin.Context, loginBase *request.UserLoginBase
 	cache.SetToken(u.Id, accessToken)
 	// 组装数据
 	if err = global.DB.Table(table.User).Where("account = ?", u.Account).First(&loginInfo).Error; err != nil {
-		return nil, fmt.Errorf("登录信息%w", errmsg.UpdateFailed), err.Error()
+		return nil, fmt.Errorf("登陆信息%w", errmsg.UpdateFailed), err.Error()
 	}
 	privilegeKeys, userRoleIds, err, debugInfo := utils.GetPrivilegeKeysByUserId(u.Id)
 	if err != nil {
@@ -326,7 +326,7 @@ func (UserService) UserUpdateService(userId int64, params *request.UserUpdate) (
 // UserChangePwdByPwdService
 //  @Description: 修改当前用户密码 Service
 //  @receiver UserService
-//  @param u 当前登录用户
+//  @param u 当前登陆用户
 //  @param params 修改密码请求参数
 //  @return err 参数校验/修改失败异常
 //  @return debugInfo 错误调试信息

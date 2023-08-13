@@ -2,6 +2,7 @@ package errmsg
 
 import "errors"
 
+// 自定义异常信息
 var (
 	QueryFailed   = errors.New("查询失败")
 	SaveFailed    = errors.New("保存失败")
@@ -16,7 +17,7 @@ var (
 	FileSizeRange = errors.New("文件大小不能超过 %d M")
 	NotPrivilege  = errors.New("您没有(%s)的权限")
 
-	LoginInvalid     = errors.New("未登录或登录状态已失效")
+	LoginInvalid     = errors.New("未登陆或登陆状态已失效")
 	AccPwdInvalid    = errors.New("账号或密码不正确,请重新输入")
 	AccStop          = errors.New("账号被停用,请联系管理员启用")
 	LoginOutLimit    = errors.New("账号或密码已错误%d次，请%d分钟后重试")

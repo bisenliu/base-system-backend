@@ -36,7 +36,7 @@ func Error(c *gin.Context, statusCode code.StatusCode, errorInfo interface{}, de
 	// 组装状态码
 
 	status := generateStatusCode(c, statusCode)
-	// 是否登录失败错误
+	// 是否登陆失败错误
 	var data interface{}
 	if value, ok := debugInfo.(map[string]interface{}); ok {
 		if value["next_time"] != nil {

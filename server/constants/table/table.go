@@ -1,5 +1,6 @@
 package table
 
+// model 表名称
 const (
 	User          = "users"
 	UserRole      = "user_role"

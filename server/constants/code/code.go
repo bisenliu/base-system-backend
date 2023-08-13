@@ -23,7 +23,7 @@ const (
 
 var statusCodeMapping = map[StatusCode]string{
 	Success:        "Success",
-	InvalidLogin:   "未登录或登录状态已失效",
+	InvalidLogin:   "未登陆或登陆状态已失效",
 	InvalidParams:  "无效的参数",
 	QueryFailed:    "查询失败",
 	SaveFailed:     "保存失败",
@@ -34,6 +34,11 @@ var statusCodeMapping = map[StatusCode]string{
 	UnknownExc:     "未知错误",
 }
 
+// Msg
+//  @Description: 根据错误码获取对应的错误描述
+//  @receiver s 接收者
+//  @return string 错误码
+
 func (s StatusCode) Msg() string {
 	msg, ok := statusCodeMapping[s]
 	if !ok {
@@ -41,6 +46,11 @@ func (s StatusCode) Msg() string {
 	}
 	return msg
 }
+
+// String
+//  @Description: 返回字符串类型错误码
+//  @receiver s 接收者
+//  @return string 字符串错误码
 
 func (s StatusCode) String() string {
 

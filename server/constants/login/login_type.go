@@ -1,15 +1,21 @@
 package login
 
-type LoginType int
+type Type int
 
+// 登陆类型
 const (
-	AccPwdLogin   LoginType = iota // 账号密码登录
-	PhoneLogin                     // 手机号登录
-	KeycloakLogin                  // keycloak登录
+	AccPwdLogin   Type = iota // 账号密码登陆
+	PhoneLogin                // 手机号登陆
+	KeycloakLogin             // keycloak登陆
 
 )
 
-func (t LoginType) IsValid() bool {
+// IsValid
+//  @Description: 登陆类型枚举校验,配合自定义 validator
+//  @receiver t 接收者
+//  @return bool 是否校验通过
+
+func (t Type) IsValid() bool {
 	switch t {
 	case AccPwdLogin, PhoneLogin, KeycloakLogin:
 		return true
@@ -17,4 +23,5 @@ func (t LoginType) IsValid() bool {
 	return false
 }
 
-const LoginFailedMaxNum = 5
+// MaxLoginFailedNum 最大登陆失败次数
+const MaxLoginFailedNum = 5

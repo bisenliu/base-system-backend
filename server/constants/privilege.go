@@ -2,6 +2,7 @@ package constants
 
 type PrivilegeKey string
 
+// 自定义权限 key
 const (
 	SystemPrivilege    PrivilegeKey = "system_privilege"
 	SystemManage       PrivilegeKey = "system_manage"
@@ -26,6 +27,11 @@ const (
 	AccountDetailOther PrivilegeKey = "account_detail_other"
 	AccountUpdateOther PrivilegeKey = "account_update_other"
 )
+
+// Desc
+//  @Description: 权限描述
+//  @receiver p 接收者
+//  @return string	描述
 
 func (p PrivilegeKey) Desc() string {
 	privilegeMap := map[PrivilegeKey]string{
@@ -54,6 +60,11 @@ func (p PrivilegeKey) Desc() string {
 	}
 	return privilegeMap[p]
 }
+
+// String
+//  @Description: 权限类型转字符串
+//  @receiver p 接收者
+//  @return string 字符串格式权限 key
 
 func (p PrivilegeKey) String() string {
 	return string(p)

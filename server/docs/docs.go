@@ -1013,7 +1013,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "登录",
+                "description": "登陆",
                 "consumes": [
                     "application/json"
                 ],
@@ -1023,7 +1023,7 @@ const docTemplate = `{
                 "tags": [
                     "UserApi"
                 ],
-                "summary": "登录",
+                "summary": "登陆",
                 "parameters": [
                     {
                         "type": "string",
@@ -1033,7 +1033,7 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "description": "登录参数",
+                        "description": "登陆参数",
                         "name": "object",
                         "in": "body",
                         "required": true,
@@ -1199,7 +1199,7 @@ const docTemplate = `{
                 "Male"
             ]
         },
-        "login.LoginType": {
+        "login.Type": {
             "type": "integer",
             "enum": [
                 0,
@@ -1207,9 +1207,9 @@ const docTemplate = `{
                 2
             ],
             "x-enum-comments": {
-                "AccPwdLogin": "账号密码登录",
-                "KeycloakLogin": "keycloak登录",
-                "PhoneLogin": "手机号登录"
+                "AccPwdLogin": "账号密码登陆",
+                "KeycloakLogin": "keycloak登陆",
+                "PhoneLogin": "手机号登陆"
             },
             "x-enum-varnames": [
                 "AccPwdLogin",
@@ -1369,7 +1369,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "login_type": {
-                    "$ref": "#/definitions/login.LoginType"
+                    "$ref": "#/definitions/login.Type"
                 },
                 "password": {
                     "type": "string"
@@ -1511,7 +1511,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "login_type": {
-                    "$ref": "#/definitions/login.LoginType"
+                    "$ref": "#/definitions/login.Type"
                 },
                 "name": {
                     "type": "string"
@@ -1675,7 +1675,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "login_type": {
-                    "$ref": "#/definitions/login.LoginType"
+                    "$ref": "#/definitions/login.Type"
                 },
                 "name": {
                     "type": "string"

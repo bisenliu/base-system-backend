@@ -4,12 +4,18 @@ type (
 	AccStatus int
 )
 
+// 账号状态枚举
 const (
 	AccNormal AccStatus = iota
 	AccFreeze
 	AccChangePwd
 	AccStop
 )
+
+// IsValid
+//  @Description: 账号枚举校验,配合自定义 validator
+//  @receiver s 接收者
+//  @return bool 是否校验通过
 
 func (s AccStatus) IsValid() bool {
 	switch s {
@@ -18,6 +24,11 @@ func (s AccStatus) IsValid() bool {
 	}
 	return false
 }
+
+// Choices
+//  @Description: 枚举转换
+//  @receiver s 接收者
+//  @return string 对应的描述
 
 func (s AccStatus) Choices() string {
 	switch s {

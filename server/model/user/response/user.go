@@ -30,7 +30,7 @@ type UserDetail struct {
 	IdCard        *string           `json:"id_card"`
 	Avatar        *string           `json:"avatar"`
 	Status        user.AccStatus    `json:"status"`
-	LoginType     login.LoginType   `json:"login_type"`
+	LoginType     login.Type        `json:"login_type"`
 	CreateTime    *field.CustomTime `json:"create_time"  swaggertype:"integer"`
 	LastTime      *field.CustomTime `json:"last_time"  swaggertype:"integer"`
 	PrivilegeList []string          `json:"privilege_list" gorm:"-"`

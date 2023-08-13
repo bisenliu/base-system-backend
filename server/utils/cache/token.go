@@ -42,7 +42,7 @@ func GetToken(userID int64) string {
 }
 
 // FlushToken
-//  @Description: 刷新登录token时间
+//  @Description: 刷新登陆token时间
 //  @param userID
 
 func FlushToken(userID int64) {

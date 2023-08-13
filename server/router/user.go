@@ -18,20 +18,20 @@ func (UserRouter) InitUserRouter(Router *gin.RouterGroup) {
 	userApi := v1.ApiGroupApp.UserApi
 	// 创建用户
 	Router.POST("", middleware.PrivilegeVerify(constants.AccountCreate), userApi.UserCreateApi)
-	// 登录
+	// 登陆
 	Router.POST("login/", userApi.UserLoginApi)
 	// 登出
 	Router.POST("logout/", userApi.UserLogoutApi)
 
 	// 用户列表
 	Router.GET("list/", middleware.PrivilegeVerify(constants.AccountList), userApi.UserListApi)
-	// 查询|修改当前登录用户信息
+	// 查询|修改当前登陆用户信息
 	detailRouterGroup := Router.Group("detail/")
 	{
 		detailRouterGroup.GET("", userApi.UserDetailApi)
 		detailRouterGroup.PUT("", userApi.UserUpdateApi)
 	}
-	// 修改当前登录用户密码
+	// 修改当前登陆用户密码
 	Router.PATCH("password/", userApi.UserChangePwdApi)
 	//上传头像
 	Router.PATCH("avatar/", userApi.UserUploadAvatarApi)

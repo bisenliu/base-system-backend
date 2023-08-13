@@ -12,7 +12,7 @@ import (
 )
 
 // GetLoginIp
-//  @Description: 获取当前登录用户 IP
+//  @Description: 获取当前登陆用户 IP
 //  @param c 上下文信息
 //  @return requestIp IP
 
@@ -31,9 +31,9 @@ func GetLoginIp(c *gin.Context) (requestIp string) {
 }
 
 // GetCurrentUser
-//  @Description: 获取当前登录用户实例
+//  @Description: 获取当前登陆用户实例
 //  @param c 上下文信息
-//  @return user 登录用户
+//  @return user 登陆用户
 //  @return err 查询失败异常
 //  @return debugInfo 错误调试信息
 

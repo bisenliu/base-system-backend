@@ -19,19 +19,19 @@ type UserFilter struct {
 
 // UserLoginBase
 //
-//	@Description: 登录请求参数
+//	@Description: 登陆请求参数
 type UserLoginBase struct {
-	LoginType *login.LoginType `json:"login_type"  binding:"required,enum" label:"登录类型"`
-	Account   *string          `json:"account"  binding:"" label:"账号"`
-	Password  *string          `json:"password"  binding:"" label:"密码"`
-	Phone     *string          `json:"phone"  binding:"" label:"手机号"`
-	Code      *string          `json:"code"  binding:"" label:"验证码"`
-	Slider    *struct{}        `json:"slider"  binding:"" label:"滑块轨迹信息"`
+	LoginType *login.Type `json:"login_type"  binding:"required,enum" label:"登陆类型"`
+	Account   *string     `json:"account"  binding:"" label:"账号"`
+	Password  *string     `json:"password"  binding:"" label:"密码"`
+	Phone     *string     `json:"phone"  binding:"" label:"手机号"`
+	Code      *string     `json:"code"  binding:"" label:"验证码"`
+	Slider    *struct{}   `json:"slider"  binding:"" label:"滑块轨迹信息"`
 }
 
 // UserAccountLogin
 //
-//	@Description: 账号密码登录请求参数
+//	@Description: 账号密码登陆请求参数
 type UserAccountLogin struct {
 	Account  string `json:"account"  binding:"required,max=20" label:"账号"`
 	Password string `json:"password"  binding:"required" label:"密码"`

@@ -170,7 +170,7 @@ func (LogService) operateLogQuery(isPage bool, c *gin.Context, params *request.O
 }
 
 // DeleteOperateLog
-//  @Description: 登录成功删除一个月以前的操作日志
+//  @Description: 登陆成功删除一个月以前的操作日志
 
 func (LogService) DeleteOperateLog() {
 	day := time.Now().AddDate(0, -1, 0)

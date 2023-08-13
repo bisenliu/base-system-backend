@@ -17,13 +17,13 @@ import (
 type UserApi struct{}
 
 // UserLoginApi
-// @Summary 登录
-// @Description 登录
+// @Summary 登陆
+// @Description 登陆
 // @Tags UserApi
 // @Accept application/json
 // @Produce application/json
 // @Param Identification header string true "Token 令牌"
-// @Param object body request.UserLoginBase true "登录参数"
+// @Param object body request.UserLoginBase true "登陆参数"
 // @Security ApiKeyAuth
 // @Success 200 {object} response.Data{data=response.LoginSuccess}
 // @Router /user/login/ [post]
@@ -32,24 +32,24 @@ func (UserApi) UserLoginApi(c *gin.Context) {
 	if !validate.RequestParamsVerify(c, &loginBase) {
 		return
 	}
-	// 账号密码登录
+	// 账号密码登陆
 	if *loginBase.LoginType == login.AccPwdLogin {
 		accLoginParams := new(request.UserAccountLogin)
 		if !validate.RequestParamsVerify(c, accLoginParams) {
 			return
 		}
-		// 账号密码登录逻辑
+		// 账号密码登陆逻辑
 		if err, debugInfo := userService.AccountLoginService(accLoginParams); err != nil {
 			response.Error(c, code.InvalidLogin, err, debugInfo)
 			return
 		}
 	} else if *loginBase.LoginType == login.KeycloakLogin {
-		// todo Keycloak 登录
+		// todo Keycloak 登陆
 		panic("Keycloak login api unrealized...")
 	} else {
 		panic("sms login api unrealized...")
 	}
-	// 登录参数校验成功校验成功生成token, 记录ip ...
+	// 登陆参数校验成功校验成功生成token, 记录ip ...
 	loginInfo, err, debugInfo := userService.LoginSuccess(c, loginBase)
 	if err != nil {
 		response.Error(c, code.InvalidLogin, err, debugInfo)
@@ -76,7 +76,7 @@ func (UserApi) UserLogoutApi(c *gin.Context) {
 		response.Error(c, code.QueryFailed, err, debugInfo)
 		return
 	}
-	//todo keycloak 也需要退出登录
+	//todo keycloak 也需要退出登陆
 	//清除token
 	cache.DeleteToken(user.Id)
 	response.OK(c, nil)
@@ -248,7 +248,7 @@ func (UserApi) UserUploadAvatarApi(c *gin.Context) {
 		response.Error(c, code.SaveFailed, err, debugInfo)
 		return
 	}
-	// 获取当前登录用户
+	// 获取当前登陆用户
 	u, err, debugInfo := utils.GetCurrentUser(c)
 	if err != nil {
 		response.Error(c, code.QueryFailed, err, debugInfo)
