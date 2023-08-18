@@ -23,9 +23,12 @@ FROM alpine:latest
 
 WORKDIR /go/src/base-system-backend/
 
-COPY --from=builder /build/server /build/config.yaml /go/src/base-system-backend/
+COPY --from=builder /build/server /build/config.yaml /build/resources /go/src/base-system-backend/
 
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories \
+    && mkdir ./resources \
+    && mv ./defaultImages ./resources \
+    && mv ./fonts ./resources \
     && apk update \
     && apk add tzdata \
     && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
