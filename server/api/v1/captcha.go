@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"base-system-backend/constants"
 	"base-system-backend/constants/code"
 	"base-system-backend/global"
 	"base-system-backend/model/captcha/request"
@@ -34,12 +35,15 @@ func (CaptchaApi) CaptchaGetApi(c *gin.Context) {
 		return
 	}
 	captcha := &rsp.CaptchaInfo{
-		JigsawImageBase64:   data["jigsawImageBase64"],
 		OriginalImageBase64: data["originalImageBase64"],
 		Token:               data["token"],
 		SecretKey:           data["secretKey"],
 	}
-
+	if params.Type == constants.ClickWord {
+		captcha.WordList = data["wordList"]
+	} else {
+		captcha.JigsawImageBase64 = data["jigsawImageBase64"]
+	}
 	response.OK(c, captcha)
 }
 

@@ -19,7 +19,7 @@ func Captcha() *service.CaptchaServiceFactory {
 	watermarkConfig := &config2.WatermarkConfig{
 		FontSize: 12,
 		Color:    color.RGBA{R: 255, G: 255, B: 255, A: 255},
-		Text:     "我的水印",
+		Text:     global.CONFIG.Captcha.WaterSeal,
 	}
 
 	// 点击文字配置（参数可从业务系统自定义）
@@ -33,7 +33,7 @@ func Captcha() *service.CaptchaServiceFactory {
 
 	// 行为校验配置模块（具体参数可从业务系统配置文件自定义）
 	config := config2.BuildConfig(constant.RedisCacheKey, constant.DefaultResourceRoot, watermarkConfig,
-		clickWordConfig, blockPuzzleConfig, 60)
+		clickWordConfig, blockPuzzleConfig, global.CONFIG.Captcha.Expire)
 
 	// 服务工厂，主要用户注册 获取 缓存和验证服务
 	factory := service.NewCaptchaServiceFactory(config)
