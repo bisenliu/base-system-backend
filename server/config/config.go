@@ -10,4 +10,5 @@ type Service struct {
 	Zap       Zap       `mapstructure:"zap" json:"zap" yaml:"zap"`
 	Pgsql     Pgsql     `mapstructure:"pgsql" json:"pgsql" yaml:"pgsql"`
 	SnowFlake SnowFlake `mapstructure:"snow_flake" json:"snow_flake" yaml:"snow_flake"`
+	Captcha   Captcha   `mapstructure:"captcha" json:"captcha" yaml:"captcha"`
 }
