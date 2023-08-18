@@ -21,6 +21,84 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/captcha/check/": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "校验滑块轨迹/文字",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CaptchaApi"
+                ],
+                "summary": "校验滑块轨迹/文字",
+                "parameters": [
+                    {
+                        "description": "校验滑块轨迹/文字",
+                        "name": "object",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.CaptchaParam"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Data"
+                        }
+                    }
+                }
+            }
+        },
+        "/captcha/get/": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "获取滑块信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CaptchaApi"
+                ],
+                "summary": "获取滑块信息",
+                "parameters": [
+                    {
+                        "description": "滑块类型(文字/图片)",
+                        "name": "object",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.CaptchaType"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.CaptchaInfo"
+                        }
+                    }
+                }
+            }
+        },
         "/log/operate/download/": {
             "get": {
                 "security": [
@@ -1184,6 +1262,17 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "constants.CaptchaType": {
+            "type": "integer",
+            "enum": [
+                0,
+                1
+            ],
+            "x-enum-varnames": [
+                "BlockPuzzle",
+                "ClickWord"
+            ]
+        },
         "gender.Gender": {
             "type": "integer",
             "enum": [
@@ -1216,6 +1305,32 @@ const docTemplate = `{
                 "PhoneLogin",
                 "KeycloakLogin"
             ]
+        },
+        "request.CaptchaParam": {
+            "type": "object",
+            "required": [
+                "point_json",
+                "token"
+            ],
+            "properties": {
+                "captcha_type": {
+                    "$ref": "#/definitions/constants.CaptchaType"
+                },
+                "point_json": {
+                    "type": "string"
+                },
+                "token": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.CaptchaType": {
+            "type": "object",
+            "properties": {
+                "captcha_type": {
+                    "$ref": "#/definitions/constants.CaptchaType"
+                }
+            }
         },
         "request.PwdChangeById": {
             "type": "object",
@@ -1458,6 +1573,15 @@ const docTemplate = `{
                 "status": {
                     "$ref": "#/definitions/user.AccStatus"
                 }
+            }
+        },
+        "response.CaptchaInfo": {
+            "type": "object",
+            "properties": {
+                "jigsaw_image_base_64": {},
+                "original_image_base_64": {},
+                "secret_key": {},
+                "token": {}
             }
         },
         "response.Create": {

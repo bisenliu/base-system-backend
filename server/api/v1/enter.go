@@ -8,6 +8,7 @@ type ApiGroup struct {
 	RoleApi
 	LogApi
 	VersionApi
+	CaptchaApi
 }
 
 var ApiGroupApp = new(ApiGroup)

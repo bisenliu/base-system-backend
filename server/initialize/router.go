@@ -65,6 +65,12 @@ func Routers() *gin.Engine {
 		privilegeRouterGroup := baseRouterGroup.Group("/privilege/")
 		privilegeRouter.InitPrivilegeRouter(privilegeRouterGroup)
 	}
+	// 滑块路由组
+	{
+		captchaRouter := router.RouterGroupApp.CaptchaRouter
+		captchaRouterGroup := baseRouterGroup.Group("/captcha/")
+		captchaRouter.InitCaptchaRouter(captchaRouterGroup)
+	}
 
 	r.NoRoute(func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{

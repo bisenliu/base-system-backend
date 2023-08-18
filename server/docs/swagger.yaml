@@ -1,5 +1,13 @@
 basePath: /v1/
 definitions:
+  constants.CaptchaType:
+    enum:
+    - 0
+    - 1
+    type: integer
+    x-enum-varnames:
+    - BlockPuzzle
+    - ClickWord
   gender.Gender:
     enum:
     - 0
@@ -25,6 +33,23 @@ definitions:
     - AccPwdLogin
     - PhoneLogin
     - KeycloakLogin
+  request.CaptchaParam:
+    properties:
+      captcha_type:
+        $ref: '#/definitions/constants.CaptchaType'
+      point_json:
+        type: string
+      token:
+        type: string
+    required:
+    - point_json
+    - token
+    type: object
+  request.CaptchaType:
+    properties:
+      captcha_type:
+        $ref: '#/definitions/constants.CaptchaType'
+    type: object
   request.PwdChangeById:
     properties:
       password:
@@ -187,6 +212,13 @@ definitions:
         $ref: '#/definitions/user.AccStatus'
     required:
     - name
+    type: object
+  response.CaptchaInfo:
+    properties:
+      jigsaw_image_base_64: {}
+      original_image_base_64: {}
+      secret_key: {}
+      token: {}
     type: object
   response.Create:
     properties:
@@ -419,6 +451,54 @@ info:
   title: 基础后端框架
   version: "1.0"
 paths:
+  /captcha/check/:
+    post:
+      consumes:
+      - application/json
+      description: 校验滑块轨迹/文字
+      parameters:
+      - description: 校验滑块轨迹/文字
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/request.CaptchaParam'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Data'
+      security:
+      - ApiKeyAuth: []
+      summary: 校验滑块轨迹/文字
+      tags:
+      - CaptchaApi
+  /captcha/get/:
+    post:
+      consumes:
+      - application/json
+      description: 获取滑块信息
+      parameters:
+      - description: 滑块类型(文字/图片)
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/request.CaptchaType'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.CaptchaInfo'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取滑块信息
+      tags:
+      - CaptchaApi
   /log/operate/download/:
     get:
       consumes:

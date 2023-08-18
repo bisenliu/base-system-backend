@@ -9,6 +9,7 @@ var ModelMapping = map[string]Model{
 	"privilege": Privilege,
 	"log":       Log,
 	"version":   Version,
+	"captcha":   Captcha,
 }
 
 // 模型对应的描述
@@ -18,6 +19,7 @@ var (
 	Privilege Model = []string{"102", "privilege", "权限管理"}
 	Log       Model = []string{"103", "log", "日志管理"}
 	Version   Model = []string{"104", "version", "版本管理"}
+	Captcha   Model = []string{"105", "captcha", "滑块管理"}
 	Unknown   Model = []string{"999", "unknown", "未知"}
 )
 

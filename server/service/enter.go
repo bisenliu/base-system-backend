@@ -5,6 +5,7 @@ type ServicesGroup struct {
 	PrivilegeService
 	RoleService
 	LogService
+	CaptchaService
 }
 
 var ServicesGroupApp = new(ServicesGroup)

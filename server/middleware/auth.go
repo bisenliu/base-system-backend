@@ -15,6 +15,8 @@ import (
 var notNeedAuthPath = []string{
 	"/v1/common/version/",
 	"/v1/user/login/",
+	"/v1/captcha/get/",
+	"/v1/captcha/check/",
 }
 
 // JWTAuthMiddleware

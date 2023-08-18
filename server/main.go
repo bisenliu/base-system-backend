@@ -37,6 +37,8 @@ func main() {
 	global.Node = initialize.SnowFlake()
 	// 初始化gorm连接
 	global.DB = initialize.GormPgSql()
+	// 初始化滑块
+	global.CAPTCHA = initialize.Captcha()
 	// 初始化表
 	initialize.RegisterTables()
 	//程序结束前关闭数据库链援

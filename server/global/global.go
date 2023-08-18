@@ -3,6 +3,7 @@ package global
 import (
 	"base-system-backend/config"
 	"embed"
+	"github.com/TestsLing/aj-captcha-go/service"
 	sf "github.com/bwmarrin/snowflake"
 	ut "github.com/go-playground/universal-translator"
 	"github.com/go-redis/redis/v8"
@@ -22,4 +23,5 @@ var (
 	TRANS      ut.Translator
 	Node       *sf.Node
 	FS         embed.FS
+	CAPTCHA    *service.CaptchaServiceFactory
 )
