@@ -2,26 +2,26 @@ system: &System
   port: 8888   # 项目端口
   start_time: "2023-05-01"  # 项目开始时间
   version: "1.0.0"   # 版本号
-# 雪花算法配置
-snow_flake: &SnowFlake
-  start_time: "2023-05-01"   # 开始时间(不能大于当前时间否则返回负数）
-  machine_id: base_machine_id # 机器编号(0-1023)
 # 滑块信息
 captcha:
   expire: 90 # 滑块信息过期时间
-  water_seal: "captcha_water_seal" # 滑块图片水印
+  info: "captcha_water_seal" # 滑块图片水印
+# 雪花算法配置
+snow_flake: &SnowFlake
+  start_time: "2023-05-01"   # 开始时间(不能大于当前时间否则返回负数）
+  machine_id: 960 # 机器编号(0-1023)
 # 系统馝钥
 kev: &Key
   # 项目秘钥
-  secret_key: "base_secret_key"
+  secret_key: "oksRaDFYAWlTB=b$kXotI8%fvmkN4%t7qiIj94EDNaoOo%%lkguAVQZSE%ABv7=m"
   # aes秘钥
-  aes_key: "base_aes_key"
+  aes_key: "8R|+LpT6A:UlRPMz"
 # token配置
 token: &Token
   expired_time: 1  # 过期时间（小时）
 # 静态文件配置
 static: &Static
-  base: &base  "base_static"
+  base: &base  "./static"
   avatar:
     - *base
     - "/avatar"
