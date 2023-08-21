@@ -219,6 +219,7 @@ definitions:
       original_image_base_64: {}
       secret_key: {}
       token: {}
+      word_list: {}
     type: object
   response.Create:
     properties:
@@ -493,7 +494,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.CaptchaInfo'
+            allOf:
+            - $ref: '#/definitions/response.Data'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.CaptchaInfo'
+              type: object
       security:
       - ApiKeyAuth: []
       summary: 获取滑块信息

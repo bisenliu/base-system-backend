@@ -93,7 +93,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.CaptchaInfo"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Data"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.CaptchaInfo"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     }
                 }
@@ -1581,7 +1593,8 @@ const docTemplate = `{
                 "jigsaw_image_base_64": {},
                 "original_image_base_64": {},
                 "secret_key": {},
-                "token": {}
+                "token": {},
+                "word_list": {}
             }
         },
         "response.Create": {

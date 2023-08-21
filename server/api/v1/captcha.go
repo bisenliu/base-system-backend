@@ -21,7 +21,7 @@ type CaptchaApi struct{}
 // @Produce application/json
 // @Param object body request.CaptchaType true "滑块类型(文字/图片)"
 // @Security ApiKeyAuth
-// @Success 200 {object} response.CaptchaInfo
+// @Success 200 {object} response.Data{data=response.CaptchaInfo}
 // @Router /captcha/get/ [post]
 func (CaptchaApi) CaptchaGetApi(c *gin.Context) {
 	params := new(request.CaptchaType)
