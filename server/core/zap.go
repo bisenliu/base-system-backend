@@ -7,7 +7,32 @@ import (
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
 	"os"
+	"path/filepath"
 )
+
+// 自定义CallerEncoder，用于获取相对路径
+func relativePathEncoder(caller zapcore.EntryCaller, enc zapcore.PrimitiveArrayEncoder) {
+	// 获取绝对路径
+	absPath := caller.FullPath()
+
+	// 获取当前工作目录
+	wd, err := filepath.Abs(".")
+	if err != nil {
+		// 获取工作目录失败，直接使用绝对路径
+		enc.AppendString(absPath)
+		return
+	}
+
+	// 获取相对路径
+	relPath, err := filepath.Rel(wd, absPath)
+	if err != nil {
+		// 获取相对路径失败，使用绝对路径
+		enc.AppendString(absPath)
+		return
+	}
+
+	enc.AppendString(relPath)
+}
 
 // Zap
 //
@@ -56,6 +81,7 @@ func getEncoder() zapcore.Encoder {
 	encoderConfig.EncodeLevel = zapcore.CapitalLevelEncoder
 	encoderConfig.EncodeDuration = zapcore.SecondsDurationEncoder
 	encoderConfig.EncodeCaller = zapcore.ShortCallerEncoder
+	encoderConfig.EncodeCaller = relativePathEncoder
 	return zapcore.NewJSONEncoder(encoderConfig)
 }
 
